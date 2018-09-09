@@ -7,7 +7,7 @@ Fininsyn
     </a>
 </p>
     
-[Fininsyn][1] is a twitter bot that publish financial information about inside trading, short selling, interest rates, statistics, analysis and news.
+[Fininsyn][1] is a twitter bot that publish Swedish financial information about inside trading, short selling, interest rates, statistics, analysis and news.
 
 
 [1]: https://twitter.com/fininsyn
