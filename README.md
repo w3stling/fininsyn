@@ -2,7 +2,7 @@ Fininsyn
 ========
 
 <p align="left">
-    <a href="https://twitter.com/fininsyn">
+    <a href="https://twitter.com/intent/follow?screen_name=fininsyn">
         <img src="https://img.shields.io/twitter/follow/fininsyn.svg?style=social&logo=twitter" alt="follow on Twitter">
     </a>
 </p>
