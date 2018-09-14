@@ -118,7 +118,8 @@ public class RssFeedTweet {
         tickerSymbols = toSymbols(symbols);
 
         String url = toShortUrl(item.getLink());
-        String tweet =  "Placera " + EMOJI_NEWSPAPER + " " + item.getTitle().trim() + " " + emoji + "\n" + item.getDescription().trim();
+        String description = Optional.ofNullable(item.getDescription()).orElse("").trim();
+        String tweet =  "Placera " + EMOJI_NEWSPAPER + " " + item.getTitle().trim() + " " + emoji + "\n" + description;
         tweet = TwitterUtil.trim(tweet, url.length() + 1);
         tweet += "\n" + url;
 
@@ -142,6 +143,9 @@ public class RssFeedTweet {
 
 
     private static String toShortUrl(String url) {
+        if (url == null || url.isEmpty())
+            return "";
+
         BitlyClient client = new BitlyClient("707fb3170e622ee0c650c02fe09151cc2e012515");
         Response<ShortenResponse> respShort = client.shorten()
                 .setLongUrl(url)
