@@ -26,39 +26,45 @@ public class RssFeedTweet {
 
 
     public static String createRiskbankenTweet(Item item) {
+        String title = item.getTitle().orElse("").trim();
         String url = toShortUrl(item.getLink().orElse(""));
-        return "Riksbanken " + EMOJI_BANK + " " + item.getTitle() + "\n" + "#riksbanken" + "\n\n" + url;
+        return "Riksbanken " + EMOJI_BANK + " " + title + "\n" + "#riksbanken" + "\n\n" + url;
     }
 
     public static String createFinanspolitiskaradetTweet(Item item) {
+        String title = item.getTitle().orElse("").trim();
         String url = toShortUrl(item.getLink().orElse(""));
-        return "Finanspolitiskaradet " + EMOJI_BRIEFCASE + " " + item.getTitle() + "\n" + url + "\n\n" + "#finanspolitiskaradet";
+        return "Finanspolitiskaradet " + EMOJI_BRIEFCASE + " " + title + "\n" + url + "\n\n" + "#finanspolitiskaradet";
     }
 
     public static String createKonjunkturinstitutetTweet(Item item) {
+        String title = item.getTitle().orElse("").trim();
         String url = toShortUrl(item.getLink().orElse(""));
-        return "Konjunkturinstitutet " + EMOJI_OFFICE_BUILDING + " " + item.getTitle() + "\n" + url + "\n\n" + "#konjunkturinstitutet";
+        return "Konjunkturinstitutet " + EMOJI_OFFICE_BUILDING + " " + title + "\n" + url + "\n\n" + "#konjunkturinstitutet";
     }
 
     public static String createScbTweet(Item item) {
+        String title = item.getTitle().orElse("").trim();
         String url = toShortUrl(item.getLink().orElse(""));
-        return "SCB " + EMOJI_BAR_CHART + " " + item.getTitle() + "\n" + "#SCB" + "\n\n" + url;
+        return "SCB " + EMOJI_BAR_CHART + " " + title + "\n" + "#SCB" + "\n\n" + url;
     }
 
     public static String createEkobrottsmyndighetenTweet(Item item) {
+        String title = item.getTitle().orElse("").trim();
         String url = toShortUrl(item.getLink().orElse(""));
-        return "Ekobrottsmyndigheten " + EMOJI_POLICE_OFFICER + " " + item.getTitle() + "\n" + url + "\n\n" + "#ekobrottsmyndigheten";
+        return "Ekobrottsmyndigheten " + EMOJI_POLICE_OFFICER + " " + title + "\n" + url + "\n\n" + "#ekobrottsmyndigheten";
     }
 
     public static String createVeckansAffarerTweet(Item item) {
+        String title = item.getTitle().orElse("").trim();
         String url = toShortUrl(item.getLink().orElse(""));
-        String tweet = "Veckans Affärer " + EMOJI_NEWSPAPER + " " + item.getTitle() + "\n" + url;
+        String tweet = "Veckans Affärer " + EMOJI_NEWSPAPER + " " + title + "\n" + url;
         return TwitterUtil.trim(tweet);
     }
 
     public static String createRealtidTweet(Item item) {
         String url = toShortUrl(item.getLink().orElse(""));
-        String title = xmlEscape(item.getTitle().orElse(""));
+        String title = xmlEscape(item.getTitle().orElse("")).trim();
         List<String> symbols = Collections.emptyList();
 
 /*
@@ -117,9 +123,10 @@ public class RssFeedTweet {
 
         tickerSymbols = toSymbols(symbols);
 
-        String url = toShortUrl(item.getLink().orElse(""));
+        String title = item.getTitle().orElse("").trim();
         String description = item.getDescription().orElse("").trim();
-        String tweet =  "Placera " + EMOJI_NEWSPAPER + " " + item.getTitle().orElse("").trim() + " " + emoji + "\n" + description;
+        String url = toShortUrl(item.getLink().orElse(""));
+        String tweet =  "Placera " + EMOJI_NEWSPAPER + " " + title + " " + emoji + "\n" + description;
         tweet = TwitterUtil.trim(tweet, url.length() + 1);
         tweet += "\n" + url;
 
@@ -131,14 +138,16 @@ public class RssFeedTweet {
 
 
     public static String createBreakitTweet(Item item) {
+        String title = item.getTitle().orElse("").trim();
         String url = toShortUrl(item.getLink().orElse(""));
-        return "Breakit " + EMOJI_NEWSPAPER + " " + item.getTitle() + "\n" + url;
+        return "Breakit " + EMOJI_NEWSPAPER + " " + title + "\n" + url;
     }
 
 
     public static String createAffarsvarldenTweet(Item item) {
+        String title = item.getTitle().orElse("").trim();
         String url = toShortUrl(item.getLink().orElse(""));
-        return "Affärsvärlden " + EMOJI_NEWSPAPER + " " + item.getTitle() + "\n" + url;
+        return "Affärsvärlden " + EMOJI_NEWSPAPER + " " + title + "\n" + url;
     }
 
 
