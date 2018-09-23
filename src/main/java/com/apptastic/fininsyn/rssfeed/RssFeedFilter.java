@@ -78,8 +78,8 @@ public class RssFeedFilter {
 
     private static boolean contains(String text, String... words) {
         return Arrays.stream(words)
-                .parallel()
-                .anyMatch(text::contains);
+                     .parallel()
+                     .anyMatch(text::contains);
     }
 
     private static String getContent(Item item) {
@@ -87,13 +87,8 @@ public class RssFeedFilter {
             return "";
 
         StringBuilder builder = new StringBuilder();
-
-        if (item.getTitle() != null)
-            builder.append(item.getTitle().toLowerCase());
-
-        if (item.getDescription() != null)
-            builder.append(" " + item.getDescription().toLowerCase());
-
+        item.getTitle().ifPresent(t -> builder.append(t.toLowerCase()));
+        item.getDescription().ifPresent(d -> builder.append(" ").append(d.toLowerCase()));
         return builder.toString();
     }
 

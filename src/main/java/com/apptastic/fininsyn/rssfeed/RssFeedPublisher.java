@@ -78,10 +78,10 @@ public class RssFeedPublisher {
 
         try {
             rssReader.read(RSS_FEED_RISKBANKEN)
-                    .filter(i -> filterPubDate(formatter, i.getPubDate(), lastPublished.getRiksbankenPubDate()))
+                    .filter(i -> filterPubDate(formatter, i.getPubDate().orElse(""), lastPublished.getRiksbankenPubDate()))
                     .filter(RssFeedFilter::filterContentRiksbanken)
                     .sorted(this::sortByPublicationDate)
-                    .map(i -> { next.setRiksbankenPubDate(i.getPubDate()); return i; })
+                    .map(i -> { next.setRiksbankenPubDate(i.getPubDate().orElse("")); return i; })
                     .map(RssFeedTweet::createRiskbankenTweet)
                     .forEach(twitter::publishTweet);
         }
@@ -97,10 +97,10 @@ public class RssFeedPublisher {
 
         try {
             rssReader.read(RSS_FEED_FINANSPOLITISKARADET)
-                    .filter(i -> filterPubDate(formatter, i.getPubDate(), lastPublished.getFinanspolitiskaradetPubDate()))
+                    .filter(i -> filterPubDate(formatter, i.getPubDate().orElse(""), lastPublished.getFinanspolitiskaradetPubDate()))
                     .filter(RssFeedFilter::filterContentFinanspolitiskaradet)
                     .sorted(this::sortByPublicationDate)
-                    .map(i -> { next.setFinanspolitiskaradetPubDate(i.getPubDate()); return i; })
+                    .map(i -> { next.setFinanspolitiskaradetPubDate(i.getPubDate().orElse("")); return i; })
                     .map(RssFeedTweet::createFinanspolitiskaradetTweet)
                     .forEach(twitter::publishTweet);
         }
@@ -116,10 +116,10 @@ public class RssFeedPublisher {
 
         try {
             rssReader.read(RSS_FEED_KONJUNKTURINSTITUTET)
-                    .filter(i -> filterPubDate(formatter, i.getPubDate(), lastPublished.getKonjunkturinstitutetPubDate()))
+                    .filter(i -> filterPubDate(formatter, i.getPubDate().orElse(""), lastPublished.getKonjunkturinstitutetPubDate()))
                     .filter(RssFeedFilter::filterContentKonjunkturinstitutet)
                     .sorted(this::sortByPublicationDate)
-                    .map(i -> { next.setKonjunkturinstitutetPubDate(i.getPubDate()); return i; })
+                    .map(i -> { next.setKonjunkturinstitutetPubDate(i.getPubDate().orElse("")); return i; })
                     .map(RssFeedTweet::createKonjunkturinstitutetTweet)
                     .forEach(twitter::publishTweet);
         }
@@ -135,10 +135,10 @@ public class RssFeedPublisher {
 
         try {
             rssReader.read(RSS_FEED_SCB)
-                    .filter(i -> filterPubDate(formatter, i.getPubDate(), lastPublished.getScbPubDate()))
+                    .filter(i -> filterPubDate(formatter, i.getPubDate().orElse(""), lastPublished.getScbPubDate()))
                     .filter(RssFeedFilter::filterContentScb)
                     .sorted(this::sortByPublicationDateGMT)
-                    .map(i -> { next.setScbPubDate(i.getPubDate()); return i; })
+                    .map(i -> { next.setScbPubDate(i.getPubDate().orElse("")); return i; })
                     .map(RssFeedTweet::createScbTweet)
                     .forEach(twitter::publishTweet);
         }
@@ -154,10 +154,10 @@ public class RssFeedPublisher {
 
         try {
             rssReader.read(RSS_FEED_EKOBROTTSMYNDIGHETEN)
-                    .filter(i -> filterPubDate(formatter, i.getPubDate(), lastPublished.getEkobrottsmyndighetenPubDate()))
+                    .filter(i -> filterPubDate(formatter, i.getPubDate().orElse(""), lastPublished.getEkobrottsmyndighetenPubDate()))
                     .filter(RssFeedFilter::filterContentEkobrottsmyndigheten)
                     .sorted(this::sortByPublicationDateGMT)
-                    .map(i -> { next.setEkobrottsmyndighetenPubDate(i.getPubDate()); return i; })
+                    .map(i -> { next.setEkobrottsmyndighetenPubDate(i.getPubDate().orElse("")); return i; })
                     .map(RssFeedTweet::createEkobrottsmyndighetenTweet)
                     .forEach(twitter::publishTweet);
         }
@@ -173,10 +173,10 @@ public class RssFeedPublisher {
 
         try {
             rssReader.read(RSS_FEED_VECKANS_AFFARER)
-                    .filter(i -> filterPubDate(formatter, i.getPubDate(), lastPublished.getVeckansAffarerPubDate()))
+                    .filter(i -> filterPubDate(formatter, i.getPubDate().orElse(""), lastPublished.getVeckansAffarerPubDate()))
                     .filter(RssFeedFilter::filterContentVeckansAffarer)
                     .sorted(this::sortByPublicationDateGMT)
-                    .map(i -> { next.setVeckansAffarerPubDate(i.getPubDate()); return i; })
+                    .map(i -> { next.setVeckansAffarerPubDate(i.getPubDate().orElse("")); return i; })
                     .map(RssFeedTweet::createVeckansAffarerTweet)
                     .forEach(twitter::publishTweet);
         }
@@ -192,10 +192,10 @@ public class RssFeedPublisher {
 
         try {
             rssReader.read(RSS_FEED_REALTID)
-                    .filter(i -> filterPubDate(formatter, i.getPubDate(), lastPublished.getRealtidPubDate()))
+                    .filter(i -> filterPubDate(formatter, i.getPubDate().orElse(""), lastPublished.getRealtidPubDate()))
                     .filter(RssFeedFilter::filterContentRealtid)
                     .sorted(this::sortByPublicationDateGMT)
-                    .map(i -> { next.setRealtidPubDate(i.getPubDate()); return i; })
+                    .map(i -> { next.setRealtidPubDate(i.getPubDate().orElse("")); return i; })
                     .map(RssFeedTweet::createRealtidTweet)
                     .forEach(twitter::publishTweet);
         }
@@ -211,10 +211,10 @@ public class RssFeedPublisher {
 
         try {
             rssReader.read(RSS_FEED_PLACERA)
-                    .filter(i -> filterPubDate(formatter, i.getPubDate(), lastPublished.getPlaceraPubDate()))
+                    .filter(i -> filterPubDate(formatter, i.getPubDate().orElse(""), lastPublished.getPlaceraPubDate()))
                     .filter(RssFeedFilter::filterContentPlacera)
                     .sorted(this::sortByPublicationDate)
-                    .map(i -> { next.setPlaceraPubDate(i.getPubDate()); return i; })
+                    .map(i -> { next.setPlaceraPubDate(i.getPubDate().orElse("")); return i; })
                     .map(RssFeedTweet::createPlaceraTweet)
                     .forEach(twitter::publishTweet);
         }
@@ -230,10 +230,10 @@ public class RssFeedPublisher {
 
         try {
             rssReader.read(RSS_FEED_BREAKIT)
-                    .filter(i -> filterPubDate(formatter, i.getPubDate(), lastPublished.getBreakitPubDate()))
+                    .filter(i -> filterPubDate(formatter, i.getPubDate().orElse(""), lastPublished.getBreakitPubDate()))
                     .filter(RssFeedFilter::filterContentBreakit)
                     .sorted(this::sortByPublicationDate)
-                    .map(i -> { next.setBreakitPubDate(i.getPubDate()); return i; })
+                    .map(i -> { next.setBreakitPubDate(i.getPubDate().orElse("")); return i; })
                     .map(RssFeedTweet::createBreakitTweet)
                     .forEach(twitter::publishTweet);
         }
@@ -249,10 +249,10 @@ public class RssFeedPublisher {
 
         try {
             rssReader.read(RSS_FEED_AFFARSVARLDEN)
-                    .filter(i -> filterPubDate(formatter, i.getPubDate(), lastPublished.getAffarsvarldenPubDate()))
+                    .filter(i -> filterPubDate(formatter, i.getPubDate().orElse(""), lastPublished.getAffarsvarldenPubDate()))
                     .filter(RssFeedFilter::filterContentAffarsvarlden)
                     .sorted(this::sortByPublicationDate)
-                    .map(i -> { next.setAffarsvarldenPubDate(i.getPubDate()); return i; })
+                    .map(i -> { next.setAffarsvarldenPubDate(i.getPubDate().orElse("")); return i; })
                     .map(RssFeedTweet::createAffarsvarldenTweet)
                     .forEach(twitter::publishTweet);
         }
@@ -319,8 +319,8 @@ public class RssFeedPublisher {
         SimpleDateFormat formatter = new SimpleDateFormat(DATE_TIME_PUBDATE_FORMAT);
 
         try {
-            long dateTime1 = formatter.parse(o1.getPubDate()).getTime();
-            long dateTime2 = formatter.parse(o2.getPubDate()).getTime();
+            long dateTime1 = formatter.parse(o1.getPubDate().orElse("")).getTime();
+            long dateTime2 = formatter.parse(o2.getPubDate().orElse("")).getTime();
 
             return Long.compare(dateTime1, dateTime2);
         }
@@ -337,8 +337,8 @@ public class RssFeedPublisher {
         SimpleDateFormat formatter = new SimpleDateFormat(DATE_TIME_PUBDATE_GMT_FORMAT);
 
         try {
-            long dateTime1 = formatter.parse(o1.getPubDate()).getTime();
-            long dateTime2 = formatter.parse(o2.getPubDate()).getTime();
+            long dateTime1 = formatter.parse(o1.getPubDate().orElse("")).getTime();
+            long dateTime2 = formatter.parse(o2.getPubDate().orElse("")).getTime();
 
             return Long.compare(dateTime1, dateTime2);
         }

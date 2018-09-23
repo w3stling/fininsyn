@@ -26,39 +26,39 @@ public class RssFeedTweet {
 
 
     public static String createRiskbankenTweet(Item item) {
-        String url = toShortUrl(item.getLink());
+        String url = toShortUrl(item.getLink().orElse(""));
         return "Riksbanken " + EMOJI_BANK + " " + item.getTitle() + "\n" + "#riksbanken" + "\n\n" + url;
     }
 
     public static String createFinanspolitiskaradetTweet(Item item) {
-        String url = toShortUrl(item.getLink());
+        String url = toShortUrl(item.getLink().orElse(""));
         return "Finanspolitiskaradet " + EMOJI_BRIEFCASE + " " + item.getTitle() + "\n" + url + "\n\n" + "#finanspolitiskaradet";
     }
 
     public static String createKonjunkturinstitutetTweet(Item item) {
-        String url = toShortUrl(item.getLink());
+        String url = toShortUrl(item.getLink().orElse(""));
         return "Konjunkturinstitutet " + EMOJI_OFFICE_BUILDING + " " + item.getTitle() + "\n" + url + "\n\n" + "#konjunkturinstitutet";
     }
 
     public static String createScbTweet(Item item) {
-        String url = toShortUrl(item.getLink());
+        String url = toShortUrl(item.getLink().orElse(""));
         return "SCB " + EMOJI_BAR_CHART + " " + item.getTitle() + "\n" + "#SCB" + "\n\n" + url;
     }
 
     public static String createEkobrottsmyndighetenTweet(Item item) {
-        String url = toShortUrl(item.getLink());
+        String url = toShortUrl(item.getLink().orElse(""));
         return "Ekobrottsmyndigheten " + EMOJI_POLICE_OFFICER + " " + item.getTitle() + "\n" + url + "\n\n" + "#ekobrottsmyndigheten";
     }
 
     public static String createVeckansAffarerTweet(Item item) {
-        String url = toShortUrl(item.getLink());
+        String url = toShortUrl(item.getLink().orElse(""));
         String tweet = "Veckans Affärer " + EMOJI_NEWSPAPER + " " + item.getTitle() + "\n" + url;
         return TwitterUtil.trim(tweet);
     }
 
     public static String createRealtidTweet(Item item) {
-        String url = toShortUrl(item.getLink());
-        String title = xmlEscape(item.getTitle());
+        String url = toShortUrl(item.getLink().orElse(""));
+        String title = xmlEscape(item.getTitle().orElse(""));
         List<String> symbols = Collections.emptyList();
 
 /*
@@ -79,7 +79,7 @@ public class RssFeedTweet {
     public static String createPlaceraTweet(Item item) {
         String emoji;
         String tickerSymbols = "";
-        String titleLowerCase = item.getTitle().toLowerCase().trim();
+        String titleLowerCase = item.getTitle().orElse("").toLowerCase().trim();
 
         if (titleLowerCase.startsWith("börsen idag:")) {
             if (titleLowerCase.contains("stark") || titleLowerCase.contains("uppåt") || titleLowerCase.contains("positiv") ||
@@ -117,9 +117,9 @@ public class RssFeedTweet {
 
         tickerSymbols = toSymbols(symbols);
 
-        String url = toShortUrl(item.getLink());
-        String description = Optional.ofNullable(item.getDescription()).orElse("").trim();
-        String tweet =  "Placera " + EMOJI_NEWSPAPER + " " + item.getTitle().trim() + " " + emoji + "\n" + description;
+        String url = toShortUrl(item.getLink().orElse(""));
+        String description = item.getDescription().orElse("").trim();
+        String tweet =  "Placera " + EMOJI_NEWSPAPER + " " + item.getTitle().orElse("").trim() + " " + emoji + "\n" + description;
         tweet = TwitterUtil.trim(tweet, url.length() + 1);
         tweet += "\n" + url;
 
@@ -131,13 +131,13 @@ public class RssFeedTweet {
 
 
     public static String createBreakitTweet(Item item) {
-        String url = toShortUrl(item.getLink());
+        String url = toShortUrl(item.getLink().orElse(""));
         return "Breakit " + EMOJI_NEWSPAPER + " " + item.getTitle() + "\n" + url;
     }
 
 
     public static String createAffarsvarldenTweet(Item item) {
-        String url = toShortUrl(item.getLink());
+        String url = toShortUrl(item.getLink().orElse(""));
         return "Affärsvärlden " + EMOJI_NEWSPAPER + " " + item.getTitle() + "\n" + url;
     }
 
@@ -168,12 +168,10 @@ public class RssFeedTweet {
 
 
     private static String toSymbols(List<String> symbols) {
-        String symbolsText = symbols.stream()
-                .map(TwitterUtil::toCashTag)
-                .collect (Collectors.joining(" "))
-                .trim();
-
-        return symbolsText;
+        return symbols.stream()
+                      .map(TwitterUtil::toCashTag)
+                      .collect (Collectors.joining(" "))
+                      .trim();
     }
 
 }
