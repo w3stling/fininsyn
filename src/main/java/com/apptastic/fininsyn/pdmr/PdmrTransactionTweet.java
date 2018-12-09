@@ -70,11 +70,11 @@ public class PdmrTransactionTweet {
             builder.append(instrumentName)
                     .append("\n");
         }
-        else if (transaction.getInstrument().length() < 50 && !transaction.getInstrument().equalsIgnoreCase("aktie") &&
-                !transaction.getInstrument().equalsIgnoreCase("Shares") &&
-                !transaction.getInstrument().equalsIgnoreCase("Common Share")) {
+        else if (transaction.getInstrumentName().length() < 50 && !transaction.getInstrumentName().equalsIgnoreCase("aktie") &&
+                !transaction.getInstrumentName().equalsIgnoreCase("Shares") &&
+                !transaction.getInstrumentName().equalsIgnoreCase("Common Share")) {
 
-            builder.append(transaction.getInstrument())
+            builder.append(transaction.getInstrumentName())
                     .append("\n");
         }
 

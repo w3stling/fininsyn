@@ -12,7 +12,7 @@ public class PdmrTransactionFilter {
     private static final double EXCHANGE_RATE_NOK_SEK = 1.07;
 
     public static boolean transactionFilter(String lastProcessed, String publicationDate) {
-        return lastProcessed.compareTo(publicationDate) < 0;
+        return lastProcessed != null && publicationDate != null && lastProcessed.compareTo(publicationDate) < 0;
     }
 
     public static boolean transactionFilter(Transaction transaction) {
@@ -21,7 +21,7 @@ public class PdmrTransactionFilter {
                 transaction.getQuantity() != 0.0 &&
                 !transaction.getIsin().isEmpty() &&
                 "Aktuell".equals(transaction.getStatus()) &&
-                !"Syntetisk option".equals(transaction.getInstrument()) &&
+                !"Syntetisk option".equals(transaction.getInstrumentName()) &&
                 ("Förvärv".equals(transaction.getNatureOfTransaction()) || "Avyttring".equals(transaction.getNatureOfTransaction()));
     }
 
