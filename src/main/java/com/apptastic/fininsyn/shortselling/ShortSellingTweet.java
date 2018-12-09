@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 
 public class ShortSellingTweet {
@@ -18,6 +19,7 @@ public class ShortSellingTweet {
     private static final String EMOJI_GHOST = "\uD83D\uDC7B";
     private static final String EMOJI_THUMBS_UP = "\uD83D\uDC4D";
     private static final DecimalFormat PROCENT_FORMATTER = new DecimalFormat("#,##0.00", new DecimalFormatSymbols(Locale.FRANCE));
+    private static final Pattern TRIM = Pattern.compile("(^\\h*)|(\\h*$)");
 
     public static String create(List<NetShortPosition> positionHistoryPerHolder) {
         NetShortPosition currentPosition = positionHistoryPerHolder.get(0);
@@ -26,7 +28,7 @@ public class ShortSellingTweet {
         String directionText = increased ? "ökar" : "minskar";
 
         StringBuilder builder = new StringBuilder();
-        builder.append(currentPosition.getPositionHolder().trim())
+        builder.append(formatPositionHolder(currentPosition.getPositionHolder()))
                 .append(" ")
                 .append(directionText)
                 .append(" sin korta nettoposition");
@@ -97,37 +99,57 @@ public class ShortSellingTweet {
 
     private static String formatIssuer(String issuer) {
         if (issuer.equals("AB SKF"))
-            issuer = "SKF AB";
+            issuer = "SKF";
         else if (issuer.equals("BillerudKorsnas publ AB"))
-            issuer = "BillerudKorsnas AB";
-        else if (issuer.equals("BillerudKorsnas"))
-            issuer = "BillerudKorsnas AB";
+            issuer = "BillerudKorsnas";
 
+        issuer = issuer.replaceFirst("TELE2", "Tele2");
         issuer = issuer.replaceFirst("\\(PUBL\\)", "");
         issuer = issuer.replaceFirst("\\(publ\\)", "");
         issuer = issuer.replaceFirst("\\(Publ\\)", "");
-        issuer = issuer.trim();
+        issuer = issuer.replaceFirst("Aktiebolag", "");
+        issuer = issuer.replaceFirst("AKTIEBOLAG", "");
+        issuer = issuer.replaceFirst("\\h+AB\\h*$", "");
+        issuer = trim(issuer, "");
 
         Optional<String> formattedIssuer = Arrays.stream(StringUtils.split(issuer, ' '))
-                .map(ShortSellingTweet::formatWordToCapitalize)
+                .map(ShortSellingTweet::formatWordToCapitalize3)
                 .reduce((a, b) -> a.trim() + " " + b.trim() );
 
-        issuer = formattedIssuer.orElse(issuer.trim());
-
-        if (issuer.codePointAt(issuer.length() - 1) == 160)
-            issuer = issuer.substring(0, issuer.length() - 1).trim();
+        issuer = formattedIssuer.orElse(issuer).trim();
 
         return issuer;
     }
 
-    private static String formatWordToCapitalize(String word) {
-        if (word.length() == 2 && word.equalsIgnoreCase("AB"))
-            word = word.toUpperCase();
+    private static String formatPositionHolder(String name) {
+        name = name.replace(",", "");
+        name = name.replace(".", "");
 
-        if (word.length() > 4 && (StringUtils.isAllUpperCase(word) || StringUtils.isAllLowerCase(word)))
+        Optional<String> formattedIssuer = Arrays.stream(StringUtils.split(name, ' '))
+                .map(ShortSellingTweet::formatWordToCapitalize3)
+                .reduce((a, b) -> a.trim() + " " + b.trim() );
+
+        name = formattedIssuer.orElse(name).trim();
+
+        return name;
+    }
+
+
+    private static String formatWordToCapitalize3(String word) {
+        return formatWordToCapitalize(word, 3);
+    }
+
+    private static String formatWordToCapitalize(String word, int nofChars) {
+        word = trim(word, "");
+
+        if (word.length() > nofChars && (StringUtils.isAllUpperCase(word) || StringUtils.isAllLowerCase(word)))
             word = StringUtils.capitalize(word.toLowerCase());
 
         return word;
     }
 
+
+    private static String trim(String text, String replacement) {
+        return TRIM.matcher(text).replaceAll(replacement);
+    }
 }
