@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '2.0.4.RELEASE'
+		springBootVersion = '2.0.7.RELEASE'
 	}
 	repositories {
 		mavenCentral()
@@ -27,7 +27,7 @@ import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
 import com.bmuschko.gradle.docker.tasks.image.DockerPushImage
 
 group = 'com.apptastic'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.2-SNAPSHOT'
 sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
 
@@ -76,7 +76,7 @@ task copyReport(type: Copy) {
 
 task createDockerfile(type: Dockerfile) {
     destFile = project.file('build/docker/Dockerfile')
-    from 'openjdk:8-jre-alpine'
+    from 'openjdk:11-jre-slim'
     maintainer 'Apptastic "apptastic.software@gmail.com"'
     copyFile jar.archiveName, '/app/fininsyn.jar'
     entryPoint 'java'
@@ -84,7 +84,8 @@ task createDockerfile(type: Dockerfile) {
     //exposePort 8080
     //runCommand 'apk --update --no-cache add curl'
     //instruction 'HEALTHCHECK CMD curl -f http://localhost:8080/health || exit 1'
-    runCommand 'apk add --no-cache tzdata'
+    //runCommand 'apk add --no-cache tzdata'
+    //runCommand 'apt-get install tzdata'
     environmentVariable('TZ', 'Europe/Stockholm')
 }
 
