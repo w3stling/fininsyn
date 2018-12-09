@@ -50,10 +50,10 @@ public class ShortSellingTwitterPublisher {
 
         if (!newPublicationDate.equals(last.getPublicationDate())) {
             try {
-                Stream<NetShortPosition> lastSearch = register.search(toDate(last.getPublicationDate()), 0)
+                Stream<NetShortPosition> lastSearch = register.search(toDate(last.getPublicationDate()), 6)
                         .filter(ShortSellingFilter::historyLimitFilter);
 
-                List<NetShortPosition> newSearch = register.search(toDate(now), 5)
+                List<NetShortPosition> newSearch = register.search(toDate(now), 6)
                         .filter(ShortSellingFilter::historyLimitFilter)
                         .collect(Collectors.toList());
 
