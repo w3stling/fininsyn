@@ -23,7 +23,7 @@ public class RssFeedPublisher {
     private static final String RSS_FEED_RISKBANKEN = "https://www.riksbank.se/sv/rss/pressmeddelanden";
     private static final String RSS_FEED_FINANSPOLITISKARADET = "http://www.finanspolitiskaradet.se/2.5dd459a31158f2d75c380003166/12.778e24d112a169fd1c1800036576.portlet?state=rss&sv.contenttype=text/xml;charset=UTF-8";
     private static final String RSS_FEED_KONJUNKTURINSTITUTET = "https://www.konj.se/4.2de5c57614f808a95afcc13f/12.2de5c57614f808a95afcc354.portlet?state=rss&sv.contenttype=text/xml;charset=UTF-8";
-    private static final String RSS_FEED_SCB = "http://www.scb.se/rss/";
+    private static final String RSS_FEED_SCB = "https://www.scb.se/Feed/statistiknyheter/";
     private static final String RSS_FEED_EKOBROTTSMYNDIGHETEN = "https://www.ekobrottsmyndigheten.se/Templates/Handlers/News/HandlerNewsRss.ashx?languageBranch=sv";
     private static final String RSS_FEED_VECKANS_AFFARER = "https://www.va.se/rss/";
     private static final String RSS_FEED_REALTID = "https://www.realtid.se/rss/senaste";
@@ -32,6 +32,7 @@ public class RssFeedPublisher {
     private static final String RSS_FEED_AFFARSVARLDEN = "https://www.affarsvarlden.se/rss.xml";
     private static final String DATE_TIME_PUBDATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss ZZZZ";
     private static final String DATE_TIME_PUBDATE_GMT_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
+    private static final String DATE_TIME_PUBDATE_ISO_FORMAT = "yyyy-MM-dd'T'HH:mm:ssXXX";
     private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
     private static final String TIME_ZONE = "Europe/Stockholm";
     @Autowired
@@ -131,13 +132,13 @@ public class RssFeedPublisher {
 
 
     private void checkScbRssFeed(RssFeed lastPublished, RssFeed next) {
-        SimpleDateFormat formatter = new SimpleDateFormat(DATE_TIME_PUBDATE_GMT_FORMAT);
+        SimpleDateFormat formatter = new SimpleDateFormat(DATE_TIME_PUBDATE_ISO_FORMAT);
 
         try {
             rssReader.read(RSS_FEED_SCB)
                     .filter(i -> filterPubDate(formatter, i.getPubDate().orElse(""), lastPublished.getScbPubDate()))
                     .filter(RssFeedFilter::filterContentScb)
-                    .sorted(this::sortByPublicationDateGMT)
+                    .sorted(this::sortByPublicationDateISO)
                     .map(i -> { next.setScbPubDate(i.getPubDate().orElse("")); return i; })
                     .map(RssFeedTweet::createScbTweet)
                     .forEach(twitter::publishTweet);
@@ -297,10 +298,12 @@ public class RssFeedPublisher {
 
             SimpleDateFormat formatter1 = new SimpleDateFormat(DATE_TIME_PUBDATE_FORMAT);
             SimpleDateFormat formatter2 = new SimpleDateFormat(DATE_TIME_PUBDATE_GMT_FORMAT);
+            SimpleDateFormat formatter3 = new SimpleDateFormat(DATE_TIME_PUBDATE_ISO_FORMAT);
             String date1 = formatter1.format(today.getTime());
             String date2 = formatter2.format(today.getTime());
+            String date3 = formatter3.format(today.getTime());
 
-            lastPublished = new RssFeed("1", "1", date1, date1, date1, date2, date2, date2, date1, date1, date1, date1, "");
+            lastPublished = new RssFeed("1", "1", date1, date1, date1, date3, date2, date2, date1, date1, date1, date1, "");
         }
 
         return lastPublished;
@@ -335,6 +338,22 @@ public class RssFeedPublisher {
 
     private int sortByPublicationDateGMT(Item o1, Item o2) {
         SimpleDateFormat formatter = new SimpleDateFormat(DATE_TIME_PUBDATE_GMT_FORMAT);
+
+        try {
+            long dateTime1 = formatter.parse(o1.getPubDate().orElse("")).getTime();
+            long dateTime2 = formatter.parse(o2.getPubDate().orElse("")).getTime();
+
+            return Long.compare(dateTime1, dateTime2);
+        }
+        catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    private int sortByPublicationDateISO(Item o1, Item o2) {
+        SimpleDateFormat formatter = new SimpleDateFormat(DATE_TIME_PUBDATE_ISO_FORMAT);
 
         try {
             long dateTime1 = formatter.parse(o1.getPubDate().orElse("")).getTime();

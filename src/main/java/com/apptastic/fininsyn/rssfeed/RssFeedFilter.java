@@ -33,22 +33,22 @@ public class RssFeedFilter {
 
     public static boolean filterContentEkobrottsmyndigheten(Item item) {
         String content = getContent(item);
-        return !contains(content, "vi söker");
+        return !contains(content, "vi söker", "söker", "tjänsten");
     }
 
     public static boolean filterContentRiksbanken(Item item) {
         String content = getContent(item);
-        return !contains(content, "vi söker");
+        return !contains(content, "vi söker", "söker", "tjänsten");
     }
 
     public static boolean filterContentFinanspolitiskaradet(Item item) {
         String content = getContent(item);
-        return !contains(content, "vi söker");
+        return !contains(content, "vi söker", "söker", "tjänsten");
     }
 
     public static boolean filterContentKonjunkturinstitutet(Item item) {
         String content = getContent(item);
-        return !contains(content, "vi söker");
+        return !contains(content, "vi söker", "söker", "tjänsten");
     }
 
     public static boolean filterContentVeckansAffarer(Item item) {

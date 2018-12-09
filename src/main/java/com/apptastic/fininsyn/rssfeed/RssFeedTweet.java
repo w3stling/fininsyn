@@ -65,6 +65,9 @@ public class RssFeedTweet {
     public static String createRealtidTweet(Item item) {
         String url = toShortUrl(item.getLink().orElse(""));
         String title = xmlEscape(item.getTitle().orElse("")).trim();
+        title = removeQuotes(title);
+
+
         List<String> symbols = Collections.emptyList();
 
 /*
@@ -183,4 +186,11 @@ public class RssFeedTweet {
                       .trim();
     }
 
+
+    private static String removeQuotes(String text) {
+        if (text != null && text.length() > 2 && text.charAt(0) == '"' && text.charAt(text.length() - 1) == '"')
+            text = text.substring(1, text.length() - 1);
+
+        return text;
+    }
 }
