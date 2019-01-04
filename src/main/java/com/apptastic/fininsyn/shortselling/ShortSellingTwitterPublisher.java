@@ -59,6 +59,9 @@ public class ShortSellingTwitterPublisher {
 
                 Set<String> diff = diffStreams(newSearch.stream(), lastSearch);
 
+                if (diff.size() > 40)
+                    return;
+
                 newSearch.stream()
                         .filter(ShortSellingFilter::historyLimitFilter)
                         .filter(p -> diff.contains(p.getPositionHolder() + p.getIsin()))
