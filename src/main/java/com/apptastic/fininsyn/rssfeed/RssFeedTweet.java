@@ -93,7 +93,8 @@ public class RssFeedTweet {
         if (titleLowerCase.startsWith("börsen idag:")) {
             if (titleLowerCase.contains("stark") || titleLowerCase.contains("uppåt") || titleLowerCase.contains("positiv") ||
                     titleLowerCase.contains("över nollan") || titleLowerCase.contains("tjuraktig") || titleLowerCase.contains("blått") ||
-                    titleLowerCase.contains("högre") || titleLowerCase.contains("blå") || titleLowerCase.contains("uppgång")) {
+                    titleLowerCase.contains("högre") || titleLowerCase.contains("blå") || titleLowerCase.contains("grön") ||
+                    titleLowerCase.contains("uppgång")) {
 
                 emoji = EMOJI_CHART_INCREASING;
             }
