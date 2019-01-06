@@ -12,17 +12,18 @@ public class RssFeedFilter {
             "riksbanken", "ecb", "fed", "bnp", "redovisar ett resultat", "omsättning", "efterhandeln", "rekommendation",
             "räkenskapsår", "tecknat avtal", "tecknar avtal", "stort avtal", "avtal kring", "bruttomarginal", "nettoomsätt",
             "kreditförlust", "övertecknad", "dagens vinnare", "vinstvarn", "omsätt", "intäkt", "lönsam", "tillväxt", "kvartalet",
-            "emission", "licens", "beställning", "leverans", "bitcoin", "kryptovalut", "blankar", "blankning", "storägaren",
+            "emission", "licens", "beställning", "leverans", "bitcoin", "kryptovalut", "blanka", "blankning", "storägaren",
             "ramavtal", "prognos", "handelskrig", "handelskonflikt", "handelsoro", "tullar", "frihandel", "riskkapital",
             "budrykte", "varsla", "varsel", "händer idag", "rusa", "investera", "forsk", "värdering", "startup", "strejk",
             "köpläge", "säljläge", "lansera", "entreprenör", "analytiker", "innovation", "hajp", "milstolpe", "forskning",
-            "rasar", "böter", "lägger ner", "upphandling", "patent", "förhandel", "konjunkturbesked", "studie", "förvänt",
+            "rasar", "böter", "lägger ner", "upphandling", "patent", "förhandel", "konjunktur", "studie", "förvänt",
             "försäljning", "marknadsandelar", "genombrott", "bötfälls", "vinstlyft", "spelbolag", "vinstfall", "nedskrivning",
             "blockchain", "blockkedja", "omstrukturera", "förvaltning", "verksamhet", "köpeskilling", "marknadsleda",
             "revolutionera", "nätkund", "analys", "förlorare", "råvaror", "rekord", "penningtvätt", "kross", "grundaren",
             "slakt", "värt", "lyfte", "raket", "skena", "dubblar", "raset", "faller", "konkurren", "elpriser", "köper",
             "artificiell", "brist", "konkurrent", "marknadsled", "import", "export", "sysselsättning", "stämning", "stämmer",
-            "pressmeddelande" };
+            "pressmeddelande", "jobbsiffror", "konkurs", "noter", "uppstickare", "köprek", "finansering", "handelsstopp",
+            "rally", "biometri"};
 
     public static final String[] COMMON_IGNORE_KEYWORDS = { "politiker" };
 
