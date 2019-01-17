@@ -94,12 +94,13 @@ public class RssFeedTweet {
             if (titleLowerCase.contains("stark") || titleLowerCase.contains("uppåt") || titleLowerCase.contains("positiv") ||
                     titleLowerCase.contains("över nollan") || titleLowerCase.contains("tjuraktig") || titleLowerCase.contains("blått") ||
                     titleLowerCase.contains("högre") || titleLowerCase.contains("blå") || titleLowerCase.contains("grön") ||
-                    titleLowerCase.contains("uppgång")) {
+                    titleLowerCase.contains("uppgång") || titleLowerCase.contains("dur")) {
 
                 emoji = EMOJI_CHART_INCREASING;
             }
             else if (titleLowerCase.contains("röd") || titleLowerCase.contains("björn") || titleLowerCase.contains("nedåt") ||
-                    titleLowerCase.contains("nedgång") || titleLowerCase.contains("svag") || titleLowerCase.contains("negativ")) {
+                    titleLowerCase.contains("nedgång") || titleLowerCase.contains("svag") || titleLowerCase.contains("negativ") ||
+                    titleLowerCase.contains("moll")) {
 
                 emoji = EMOJI_CHART_DECREASING;
             }

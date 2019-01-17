@@ -29,12 +29,13 @@ public class RssFeedFilter {
 
     public static boolean filterContentScb(Item item) {
         String content = getContent(item);
-        return !contains(content, "politik", "parti", "barn", "föräld", "skola", "vi söker");
+        return !contains(content, "politik", "parti", "barn", "föräld", "skola", "vi söker", "allmänna val",
+                "folkvald", "kommunfullmäktig");
     }
 
     public static boolean filterContentEkobrottsmyndigheten(Item item) {
         String content = getContent(item);
-        return !contains(content, "vi söker", "söker", "tjänsten");
+        return !contains(content, "vi söker", "söker", "tjänsten", "högskoleprovsfusk");
     }
 
     public static boolean filterContentRiksbanken(Item item) {
