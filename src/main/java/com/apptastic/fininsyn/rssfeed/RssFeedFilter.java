@@ -5,8 +5,8 @@ import com.apptastic.rssreader.Item;
 import java.util.Arrays;
 
 public class RssFeedFilter {
-    public static final String[] COMMON_KEYWORDS = { "börs", "aktie", "terminer", "rörelseresultat", "periodresultat",
-            "årsresultat", "kvartalsresultat", "kvartalsrapport", "rekyl", "marknaden", "konkurrera", "kunder",
+    public static final String[] COMMON_KEYWORDS = { "börs", "aktie", "terminer", "rörelseresultat", "värdepapper",
+            "periodresultat", "årsresultat", "kvartalsresultat", "kvartalsrapport", "rekyl", "marknaden", "konkurrera", "kunder",
             "årsrapport", "delårsrapport", "halvårsrapport", "rapport", "rapportflod", "riktkurs", "släppt", "fintech",
             "förvärv", "uppköp", "räntebesked", "reporänta", "styrräntan", "räntehöjning", "räntesäkning", "intäkter",
             "riksbanken", "ecb", "fed", "bnp", "redovisar ett resultat", "omsättning", "efterhandeln", "rekommendation",
@@ -22,8 +22,8 @@ public class RssFeedFilter {
             "revolutionera", "nätkund", "analys", "förlorare", "råvaror", "rekord", "penningtvätt", "kross", "grundaren",
             "slakt", "värt", "lyfte", "raket", "skena", "dubblar", "raset", "faller", "konkurren", "elpriser", "köper",
             "artificiell", "brist", "konkurrent", "marknadsled", "import", "export", "sysselsättning", "stämning", "stämmer",
-            "pressmeddelande", "jobbsiffror", "konkurs", "noter", "uppstickare", "köprek", "finansering", "handelsstopp",
-            "rally", "biometri"};
+            "pressmeddelande", "jobbsiffror", "konkurs", "noter", "uppstickare", "köprek", "säljrek", "finansering", "handelsstopp",
+            "rally", "biometri", "marknadsmanipulation", "kursmanipulation", "marknadsmissbruk", "inside"};
 
     public static final String[] COMMON_IGNORE_KEYWORDS = { "politiker" };
 
@@ -35,7 +35,7 @@ public class RssFeedFilter {
 
     public static boolean filterContentEkobrottsmyndigheten(Item item) {
         String content = getContent(item);
-        return !contains(content, "vi söker", "söker", "tjänsten", "högskoleprovsfusk");
+        return !contains(content, "vi söker", "söker", "tjänsten", "högskoleprovsfusk", "namnstatistik", "tilltalsnamn", "miljöräkenskaper");
     }
 
     public static boolean filterContentRiksbanken(Item item) {

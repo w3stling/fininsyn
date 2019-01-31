@@ -177,7 +177,8 @@ public class RssFeedTweet {
                    .replace("&quot;", "\"")
                    .replace("&apos;", "'")
                    .replace("&lt;","<")
-                   .replace("&gt;", ">");
+                   .replace("&gt;", ">")
+                   .replace("&#039;", "'");
     }
 
 
