@@ -25,12 +25,12 @@ public class RssFeedFilter {
             "pressmeddelande", "jobbsiffror", "konkurs", "noter", "uppstickare", "köprek", "säljrek", "finansering", "handelsstopp",
             "rally", "biometri", "marknadsmanipulation", "kursmanipulation", "marknadsmissbruk", "inside"};
 
-    public static final String[] COMMON_IGNORE_KEYWORDS = { "politiker" };
+    public static final String[] COMMON_IGNORE_KEYWORDS = { "politiker", "väljarbarometer" };
 
     public static boolean filterContentScb(Item item) {
         String content = getContent(item);
         return !contains(content, "politik", "parti", "barn", "föräld", "skola", "vi söker", "allmänna val",
-                "folkvald", "kommunfullmäktig");
+                "folkvald", "kommunfullmäktig", "folkmängd");
     }
 
     public static boolean filterContentEkobrottsmyndigheten(Item item) {
