@@ -23,7 +23,7 @@ public class RssFeedFilter {
             "slakt", "värt", "lyfte", "raket", "skena", "dubblar", "raset", "faller", "konkurren", "elpriser", "köper",
             "artificiell", "brist", "konkurrent", "marknadsled", "import", "export", "sysselsättning", "stämning", "stämmer",
             "pressmeddelande", "jobbsiffror", "konkurs", "noter", "uppstickare", "köprek", "säljrek", "finansering", "handelsstopp",
-            "rally", "biometri", "marknadsmanipulation", "kursmanipulation", "marknadsmissbruk", "inside"};
+            "rally", "biometri", "marknadsmanipulation", "kursmanipulation", "marknadsmissbruk", "inside", "finansinspektionen" };
 
     public static final String[] COMMON_IGNORE_KEYWORDS = { "politiker", "väljarbarometer" };
 
