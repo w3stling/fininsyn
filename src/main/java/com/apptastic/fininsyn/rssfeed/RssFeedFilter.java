@@ -14,16 +14,17 @@ public class RssFeedFilter {
             "kreditförlust", "övertecknad", "dagens vinnare", "vinstvarn", "omsätt", "intäkt", "lönsam", "tillväxt", "kvartalet",
             "emission", "licens", "beställning", "leverans", "bitcoin", "kryptovalut", "blanka", "blankning", "storägaren",
             "ramavtal", "prognos", "handelskrig", "handelskonflikt", "handelsoro", "tullar", "frihandel", "riskkapital",
-            "budrykte", "varsla", "varsel", "händer idag", "rusa", "investera", "forsk", "värdering", "startup", "strejk",
+            "budrykte", "varsla", "varsel", "händer idag", "rusa", "rusning", "investera", "forsk", "värdering", "startup", "strejk",
             "köpläge", "säljläge", "lansera", "entreprenör", "analytiker", "innovation", "hajp", "milstolpe", "forskning",
             "rasar", "böter", "lägger ner", "upphandling", "patent", "förhandel", "konjunktur", "studie", "förvänt",
             "försäljning", "marknadsandelar", "genombrott", "bötfälls", "vinstlyft", "spelbolag", "vinstfall", "nedskrivning",
             "blockchain", "blockkedja", "omstrukturera", "förvaltning", "verksamhet", "köpeskilling", "marknadsleda",
             "revolutionera", "nätkund", "analys", "förlorare", "råvaror", "rekord", "penningtvätt", "kross", "grundaren",
-            "slakt", "värt", "lyfte", "raket", "skena", "dubblar", "raset", "faller", "konkurren", "elpriser", "köper",
+            "slakt", "värt", "lyfte", "raket", "skena", "dubblar", "raset", "faller", "konkurren", "elpriser", "köper", "avyttra",
             "artificiell", "brist", "konkurrent", "marknadsled", "import", "export", "sysselsättning", "stämning", "stämmer",
             "pressmeddelande", "jobbsiffror", "konkurs", "noter", "uppstickare", "köprek", "säljrek", "finansering", "handelsstopp",
-            "rally", "biometri", "marknadsmanipulation", "kursmanipulation", "marknadsmissbruk", "inside", "finansinspektionen" };
+            "rally", "biometri", "marknadsmanipulation", "kursmanipulation", "marknadsmissbruk", "inside", "finansinspektionen",
+            "rekonstruktion", "ägardata", "backar", "satsning", "satsar"};
 
     public static final String[] COMMON_IGNORE_KEYWORDS = { "politiker", "väljarbarometer" };
 
