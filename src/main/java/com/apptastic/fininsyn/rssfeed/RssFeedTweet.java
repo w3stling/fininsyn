@@ -100,7 +100,7 @@ public class RssFeedTweet {
             }
             else if (titleLowerCase.contains("röd") || titleLowerCase.contains("björn") || titleLowerCase.contains("nedåt") ||
                     titleLowerCase.contains("nedgång") || titleLowerCase.contains("svag") || titleLowerCase.contains("negativ") ||
-                    titleLowerCase.contains("moll")) {
+                    titleLowerCase.contains("moll") || titleLowerCase.contains("utför")) {
 
                 emoji = EMOJI_CHART_DECREASING;
             }
