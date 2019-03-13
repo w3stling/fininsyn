@@ -19,6 +19,7 @@ public class RssFeed {
     public String placeraPubDate;
     public String breakitPubDate;
     public String affarsvarldenPubDate;
+    public String investingComPubDate;
     public String lastAttempt;
 
 
@@ -29,7 +30,7 @@ public class RssFeed {
     public RssFeed(String id, String rssFeedId, String riksbankenPubDate, String finanspolitiskaradetPubDate,
                    String konjunkturinstitutetPubDate, String scbPubDate, String ekobrottsmyndighetenPubDate,
                    String veckansAffarerPubDate, String realtidPubDate, String placeraPubDate, String breakitPubDate,
-                   String affarsvarldenPubDate, String lastAttempt) {
+                   String affarsvarldenPubDate, String investingComPubDate, String lastAttempt) {
 
         this.id = id;
         this.rssFeedId = rssFeedId;
@@ -43,6 +44,7 @@ public class RssFeed {
         this.placeraPubDate = placeraPubDate;
         this.breakitPubDate = breakitPubDate;
         this.affarsvarldenPubDate = affarsvarldenPubDate;
+        this.investingComPubDate = investingComPubDate;
         this.lastAttempt = lastAttempt;
     }
 
@@ -60,6 +62,7 @@ public class RssFeed {
         placeraPubDate = o.placeraPubDate;
         breakitPubDate = o.breakitPubDate;
         affarsvarldenPubDate = o.affarsvarldenPubDate;
+        investingComPubDate = o.investingComPubDate;
         lastAttempt = o.lastAttempt;
     }
 
@@ -152,11 +155,19 @@ public class RssFeed {
     }
 
     public String getAffarsvarldenPubDate() {
-        return breakitPubDate;
+        return affarsvarldenPubDate;
     }
 
-    public void setAffarsvarldenPubDate(String breakitPubDate) {
-        this.breakitPubDate = breakitPubDate;
+    public void setAffarsvarldenPubDate(String affarsvarldenPubDate) {
+        this.affarsvarldenPubDate = affarsvarldenPubDate;
+    }
+
+    public String getInvestingComPubDate() {
+        return investingComPubDate;
+    }
+
+    public void setInvestingComPubDate(String investingComPubDate) {
+        this.investingComPubDate = investingComPubDate;
     }
 
     public String getLastAttempt() {

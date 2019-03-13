@@ -156,6 +156,13 @@ public class RssFeedTweet {
     }
 
 
+    public static String createInvestingComTweet(Item item) {
+        String title = item.getTitle().orElse("").trim();
+        String url = toShortUrl(item.getLink().orElse(""));
+        return "Investing com " + EMOJI_NEWSPAPER + " " + title + "\n" + url;
+    }
+
+
     private static String toShortUrl(String url) {
         if (url == null || url.isEmpty())
             return "";

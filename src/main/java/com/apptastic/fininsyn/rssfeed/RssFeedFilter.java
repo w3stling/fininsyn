@@ -79,6 +79,11 @@ public class RssFeedFilter {
         return !contains(content, "analys+", "portfölj") && contains(content, COMMON_KEYWORDS) && !contains(content, COMMON_IGNORE_KEYWORDS);
     }
 
+    public static boolean filterContentInvestingCom(Item item) {
+        String content = getContent(item);
+        return contains(content, COMMON_KEYWORDS) && !contains(content, COMMON_IGNORE_KEYWORDS);
+    }
+
     private static boolean contains(String text, String... words) {
         return Arrays.stream(words)
                      .parallel()

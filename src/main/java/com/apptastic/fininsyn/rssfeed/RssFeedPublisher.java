@@ -30,9 +30,11 @@ public class RssFeedPublisher {
     private static final String RSS_FEED_PLACERA = "https://www.avanza.se/placera/forstasidan.rss.xml";
     private static final String RSS_FEED_BREAKIT = "https://www.breakit.se/feed/artiklar";
     private static final String RSS_FEED_AFFARSVARLDEN = "https://www.affarsvarlden.se/rss.xml";
+    private static final String RSS_FEED_INVESTING_COM = "https://se.investing.com/rss/news.rss";
     private static final String DATE_TIME_PUBDATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss ZZZZ";
     private static final String DATE_TIME_PUBDATE_GMT_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
     private static final String DATE_TIME_PUBDATE_ISO_FORMAT = "yyyy-MM-dd'T'HH:mm:ssXXX";
+    private static final String DATE_TIME_PUBDATE_NORMAL_FORMAT = "yyyy-MM-dd HH:mm:ss";
     private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
     private static final String TIME_ZONE = "Europe/Stockholm";
     @Autowired
@@ -64,6 +66,7 @@ public class RssFeedPublisher {
             checkBreakitRssFeed(lastPublished, next);
             checkAffarsvarldenRssFeed(lastPublished, next);
             checkPlaceraRssFeed(lastPublished, next);
+            checkInvestingComRssFeed(lastPublished, next);
 
             next.setLastAttempt(now());
             repository.save(next).subscribe();
@@ -263,6 +266,24 @@ public class RssFeedPublisher {
 
     }
 
+    private void checkInvestingComRssFeed(RssFeed lastPublished, RssFeed next) {
+        SimpleDateFormat formatter = new SimpleDateFormat(DATE_TIME_PUBDATE_NORMAL_FORMAT);
+
+        try {
+            rssReader.read(RSS_FEED_INVESTING_COM)
+                    .filter(i -> filterPubDate(formatter, i.getPubDate().orElse(""), lastPublished.getInvestingComPubDate()))
+                    .filter(RssFeedFilter::filterContentInvestingCom)
+                    .sorted(this::sortByPublicationDateNormal)
+                    .map(i -> { next.setInvestingComPubDate(i.getPubDate().orElse("")); return i; })
+                    .map(RssFeedTweet::createInvestingComTweet)
+                    .forEach(twitter::publishTweet);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
     private boolean filterPubDate(SimpleDateFormat formatter, String pubDate, String lastPublished) {
         boolean filter;
@@ -299,11 +320,13 @@ public class RssFeedPublisher {
             SimpleDateFormat formatter1 = new SimpleDateFormat(DATE_TIME_PUBDATE_FORMAT);
             SimpleDateFormat formatter2 = new SimpleDateFormat(DATE_TIME_PUBDATE_GMT_FORMAT);
             SimpleDateFormat formatter3 = new SimpleDateFormat(DATE_TIME_PUBDATE_ISO_FORMAT);
+            SimpleDateFormat formatter4 = new SimpleDateFormat(DATE_TIME_PUBDATE_NORMAL_FORMAT);
             String date1 = formatter1.format(today.getTime());
             String date2 = formatter2.format(today.getTime());
             String date3 = formatter3.format(today.getTime());
+            String date4 = formatter4.format(today.getTime());
 
-            lastPublished = new RssFeed("1", "1", date1, date1, date1, date3, date2, date2, date1, date1, date1, date1, "");
+            lastPublished = new RssFeed("1", "1", date1, date1, date1, date3, date2, date2, date1, date1, date1, date1, date4, "");
         }
 
         return lastPublished;
@@ -354,6 +377,23 @@ public class RssFeedPublisher {
 
     private int sortByPublicationDateISO(Item o1, Item o2) {
         SimpleDateFormat formatter = new SimpleDateFormat(DATE_TIME_PUBDATE_ISO_FORMAT);
+
+        try {
+            long dateTime1 = formatter.parse(o1.getPubDate().orElse("")).getTime();
+            long dateTime2 = formatter.parse(o2.getPubDate().orElse("")).getTime();
+
+            return Long.compare(dateTime1, dateTime2);
+        }
+        catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+
+    private int sortByPublicationDateNormal(Item o1, Item o2) {
+        SimpleDateFormat formatter = new SimpleDateFormat(DATE_TIME_PUBDATE_NORMAL_FORMAT);
 
         try {
             long dateTime1 = formatter.parse(o1.getPubDate().orElse("")).getTime();
