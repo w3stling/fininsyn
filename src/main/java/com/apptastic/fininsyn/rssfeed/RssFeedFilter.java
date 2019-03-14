@@ -81,7 +81,7 @@ public class RssFeedFilter {
 
     public static boolean filterContentInvestingCom(Item item) {
         String content = getContent(item);
-        return contains(content, COMMON_KEYWORDS) && !contains(content, COMMON_IGNORE_KEYWORDS);
+        return !contains(content, "nettoköper", "köper", "nettosäljer", "säljer") && contains(content, COMMON_KEYWORDS) && !contains(content, COMMON_IGNORE_KEYWORDS);
     }
 
     private static boolean contains(String text, String... words) {
