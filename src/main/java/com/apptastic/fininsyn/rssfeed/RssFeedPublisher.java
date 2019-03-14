@@ -45,7 +45,7 @@ public class RssFeedPublisher {
     TwitterPublisher twitter;
 
 
-    @Scheduled(initialDelay = 30000, fixedRate = 300000)
+    @Scheduled(initialDelay = 30000, fixedRate = 180000)
     public void checkRssFeeds() {
         Logger logger = Logger.getLogger("com.apptastic.fininsyn");
 
