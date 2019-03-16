@@ -23,6 +23,7 @@ public class RssFeedTweet {
     private static final String EMOJI_NEWSPAPER = "\uD83D\uDCF0";
     private static final String EMOJI_NEWSPAPER_ROLLED_UP = "\uD83D\uDDDE️";
     private static final String EMOJI_LIGHT_BULB = "\uD83D\uDCA1";
+    private static final String EMOJI_FACE_WITH_MONOCLE = "\uD83E\uDDD0";
 
 
     public static String createRiskbankenTweet(Item item) {
@@ -144,8 +145,14 @@ public class RssFeedTweet {
 
     public static String createBreakitTweet(Item item) {
         String title = item.getTitle().orElse("").trim();
+
+        String emoji = "";
+        if (title.contains(": Det händer idag")) {
+            emoji = EMOJI_FACE_WITH_MONOCLE;
+        }
+
         String url = toShortUrl(item.getLink().orElse(""));
-        return "Breakit " + EMOJI_NEWSPAPER + " " + title + "\n" + url;
+        return "Breakit " + EMOJI_NEWSPAPER + " " + title + " " + emoji + "\n" + url;
     }
 
 
