@@ -84,6 +84,11 @@ public class RssFeedFilter {
         return !contains(content, "nettoköper", "köper", "köpt", "nettosäljer", "säljer", "sålt") && contains(content, COMMON_KEYWORDS) && !contains(content, COMMON_IGNORE_KEYWORDS);
     }
 
+    public static boolean filterContentDiDigital(Item item) {
+        String content = getContent(item);
+        return contains(content, COMMON_KEYWORDS) && !contains(content, COMMON_IGNORE_KEYWORDS);
+    }
+
     private static boolean contains(String text, String... words) {
         return Arrays.stream(words)
                      .parallel()

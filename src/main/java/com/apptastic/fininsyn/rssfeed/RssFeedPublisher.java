@@ -31,6 +31,7 @@ public class RssFeedPublisher {
     private static final String RSS_FEED_BREAKIT = "https://www.breakit.se/feed/artiklar";
     private static final String RSS_FEED_AFFARSVARLDEN = "https://www.affarsvarlden.se/rss.xml";
     private static final String RSS_FEED_INVESTING_COM = "https://se.investing.com/rss/news.rss";
+    private static final String RSS_FEED_DI_DIGITAL = "https://digital.di.se/rss";
     private static final String DATE_TIME_PUBDATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss ZZZZ";
     private static final String DATE_TIME_PUBDATE_GMT_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
     private static final String DATE_TIME_PUBDATE_ISO_FORMAT = "yyyy-MM-dd'T'HH:mm:ssXXX";
@@ -67,6 +68,7 @@ public class RssFeedPublisher {
             checkAffarsvarldenRssFeed(lastPublished, next);
             checkPlaceraRssFeed(lastPublished, next);
             checkInvestingComRssFeed(lastPublished, next);
+            checkDiDigitalRssFeed(lastPublished, next);
 
             next.setLastAttempt(now());
             repository.save(next).subscribe();
@@ -285,10 +287,33 @@ public class RssFeedPublisher {
     }
 
 
+    private void checkDiDigitalRssFeed(RssFeed lastPublished, RssFeed next) {
+        SimpleDateFormat formatter = new SimpleDateFormat(DATE_TIME_PUBDATE_GMT_FORMAT);
+
+        try {
+            rssReader.read(RSS_FEED_DI_DIGITAL)
+                    .filter(i -> filterPubDate(formatter, i.getPubDate().orElse(""), lastPublished.getDiDigitalPubDate()))
+                    .filter(RssFeedFilter::filterContentDiDigital)
+                    .sorted(this::sortByPublicationDateGMT)
+                    .map(i -> { next.setDiDigitalPubDate(i.getPubDate().orElse("")); return i; })
+                    .map(RssFeedTweet::createDiDigitalTweet)
+                    .forEach(twitter::publishTweet);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
     private boolean filterPubDate(SimpleDateFormat formatter, String pubDate, String lastPublished) {
         boolean filter;
 
         try {
+            if (lastPublished == null) {
+                lastPublished = now(formatter);
+            }
+
             long pubDateTime = formatter.parse(pubDate).getTime();
             long lastPublishedDateTime = formatter.parse(lastPublished).getTime();
             filter = Long.compare(pubDateTime, lastPublishedDateTime) > 0;
@@ -326,7 +351,7 @@ public class RssFeedPublisher {
             String date3 = formatter3.format(today.getTime());
             String date4 = formatter4.format(today.getTime());
 
-            lastPublished = new RssFeed("1", "1", date1, date1, date1, date3, date2, date2, date1, date1, date1, date1, date4, "");
+            lastPublished = new RssFeed("1", "1", date1, date1, date1, date3, date2, date2, date1, date1, date1, date1, date4, date2, "");
         }
 
         return lastPublished;
@@ -335,6 +360,10 @@ public class RssFeedPublisher {
 
     private String now() {
         SimpleDateFormat formatter = new SimpleDateFormat(DATE_TIME_FORMAT);
+        return now(formatter);
+    }
+
+    private String now(SimpleDateFormat formatter) {
         Calendar now = Calendar.getInstance(TimeZone.getTimeZone(TIME_ZONE));
 
         return formatter.format(now.getTime());
