@@ -147,7 +147,7 @@ public class RssFeedTweet {
         String title = item.getTitle().orElse("").trim();
 
         String emoji = "";
-        if (title.contains(": Det händer idag")) {
+        if (title.contains(": Det händer idag") || title.contains(": Detta händer idag")) {
             emoji = EMOJI_FACE_WITH_MONOCLE;
         }
 
