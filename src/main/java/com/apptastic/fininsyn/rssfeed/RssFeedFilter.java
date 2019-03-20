@@ -7,24 +7,25 @@ import java.util.Arrays;
 public class RssFeedFilter {
     public static final String[] COMMON_KEYWORDS = { "börs", "aktie", "terminer", "rörelseresultat", "värdepapper",
             "periodresultat", "årsresultat", "kvartalsresultat", "kvartalsrapport", "rekyl", "marknaden", "konkurrera", "kunder",
-            "årsrapport", "delårsrapport", "halvårsrapport", "rapport", "rapportflod", "riktkurs", "släppt", "fintech",
+            "årsrapport", "delårsrapport", "halvårsrapport", "rapport", "rapportflod", "riktkurs", "fintech",
             "förvärv", "uppköp", "räntebesked", "reporänta", "styrräntan", "räntehöjning", "räntesäkning", "intäkter",
-            "riksbanken", "ecb", "fed", "bnp", "redovisar ett resultat", "omsättning", "efterhandeln", "rekommendation",
+            "riksbank", "ecb", "fed", "bnp", "redovisar ett resultat", "omsättning", "efterhandeln", "rekommendation",
             "räkenskapsår", "tecknat avtal", "tecknar avtal", "stort avtal", "avtal kring", "bruttomarginal", "nettoomsätt",
             "kreditförlust", "övertecknad", "dagens vinnare", "vinstvarn", "omsätt", "intäkt", "lönsam", "tillväxt", "kvartalet",
             "emission", "licens", "beställning", "leverans", "bitcoin", "kryptovalut", "blanka", "blankning", "storägaren",
             "ramavtal", "prognos", "handelskrig", "handelskonflikt", "handelsoro", "tullar", "frihandel", "riskkapital",
-            "budrykte", "varsla", "varsel", "händer idag", "rusa", "rusning", "investera", "forsk", "värdering", "startup", "strejk",
+            "budrykte", "varsla", "varsel", "händer idag", "rusa", "rusning", "investera", "forsk", "startup", "strejk",
             "köpläge", "säljläge", "lansera", "entreprenör", "analytiker", "innovation", "hajp", "milstolpe", "forskning",
             "rasar", "böter", "lägger ner", "upphandling", "patent", "förhandel", "konjunktur", "studie", "förvänt",
             "försäljning", "marknadsandelar", "genombrott", "bötfälls", "vinstlyft", "spelbolag", "vinstfall", "nedskrivning",
             "blockchain", "blockkedja", "omstrukturera", "förvaltning", "verksamhet", "köpeskilling", "marknadsleda",
             "revolutionera", "nätkund", "analys", "förlorare", "råvaror", "rekord", "penningtvätt", "kross", "grundaren",
-            "slakt", "värt", "lyfte", "raket", "skena", "dubblar", "raset", "faller", "konkurren", "elpriser", "köper", "avyttra",
-            "artificiell", "brist", "konkurrent", "marknadsled", "import", "export", "sysselsättning", "stämning", "stämmer",
-            "pressmeddelande", "jobbsiffror", "konkurs", "noter", "uppstickare", "köprek", "säljrek", "finansering", "handelsstopp",
-            "rally", "biometri", "marknadsmanipulation", "kursmanipulation", "marknadsmissbruk", "inside", "finansinspektionen",
-            "rekonstruktion", "ägardata", "backar", "satsning", "satsar", "fusion", "läkemedel" };
+            "slakt", "värt", "raket", "skena", "dubblar", "raset", "faller", "konkurren", "elpris", "köper", "avyttra",
+            "artificiell", "konkurrent", "marknadsled", "import", "export", "sysselsättning", "stämning", "stämmer", "stäms",
+            "pressmeddelande", "jobbsiffror", "konkurs", "noter", "uppstickare", "köprek", "säljrek", "köpråd", "säljråd", "neutralt råd",
+            "finansering", "handelsstopp", "rally", "biometri", "marknadsmanipulation", "kursmanipulation", "marknadsmissbruk",
+            "inside", "finansinspektionen", "rekonstruktion", "ägardata", "backar", "satsning", "satsar", "fusion", "läkemedel",
+            "inflation", "deflation", "personalneddrag", "batteri", "cannabis"};
 
     public static final String[] COMMON_IGNORE_KEYWORDS = { "politiker", "väljarbarometer" };
 
@@ -81,7 +82,7 @@ public class RssFeedFilter {
 
     public static boolean filterContentInvestingCom(Item item) {
         String content = getContent(item);
-        return !contains(content, "nettoköper", "köper", "köpt", "nettosäljer", "säljer", "sålt") && contains(content, COMMON_KEYWORDS) && !contains(content, COMMON_IGNORE_KEYWORDS);
+        return !contains(content, "nettoköper", "köper", "köpt", "nettosäljer", "säljer", "sålt", "mäklar", "mäklade") && contains(content, COMMON_KEYWORDS) && !contains(content, COMMON_IGNORE_KEYWORDS);
     }
 
     public static boolean filterContentDiDigital(Item item) {
