@@ -25,7 +25,7 @@ public class RssFeedFilter {
             "pressmeddelande", "jobbsiffror", "konkurs", "noter", "uppstickare", "köprek", "säljrek", "köpråd", "säljråd", "neutralt råd",
             "finansering", "handelsstopp", "rally", "biometri", "marknadsmanipulation", "kursmanipulation", "marknadsmissbruk",
             "inside", "finansinspektionen", "rekonstruktion", "ägardata", "backar", "satsning", "satsar", "fusion", "läkemedel",
-            "inflation", "deflation", "personalneddrag", "batteri", "cannabis"};
+            "inflation", "deflation", "personalneddrag", "cannabis"};
 
     public static final String[] COMMON_IGNORE_KEYWORDS = { "politiker", "väljarbarometer" };
 
