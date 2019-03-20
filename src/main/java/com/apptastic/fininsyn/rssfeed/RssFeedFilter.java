@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 public class RssFeedFilter {
     public static final String[] COMMON_KEYWORDS = { "börs", "aktie", "terminer", "rörelseresultat", "värdepapper",
-            "periodresultat", "årsresultat", "kvartalsresultat", "kvartalsrapport", "rekyl", "marknaden", "konkurrera", "kunder",
+            "periodresultat", "årsresultat", "kvartalsresultat", "kvartalsrapport", "rekyl", "konkurrera", "kunder",
             "årsrapport", "delårsrapport", "halvårsrapport", "rapport", "rapportflod", "riktkurs", "fintech",
             "förvärv", "uppköp", "räntebesked", "reporänta", "styrräntan", "räntehöjning", "räntesäkning", "intäkter",
             "riksbank", "ecb", "fed", "bnp", "redovisar ett resultat", "omsättning", "efterhandeln", "rekommendation",
