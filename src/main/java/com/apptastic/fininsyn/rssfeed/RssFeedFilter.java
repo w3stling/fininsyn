@@ -82,7 +82,8 @@ public class RssFeedFilter {
 
     public static boolean filterContentInvestingCom(Item item) {
         String content = getContent(item);
-        return !contains(content, "nettoköper", "köper", "köpt", "nettosäljer", "säljer", "sålt", "mäklar", "mäklade", "emission") && contains(content, COMMON_KEYWORDS) && !contains(content, COMMON_IGNORE_KEYWORDS);
+        return !contains(content, "nettoköper", "köper", "köpt", "nettosäljer", "säljer", "sålt", "mäklar", "mäklade",
+                "emission", "exklusive") && contains(content, COMMON_KEYWORDS) && !contains(content, COMMON_IGNORE_KEYWORDS);
     }
 
     public static boolean filterContentDiDigital(Item item) {
