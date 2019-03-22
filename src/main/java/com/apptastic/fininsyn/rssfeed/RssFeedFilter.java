@@ -32,7 +32,7 @@ public class RssFeedFilter {
     public static boolean filterContentScb(Item item) {
         String content = getContent(item);
         return !contains(content, "politik", "parti", "barn", "föräld", "skola", "vi söker", "allmänna val",
-                "folkvald", "kommunfullmäktig", "folkmängd");
+                "folkvald", "kommunfullmäktig", "folkmängd", "fritidshus");
     }
 
     public static boolean filterContentEkobrottsmyndigheten(Item item) {
@@ -82,7 +82,7 @@ public class RssFeedFilter {
 
     public static boolean filterContentInvestingCom(Item item) {
         String content = getContent(item);
-        return !contains(content, "nettoköper", "köper", "köpt", "nettosäljer", "säljer", "sålt", "mäklar", "mäklade") && contains(content, COMMON_KEYWORDS) && !contains(content, COMMON_IGNORE_KEYWORDS);
+        return !contains(content, "nettoköper", "köper", "köpt", "nettosäljer", "säljer", "sålt", "mäklar", "mäklade", "emission") && contains(content, COMMON_KEYWORDS) && !contains(content, COMMON_IGNORE_KEYWORDS);
     }
 
     public static boolean filterContentDiDigital(Item item) {
