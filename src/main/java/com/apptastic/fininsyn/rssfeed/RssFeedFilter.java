@@ -7,9 +7,9 @@ import java.util.Arrays;
 public class RssFeedFilter {
     public static final String[] COMMON_KEYWORDS = { "börs", "aktie", "terminer", "rörelseresultat", "värdepapper",
             "periodresultat", "årsresultat", "kvartalsresultat", "kvartalsrapport", "rekyl", "konkurrera", "kunder",
-            "årsrapport", "delårsrapport", "halvårsrapport", "rapport", "rapportflod", "riktkurs", "fintech",
+            "årsrapport", "delårsrapport", "halvårsrapport", "rapport", "rapportflod", "riktkurs", "fintech", "ipo",
             "förvärv", "uppköp", "räntebesked", "reporänta", "styrräntan", "räntehöjning", "räntesäkning", "intäkter",
-            "riksbank", "imf", "ebm", "ecb", "fed", "bnp", "redovisar ett resultat", "omsättning", "efterhandeln", "rekommendation",
+            "riksbank", "imf", "ebm", "ecb", "fed", "emu", "bnp", "redovisar ett resultat", "omsättning", "efterhandeln", "rekommendation",
             "räkenskapsår", "tecknat avtal", "tecknar avtal", "stort avtal", "avtal kring", "bruttomarginal", "nettoomsätt",
             "kreditförlust", "övertecknad", "dagens vinnare", "vinstvarn", "omsätt", "intäkt", "lönsam", "tillväxt", "kvartalet",
             "emission", "licens", "beställning", "leverans", "bitcoin", "kryptovalut", "blanka", "blankning", "storägaren",
@@ -24,10 +24,10 @@ public class RssFeedFilter {
             "artificiell", "konkurrent", "marknadsled", "import", "export", "sysselsättning", "stämning", "stämmer", "stäms",
             "pressmeddelande", "jobbsiffror", "konkurs", "noter", "uppstickare", "köprek", "säljrek", "köpråd", "säljråd", "neutralt råd",
             "finansering", "handelsstopp", "rally", "biometri", "marknadsmanipulation", "kursmanipulation", "marknadsmissbruk",
-            "inside", "finansinspektionen", "rekonstruktion", "ägardata", "backar", "satsning", "satsar", "fusion", "läkemedel",
-            "inflation", "deflation", "personalneddrag", "cannabis", "tvångsinlös" };
+            "inside", "finansinspektionen", "finansmyndighet", "rekonstruktion", "ägardata", "backar", "satsning", "satsar", "fusion",
+            "läkemedel", "inflation", "deflation", "personalneddrag", "cannabis", "tvångsinlös", "licens" };
 
-    public static final String[] COMMON_IGNORE_KEYWORDS = { "politiker", "partiet", "väljarbarometer" };
+    public static final String[] COMMON_IGNORE_KEYWORDS = { "politiker", "partiet", "väljarbarometer", "deklaration" };
 
     public static boolean filterContentScb(Item item) {
         String content = getContent(item);
@@ -45,9 +45,9 @@ public class RssFeedFilter {
         return !contains(content, "vi söker", "söker", "tjänsten");
     }
 
-    public static boolean filterContentFinanspolitiskaradet(Item item) {
+    public static boolean filterContentFinanspolitiskaRadet(Item item) {
         String content = getContent(item);
-        return !contains(content, "vi söker", "söker", "tjänsten");
+        return !contains(content, "vi söker", "söker", "tjänsten", "konferens", "seminarium");
     }
 
     public static boolean filterContentKonjunkturinstitutet(Item item) {

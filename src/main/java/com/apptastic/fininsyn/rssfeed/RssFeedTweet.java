@@ -146,9 +146,10 @@ public class RssFeedTweet {
 
     public static String createBreakitTweet(Item item) {
         String title = item.getTitle().orElse("").trim();
+        String titleLowerCase = title.toLowerCase();
 
         String emoji = "";
-        if (title.contains(": Det händer idag") || title.contains(": Detta händer idag")) {
+        if (titleLowerCase.contains("det händer idag") || titleLowerCase.contains("detta händer idag")) {
             emoji = EMOJI_FACE_WITH_MONOCLE;
         }
 

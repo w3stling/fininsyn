@@ -104,7 +104,7 @@ public class RssFeedPublisher {
         try {
             rssReader.read(RSS_FEED_FINANSPOLITISKARADET)
                     .filter(i -> filterPubDate(formatter, i.getPubDate().orElse(""), lastPublished.getFinanspolitiskaradetPubDate()))
-                    .filter(RssFeedFilter::filterContentFinanspolitiskaradet)
+                    .filter(RssFeedFilter::filterContentFinanspolitiskaRadet)
                     .sorted(this::sortByPublicationDate)
                     .map(i -> { next.setFinanspolitiskaradetPubDate(i.getPubDate().orElse("")); return i; })
                     .map(RssFeedTweet::createFinanspolitiskaradetTweet)
