@@ -91,7 +91,7 @@ public class RssFeedTweet {
         String tickerSymbols = "";
         String titleLowerCase = item.getTitle().orElse("").toLowerCase().trim();
 
-        if (titleLowerCase.startsWith("börsen idag:")) {
+        if (titleLowerCase.startsWith("börsen idag:") || titleLowerCase.startsWith("börsen:")) {
             if (titleLowerCase.contains("stark") || titleLowerCase.contains("uppåt") || titleLowerCase.contains("positiv") ||
                     titleLowerCase.contains("över nollan") || titleLowerCase.contains("tjuraktig") || titleLowerCase.contains("blått") ||
                     titleLowerCase.contains("högre") || titleLowerCase.contains("blå") || titleLowerCase.contains("grön") ||
