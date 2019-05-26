@@ -88,7 +88,7 @@ public class RssFeedTweet {
 
     public static String createPlaceraTweet(Item item) {
         String emoji;
-        String tickerSymbols = "";
+        String tickerSymbols;
         String titleLowerCase = item.getTitle().orElse("").toLowerCase().trim();
 
         if (titleLowerCase.startsWith("börsen idag:") || titleLowerCase.startsWith("börsen:")) {
@@ -102,7 +102,7 @@ public class RssFeedTweet {
             else if (titleLowerCase.contains("röd") || titleLowerCase.contains("björn") || titleLowerCase.contains("nedåt") ||
                     titleLowerCase.contains("nedgång") || titleLowerCase.contains("svag") || titleLowerCase.contains("negativ") ||
                     titleLowerCase.contains("moll") || titleLowerCase.contains("utför") || titleLowerCase.contains("fallande") ||
-                    titleLowerCase.contains("sur")) {
+                    titleLowerCase.contains("sur") || titleLowerCase.contains("motvind")) {
 
                 emoji = EMOJI_CHART_DECREASING;
             }

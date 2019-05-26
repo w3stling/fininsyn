@@ -27,7 +27,7 @@ public class RssFeedFilter {
             "inside", "finansinspektionen", "finansmyndighet", "rekonstruktion", "ägardata", "backar", "satsning", "satsar", "fusion",
             "läkemedel", "inflation", "deflation", "personalneddrag", "cannabis", "tvångsinlös", "licens" };
 
-    public static final String[] COMMON_IGNORE_KEYWORDS = { "politiker", "partiet", "väljarbarometer", "deklaration" };
+    public static final String[] COMMON_IGNORE_KEYWORDS = { "politiker", "partiet", "väljarbarometer", "deklaration", "eu-val" };
 
     public static boolean filterContentScb(Item item) {
         String content = getContent(item);
@@ -37,7 +37,7 @@ public class RssFeedFilter {
 
     public static boolean filterContentEkobrottsmyndigheten(Item item) {
         String content = getContent(item);
-        return !contains(content, "vi söker", "söker", "tjänsten", "högskoleprovsfusk", "namnstatistik", "tilltalsnamn", "miljöräkenskaper");
+        return !contains(content, "vi söker", "söker", "tjänsten", "högskol", "trafikskol", "välfärd", "friskol", "namnstatistik", "tilltalsnamn", "miljöräkenskaper");
     }
 
     public static boolean filterContentRiksbanken(Item item) {
