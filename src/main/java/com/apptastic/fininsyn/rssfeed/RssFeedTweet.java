@@ -95,14 +95,15 @@ public class RssFeedTweet {
             if (titleLowerCase.contains("stark") || titleLowerCase.contains("uppåt") || titleLowerCase.contains("positiv") ||
                     titleLowerCase.contains("över nollan") || titleLowerCase.contains("tjuraktig") || titleLowerCase.contains("blått") ||
                     titleLowerCase.contains("högre") || titleLowerCase.contains("blå") || titleLowerCase.contains("grön") ||
-                    titleLowerCase.contains("uppgång") || titleLowerCase.contains("dur") || titleLowerCase.contains("stigande")) {
+                    titleLowerCase.contains("uppgång") || titleLowerCase.contains("dur") || titleLowerCase.contains("stigande") ||
+                    titleLowerCase.contains("tjurstart") || titleLowerCase.contains("norrut")) {
 
                 emoji = EMOJI_CHART_INCREASING;
             }
             else if (titleLowerCase.contains("röd") || titleLowerCase.contains("björn") || titleLowerCase.contains("nedåt") ||
                     titleLowerCase.contains("nedgång") || titleLowerCase.contains("svag") || titleLowerCase.contains("negativ") ||
                     titleLowerCase.contains("moll") || titleLowerCase.contains("utför") || titleLowerCase.contains("fallande") ||
-                    titleLowerCase.contains("sur") || titleLowerCase.contains("motvind")) {
+                    titleLowerCase.contains("sur") || titleLowerCase.contains("motvind")|| titleLowerCase.contains("under nollan")) {
 
                 emoji = EMOJI_CHART_DECREASING;
             }
