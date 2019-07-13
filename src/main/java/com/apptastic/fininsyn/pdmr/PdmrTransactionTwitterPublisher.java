@@ -75,7 +75,8 @@ public class PdmrTransactionTwitterPublisher {
 
 
     private String groupTransactionBy(Transaction transaction) {
-        return transaction.getPublicationDate() + transaction.getIsin() + transaction.getNatureOfTransaction() + transaction.getLeiCode();
+        return transaction.getPublicationDate() + transaction.getIsin() + transaction.getNatureOfTransaction() +
+                transaction.getLeiCode() + transaction.getInstrumentType();
     }
 
 

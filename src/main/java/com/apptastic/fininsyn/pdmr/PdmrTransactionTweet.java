@@ -59,7 +59,9 @@ public class PdmrTransactionTweet {
 
         builder.append(" har ")
                 .append(formatNatureOfTransaction(transaction.getNatureOfTransaction()))
-                .append(" aktier för ")
+                .append(" ")
+                .append(formatInstrumentType(transaction.getInstrumentTypeDescription()))
+                .append(" för ")
                 .append(formatAmount(amount, transaction.getCurrency()))
                 .append(" ")
                 .append(formatEmoji(transaction, amount))
@@ -172,6 +174,45 @@ public class PdmrTransactionTweet {
             natureOfTransaction = "???";
 
         return natureOfTransaction;
+    }
+
+    private static String formatInstrumentType(Transaction.InstrumentType type) {
+        if (type.equals(Transaction.InstrumentType.SHARE))
+            return "aktier";
+        else if (type.equals(Transaction.InstrumentType.BTA))
+            return "BTA";
+        else if (type.equals(Transaction.InstrumentType.BTU))
+            return "BTU";
+        else if (type.equals(Transaction.InstrumentType.CAPITAL_EQUITY))
+            return "kapitalandelsbevis";
+        else if (type.equals(Transaction.InstrumentType.CONVERTIBLE))
+            return "konvertibler";
+        else if (type.equals(Transaction.InstrumentType.BOND))
+            return "obligationer";
+        else if (type.equals(Transaction.InstrumentType.SUBSCRIPTION_WARRANT))
+            return "teckningsoptioner";
+        else if (type.equals(Transaction.InstrumentType.SUBSCRIPTION_RIGHT))
+            return "teckningsrätter";
+        else if (type.equals(Transaction.InstrumentType.FUTURE_FORWARD))
+            return "terminer";
+        else if (type.equals(Transaction.InstrumentType.WARRANT))
+            return "warranter";
+        else if (type.equals(Transaction.InstrumentType.OTHER_DERIVATIVE_CONTRACTS))
+            return "derivatkontrakt";
+        else if (type.equals(Transaction.InstrumentType.REDEMPTION_SHARE))
+            return "inlösenaktier";
+        else if (type.equals(Transaction.InstrumentType.OPTION))
+            return "optioner";
+        else if (type.equals(Transaction.InstrumentType.CALL_OPTION))
+            return "köpoptioner";
+        else if (type.equals(Transaction.InstrumentType.PUT_OPTION))
+            return "säljoptioner";
+        else if (type.equals(Transaction.InstrumentType.COMMERCIAL_PAPER))
+            return "företagscertifikat";
+        else if (type.equals(Transaction.InstrumentType.INTERIM_SHARE))
+            return "interimsaktier";
+        else
+            return "värdepapper";
     }
 
     private static String formatPosition(String position) {

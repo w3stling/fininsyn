@@ -44,7 +44,7 @@ repositories {
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-mongodb-reactive')
 	compile('org.twitter4j:twitter4j-core:4.0.7')
-    compile('com.apptastic:insynsregistret:2.0.2')
+    compile('com.apptastic:insynsregistret:2.1.2')
 	compile('com.apptastic:blankningsregistret:2.0.2')
     compile('com.apptastic:rssreader:2.0.1')
     compile('com.apptastic:tickersymbol:2.0.2')
