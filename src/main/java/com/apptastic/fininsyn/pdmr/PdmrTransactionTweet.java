@@ -48,6 +48,10 @@ public class PdmrTransactionTweet {
 
         StringBuilder builder = new StringBuilder();
 
+        if (transaction.isCloselyAssociated()) {
+            builder.append("Närstående till ");
+        }
+
         builder.append(formatIssuer(transaction.getIssuer()))
                 .append(" ")
                 .append(formatPosition(transaction.getPosition().trim()));
@@ -61,6 +65,7 @@ public class PdmrTransactionTweet {
                 .append(formatNatureOfTransaction(transaction.getNatureOfTransaction()))
                 .append(" ")
                 .append(formatInstrumentType(transaction.getInstrumentTypeDescription()))
+                .append(formatLinkedToShareOptionProgramme(transaction.isLinkedToShareOptionProgramme()))
                 .append(" för ")
                 .append(formatAmount(amount, transaction.getCurrency()))
                 .append(" ")
@@ -215,6 +220,10 @@ public class PdmrTransactionTweet {
             return "värdepapper";
     }
 
+    private static String formatLinkedToShareOptionProgramme(boolean isLinkedToShareOptionProgramme) {
+        return (isLinkedToShareOptionProgramme) ? " kopplad till aktieoptionsprogram" : "";
+    }
+
     private static String formatPosition(String position) {
         if ("vd".equals(position))
             position = "VD";
@@ -253,7 +262,10 @@ public class PdmrTransactionTweet {
         Optional<String> formattedPdmr = Arrays.stream(StringUtils.split(pdmr, ' '))
                 .map(String::toLowerCase)
                 .map(StringUtils::capitalize)
-                .reduce((a, b) -> a + ' ' + b );
+                .map(t -> Arrays.stream(StringUtils.split(t, '-'))
+                                .reduce((a, b) -> a + '-' + StringUtils.capitalize(b))
+                                .orElse(t))
+                .reduce((a, b) -> a + ' ' + b);
 
         return formattedPdmr.orElse(pdmr);
     }
