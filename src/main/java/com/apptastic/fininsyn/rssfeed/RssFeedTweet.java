@@ -1,7 +1,6 @@
 package com.apptastic.fininsyn.rssfeed;
 
-import com.apptastic.fininsyn.utils.PlaceraUtil;
-import com.apptastic.fininsyn.utils.RealtidUtil;
+import com.apptastic.fininsyn.utils.TextUtil;
 import com.apptastic.fininsyn.utils.TwitterUtil;
 import com.apptastic.rssreader.Item;
 import net.swisstech.bitly.BitlyClient;
@@ -24,7 +23,9 @@ public class RssFeedTweet {
     private static final String EMOJI_NEWSPAPER_ROLLED_UP = "\uD83D\uDDDE️";
     private static final String EMOJI_LIGHT_BULB = "\uD83D\uDCA1";
     private static final String EMOJI_FACE_WITH_MONOCLE = "\uD83E\uDDD0";
-
+    private static final String EMOJI_LOUDSPEAKER = "\uD83D\uDCE2";
+    private static final String EMOJI_THUMBS_UP = "\uD83D\uDC4D";
+    private static final String EMOJI_THUMBS_DOWN = "\uD83D\uDC4E";
 
     public static String createRiskbankenTweet(Item item) {
         String title = item.getTitle().orElse("").trim();
@@ -58,14 +59,16 @@ public class RssFeedTweet {
 
     public static String createVeckansAffarerTweet(Item item) {
         String title = item.getTitle().orElse("").trim();
+        String description = item.getDescription().orElse("").trim();
         String url = toShortUrl(item.getLink().orElse(""));
-        String tweet = "Veckans Affärer " + EMOJI_NEWSPAPER + " " + title + "\n" + url;
+        String tweet = "Veckans Affärer " + EMOJI_NEWSPAPER + " " + title + " " + generalTitleSuffix(title, description) + "\n" + url;
         return TwitterUtil.trim(tweet);
     }
 
     public static String createRealtidTweet(Item item) {
         String url = toShortUrl(item.getLink().orElse(""));
         String title = xmlEscape(item.getTitle().orElse("")).trim();
+        String description = item.getDescription().orElse("").trim();
         title = removeQuotes(title);
 
 
@@ -82,7 +85,7 @@ public class RssFeedTweet {
 
         String tickerSymbols = toSymbols(symbols);
 
-        String tweet = "Realtid " + EMOJI_NEWSPAPER + " " + title + "\n" + tickerSymbols + "\n" + url;
+        String tweet = "Realtid " + EMOJI_NEWSPAPER + " " + title + " " + generalTitleSuffix(title, description) + "\n" + tickerSymbols + "\n" + url;
         return TwitterUtil.trim(tweet);
     }
 
@@ -135,7 +138,7 @@ public class RssFeedTweet {
         String title = item.getTitle().orElse("").trim();
         String description = item.getDescription().orElse("").trim();
         String url = toShortUrl(item.getLink().orElse(""));
-        String tweet =  "Placera " + EMOJI_NEWSPAPER + " " + title + " " + emoji + "\n" + description;
+        String tweet =  "Placera " + EMOJI_NEWSPAPER + " " + title + " " + emoji + generalTitleSuffix(title, description) + "\n" + description;
         tweet = TwitterUtil.trim(tweet, url.length() + 1);
         tweet += "\n" + url;
 
@@ -148,6 +151,7 @@ public class RssFeedTweet {
 
     public static String createBreakitTweet(Item item) {
         String title = item.getTitle().orElse("").trim();
+        String description = item.getDescription().orElse("").trim();
         String titleLowerCase = title.toLowerCase();
 
         String emoji = "";
@@ -157,14 +161,15 @@ public class RssFeedTweet {
         }
 
         String url = toShortUrl(item.getLink().orElse(""));
-        return "Breakit " + EMOJI_NEWSPAPER + " " + title + " " + emoji + "\n" + url;
+        return "Breakit " + EMOJI_NEWSPAPER + " " + title + " " + emoji + generalTitleSuffix(title, description) + "\n" + url;
     }
 
 
     public static String createAffarsvarldenTweet(Item item) {
         String title = item.getTitle().orElse("").trim();
+        String description = item.getDescription().orElse("").trim();
         String url = toShortUrl(item.getLink().orElse(""));
-        return "Affärsvärlden " + EMOJI_NEWSPAPER + " " + title + "\n" + url;
+        return "Affärsvärlden " + EMOJI_NEWSPAPER + " " + title + " " + generalTitleSuffix(title, description) + "\n" + url;
     }
 
 
@@ -221,5 +226,43 @@ public class RssFeedTweet {
             text = text.substring(1, text.length() - 1);
 
         return text;
+    }
+
+
+    private static String generalTitleSuffix(String title, String description) {
+        String titleSuffix = "";
+
+        if (isReportAnnouncement(title, description)) {
+            titleSuffix += EMOJI_LOUDSPEAKER;
+        }
+
+        return titleSuffix;
+    }
+
+    private static boolean isReportAnnouncement(String title, String description) {
+        description = Optional.ofNullable(description).orElse("").toLowerCase();
+
+        return TextUtil.containsAny(description,"redovisar ett resultat", "redovisade ett result",
+                "redovisar ett rörelseresultat", "redovisade ett rörelseresultat",
+                "redovisar ett ebitda-resultat", "redovisade ett ebitda-resultat") ||
+                (TextUtil.containsAny(description, "redovisar", "redovisade") && TextUtil.containsAtLeast(description, 3, "nettoomsättning", "rörelseresultat", "kassaflöde",
+                        "bruttomarginal", "nettoresultat", "kvartal",
+                        "resultatet per aktie", "resultat per aktie",
+                        "resultatet före skatt", "resultat före skatt",
+                        "resultatet efter skatt", "resultat efter skatt"));
+    }
+
+    private static String reportSentiment(String title) {
+        String sentiment = "";
+        title = Optional.ofNullable(title).orElse("").toLowerCase();
+
+        if (TextUtil.containsAny(title, "över förväntan", "stigande omsättning", "ökade vinsten")) {
+            sentiment = EMOJI_THUMBS_UP;
+        }
+        else if (TextUtil.containsAny(title, "sämre", "under förväntan", "förlust", "minusresultat")) {
+            sentiment = EMOJI_THUMBS_DOWN;
+        }
+
+        return sentiment;
     }
 }

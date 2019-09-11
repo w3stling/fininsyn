@@ -2,7 +2,8 @@ package com.apptastic.fininsyn.rssfeed;
 
 import com.apptastic.rssreader.Item;
 
-import java.util.Arrays;
+import static com.apptastic.fininsyn.utils.TextUtil.containsAny;
+
 
 public class RssFeedFilter {
 
@@ -10,95 +11,89 @@ public class RssFeedFilter {
             "periodresultat", "årsresultat", "kvartalsresultat", "kvartalsrapport", "rekyl", "konkurrera", "kunder",
             "årsrapport", "delårsrapport", "halvårsrapport", "rapport", "rapportflod", "riktkurs", "fintech", "ipo",
             "förvärv", "uppköp", "räntebesked", "reporänta", "styrräntan", "räntehöjning", "räntesäkning", "intäkter",
-            "centralbank", "riksbank", "imf", "ebm", "ecb", "fed", "emu", "bnp", "redovisar ett resultat", "omsättning",
-            "efterhandeln", "rekommendation", "räkenskapsår", "tecknat avtal", "tecknar avtal", "stort avtal",
+            "centralbank", "riksbank", "imf", "ebm", "ecb", "fed", "emu", "bnp", "redovisar ett resultat", "redovisade ett result",
+            "omsättning", "efterhandeln", "rekommendation", "räkenskapsår", "tecknat avtal", "tecknar avtal", "stort avtal",
             "avtal kring", "bruttomarginal", "nettoomsätt", "kreditförlust", "övertecknad", "dagens vinnare",
             "vinstvarn", "omsätt", "intäkt", "lönsam", "tillväxt", "kvartalet", "emission", "licens", "beställning",
             "leverans", "bitcoin", "kryptovalut", "blanka", "blankning", "storägaren", "ramavtal", "prognos",
-            "handelskrig", "handelskonflikt", "handelsoro", "tullar", "frihandel", "riskkapital", "budrykte", "varsla",
-            "varsel", "händer idag", "rusa", "rusning", "investera", "forsk", "startup", "strejk", "köpläge",
-            "säljläge", "lansera", "entreprenör", "analytiker", "innovation", "hajp", "milstolpe", "forskning", "rasar",
-            "böter", "lägger ner", "upphandling", "patent", "förhandel", "konjunktur", "studie", "förvänt",
-            "försäljning", "marknadsandelar", "genombrott", "bötfälls", "vinstlyft", "spelbolag", "vinstfall",
-            "nedskrivning", "blockchain", "blockkedja", "omstrukturera", "förvaltning", "verksamhet", "köpeskilling",
-            "marknadsleda", "revolutionera", "nätkund", "analys", "förlorare", "råvaror", "rekord", "penningtvätt",
-            "kross", "grundaren", "slakt", "värt", "raket", "skena", "dubblar", "raset", "faller", "konkurren",
-            "elpris", "köper", "avyttra", "artificiell", "konkurrent", "marknadsled", "import", "export",
+            "handelskrig", "handelskonflikt", "handelsoro", "handelsamtal", "handelssamtal", "tullar", "frihandel", "riskkapital",
+            "budrykte", "varsla", "varsel", "händer idag", "rusa", "rusning", "investera", "forsk", "startup", "strejk",
+            "köpläge", "säljläge", "lansera", "entreprenör", "analytiker", "innovation", "hajp", "milstolpe",
+            "forskning", "rasar", "böter", "lägger ner", "upphandling", "patent", "förhandel", "konjunktur", "studie",
+            "förvänt", "försäljning", "marknadsandelar", "genombrott", "bötfälls", "vinstlyft", "spelbolag",
+            "vinstfall", "nedskrivning", "blockchain", "blockkedja", "omstrukturera", "förvaltning", "verksamhet",
+            "köpeskilling", "marknadsleda", "revolutionera", "nätkund", "analys", "förlorare", "råvaror", "rekord",
+            "penningtvätt", "kross", "grundaren", "slakt", "värt", "raket", "skena", "dubblar", "raset", "faller",
+            "konkurren", "elpris", "köper", "avyttra", "artificiell", "konkurrent", "marknadsled", "import", "export",
             "sysselsättning", "stämning", "stämmer", "stäms", "pressmeddelande", "jobbsiffror", "konkurs", "noter",
             "uppstickare", "köprek", "säljrek", "köpråd", "säljråd", "neutralt råd", "finansering", "handelsstopp",
             "rally", "biometri", "marknadsmanipulation", "kursmanipulation", "marknadsmissbruk", "inside",
             "finansinspektionen", "finansmyndighet", "rekonstruktion", "ägardata", "backar", "satsning", "satsar",
-            "fusion", "läkemedel", "inflation", "deflation", "personalneddrag", "cannabis", "tvångsinlös", "licens",
-            "växtbaser" };
+            "fusion", "läkemedel", "inflation", "deflation", "recession", "högkonjunktur", "lågkonjunktur",
+            "personalneddrag", "cannabis", "tvångsinlös", "licens", "växtbaser" };
 
     public static final String[] COMMON_IGNORE_KEYWORDS = { "politiker", "partiet", "väljarbarometer", "deklaration", "eu-val" };
 
     public static boolean filterContentScb(Item item) {
         String content = getContent(item);
-        return !contains(content, "politik", "parti", "barn", "föräld", "skola", "vi söker", "allmänna val",
+        return !containsAny(content, "politik", "parti", "barn", "föräld", "skola", "vi söker", "allmänna val",
                 "folkvald", "kommunfullmäktig", "folkmängd", "fritidshus");
     }
 
     public static boolean filterContentEkobrottsmyndigheten(Item item) {
         String content = getContent(item);
-        return !contains(content, "vi söker", "söker", "tjänsten", "högskol", "trafikskol", "välfärd", "friskol", "namnstatistik", "tilltalsnamn", "miljöräkenskaper");
+        return !containsAny(content, "vi söker", "söker", "tjänsten", "högskol", "trafikskol", "välfärd", "friskol", "namnstatistik", "tilltalsnamn", "miljöräkenskaper");
     }
 
     public static boolean filterContentRiksbanken(Item item) {
         String content = getContent(item);
-        return !contains(content, "vi söker", "söker", "tjänsten");
+        return !containsAny(content, "vi söker", "söker", "tjänsten");
     }
 
     public static boolean filterContentFinanspolitiskaRadet(Item item) {
         String content = getContent(item);
-        return !contains(content, "vi söker", "söker", "tjänsten", "konferens", "seminarium");
+        return !containsAny(content, "vi söker", "söker", "tjänsten", "konferens", "seminarium");
     }
 
     public static boolean filterContentKonjunkturinstitutet(Item item) {
         String content = getContent(item);
-        return !contains(content, "vi söker", "söker", "tjänsten");
+        return !containsAny(content, "vi söker", "söker", "tjänsten");
     }
 
     public static boolean filterContentVeckansAffarer(Item item) {
         String content = getContent(item);
-        return contains(content, COMMON_KEYWORDS) && !contains(content, COMMON_IGNORE_KEYWORDS);
+        return containsAny(content, COMMON_KEYWORDS) && !containsAny(content, COMMON_IGNORE_KEYWORDS);
     }
 
     public static boolean filterContentRealtid(Item item) {
         String content = getContent(item);
-        return contains(content, COMMON_KEYWORDS) && !contains(content, COMMON_IGNORE_KEYWORDS);
+        return containsAny(content, COMMON_KEYWORDS) && !containsAny(content, COMMON_IGNORE_KEYWORDS);
     }
 
     public static boolean filterContentPlacera(Item item) {
         String content = getContent(item);
-        return !contains(content, "tv:") && contains(content, COMMON_KEYWORDS) && !contains(content, COMMON_IGNORE_KEYWORDS);
+        return !containsAny(content, "tv:") && containsAny(content, COMMON_KEYWORDS) && !containsAny(content, COMMON_IGNORE_KEYWORDS);
     }
 
     public static boolean filterContentBreakit(Item item) {
         String content = getContent(item);
-        return contains(content, COMMON_KEYWORDS) && !contains(content, COMMON_IGNORE_KEYWORDS);
+        return containsAny(content, COMMON_KEYWORDS) && !containsAny(content, COMMON_IGNORE_KEYWORDS);
     }
 
     public static boolean filterContentAffarsvarlden(Item item) {
         String content = getContent(item);
-        return !contains(content, "analys+", "portfölj", "köper aktier", "säljer aktier") && contains(content, COMMON_KEYWORDS) && !contains(content, COMMON_IGNORE_KEYWORDS);
+        return !containsAny(content, "analys+", "portfölj", "köper aktier", "säljer aktier") && containsAny(content, COMMON_KEYWORDS) && !containsAny(content, COMMON_IGNORE_KEYWORDS);
     }
 
     public static boolean filterContentInvestingCom(Item item) {
         String content = getContent(item);
-        return !contains(content, "nettoköper", "köper", "köpt", "nettosäljer", "säljer", "sålt", "mäklar", "mäklade",
-                "emission", "exklusive") && contains(content, COMMON_KEYWORDS) && !contains(content, COMMON_IGNORE_KEYWORDS);
+        return !containsAny(content, "nettoköper", "köper", "köpt", "nettosäljer", "säljer", "sålt", "mäklar", "mäklade",
+                "emission", "exklusive") && containsAny(content, COMMON_KEYWORDS) && !containsAny(content, COMMON_IGNORE_KEYWORDS);
     }
 
     public static boolean filterContentDiDigital(Item item) {
         String content = getContent(item);
-        return contains(content, COMMON_KEYWORDS) && !contains(content, COMMON_IGNORE_KEYWORDS);
-    }
-
-    private static boolean contains(String text, String... words) {
-        return Arrays.stream(words)
-                     .parallel()
-                     .anyMatch(text::contains);
+        return containsAny(content, COMMON_KEYWORDS) && !containsAny(content, COMMON_IGNORE_KEYWORDS);
     }
 
     private static String getContent(Item item) {
