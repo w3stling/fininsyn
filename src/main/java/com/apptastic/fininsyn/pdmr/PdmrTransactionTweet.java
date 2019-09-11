@@ -305,9 +305,9 @@ public class PdmrTransactionTweet {
             if (amountInSek < 50_000_000)
                 emojiBuilder.append(EMOJI_BEAR);
             else if (amountInSek < 1_000_000_000.0)
-                emojiBuilder.append(EMOJI_BEAR + EMOJI_WEARY_FACE);
+                emojiBuilder.append(EMOJI_BEAR + EMOJI_BEAR);
             else
-                emojiBuilder.append(EMOJI_BEAR + EMOJI_FACE_SCREAMING_IN_FEAR);
+                emojiBuilder.append(EMOJI_BEAR + EMOJI_BEAR + EMOJI_BEAR);
         }
 
         return emojiBuilder.toString();
