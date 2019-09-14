@@ -1,6 +1,7 @@
 package com.apptastic.fininsyn.pdmr;
 
 import com.apptastic.fininsyn.InstrumentLookup;
+import com.apptastic.fininsyn.utils.TextUtil;
 import com.apptastic.fininsyn.utils.TwitterUtil;
 import com.apptastic.insynsregistret.Transaction;
 import org.apache.commons.lang3.StringUtils;
@@ -49,7 +50,14 @@ public class PdmrTransactionTweet {
         StringBuilder builder = new StringBuilder();
 
         if (transaction.isCloselyAssociated()) {
-            builder.append("Närstående till ");
+            if (isCompany(transaction.getNotifier())) {
+                builder.append("Närstående (")
+                       .append(transaction.getNotifier())
+                       .append(") till ");
+            }
+            else {
+                builder.append("Närstående till ");
+            }
         }
 
         builder.append(formatIssuer(transaction.getIssuer()))
@@ -110,6 +118,16 @@ public class PdmrTransactionTweet {
         }
 
         return tweet;
+    }
+
+    private static boolean isCompany(String text) {
+        if (text == null || text.isEmpty()) {
+            return false;
+        }
+        text = text.toLowerCase();
+        return TextUtil.endsWith(text, "ab", "plc", "ltd", "inc", "as") ||
+               TextUtil.containsAny(text, "holding", "capital", "invest", "management", "aktiebolag", "finance",
+                       "partner", "trust");
     }
 
     private static String formatIssuer(String issuer) {

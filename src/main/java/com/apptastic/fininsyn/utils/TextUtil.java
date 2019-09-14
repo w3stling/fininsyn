@@ -27,4 +27,10 @@ public class TextUtil {
                       .filter(text::contains)
                       .count() >= count;
     }
+
+    public static boolean endsWith(String text, String... suffix) {
+        return Arrays.stream(suffix)
+                     .parallel()
+                     .anyMatch(text::endsWith);
+    }
 }
