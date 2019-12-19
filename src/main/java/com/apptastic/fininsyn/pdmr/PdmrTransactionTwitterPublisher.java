@@ -18,11 +18,13 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toList;
 
 @Component
@@ -53,12 +55,13 @@ public class PdmrTransactionTwitterPublisher {
         try {
             TransactionQuery query = TransactionQueryBuilder.publications(fromDate, toDate).build();
             insynsregistret.search(query)
-                .filter(t -> PdmrTransactionFilter.transactionFilter(last.getPublicationDate(), t.getPublicationDate().format(DateTimeFormatter.ISO_LOCAL_DATE)))
+                .filter(t -> PdmrTransactionFilter.transactionFilter(last.getPublicationDate(), t.getPublicationDate().format(DATE_TIME_FORMATTER)))
                 .filter(PdmrTransactionFilter::transactionFilter)
                 .collect(Collectors.groupingBy(this::groupTransactionBy, TreeMap::new, toList()))
                 .values().stream()
                 .filter(PdmrTransactionFilter::transactionAmountFilter)
-                .peek(t -> next.setPublicationDate(t.get(0).getPublicationDate().format(DateTimeFormatter.ISO_LOCAL_DATE)))
+                .filter(not(List::isEmpty))
+                .peek(t -> next.setPublicationDate(t.get(0).getPublicationDate().format(DATE_TIME_FORMATTER)))
                 .map(PdmrTransactionTweet::create)
                 .filter(TwitterPublisher::filterTweetLength)
                 .forEach(twitter::publishTweet);

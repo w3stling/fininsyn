@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -71,6 +72,7 @@ public class ShortSellingTwitterPublisher {
                         .collect(Collectors.groupingBy(this::groupShortSellingBy, TreeMap::new, toList()))
                         .values().stream()
                         .sorted(this::sortByPositionDate)
+                        .filter(Predicate.not(List::isEmpty))
                         .filter(t -> ShortSellingFilter.positionDateFilter(filterPositionDate(), t.get(0).getPositionDate()))
                         .peek(t -> {
                             next.setPublicationDate(newPublicationDate);
