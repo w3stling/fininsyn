@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -95,16 +96,19 @@ public class PdmrTransactionTweet {
 
         builder.append(QUANTITY_FORMATTER.format((long)quantity) + " @ " + PRICE_FORMATTER.format(amount/quantity) + " " + transaction.getCurrency())
                 .append("\n")
-                .append(transaction.getTransactionDate().substring(0, 10))
+                .append(transaction.getTransactionDate().format(DateTimeFormatter.ISO_LOCAL_DATE))
                 .append("\n");
 
         if (amount >= 85_000_000)
             builder.append("#insynshandel ");
 
         if (symbolName != null)
-            builder.append(TwitterUtil.toCashTag(symbolName) + " #" + transaction.getIsin());
+            builder.append(TwitterUtil.toCashTag(symbolName))
+                   .append(" #")
+                   .append(transaction.getIsin());
         else
-            builder.append("#" + transaction.getIsin());
+            builder.append("#")
+                   .append(transaction.getIsin());
 
         String tweet = builder.toString();
 

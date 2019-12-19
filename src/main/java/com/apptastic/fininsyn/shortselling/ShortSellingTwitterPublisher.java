@@ -12,6 +12,9 @@ import org.springframework.stereotype.Component;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,7 +29,7 @@ public class ShortSellingTwitterPublisher {
     private static final int FILTER_OLDER_THEN_DAYS = -10;
     private static final String DATE_FORMAT = "yyyy-MM-dd";
     private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
-    private static final String TIME_ZONE = "Europe/Stockholm";
+    static final String TIME_ZONE = "Europe/Stockholm";
     @Autowired
     Blankningsregistret register;
     @Autowired
@@ -69,9 +72,8 @@ public class ShortSellingTwitterPublisher {
                         .values().stream()
                         .sorted(this::sortByPositionDate)
                         .filter(t -> ShortSellingFilter.positionDateFilter(filterPositionDate(), t.get(0).getPositionDate()))
-                        .map(t -> {
+                        .peek(t -> {
                             next.setPublicationDate(newPublicationDate);
-                            return t;
                         })
                         .map(ShortSellingTweet::create)
                         .filter(TwitterPublisher::filterTweetLength)
@@ -132,16 +134,20 @@ public class ShortSellingTwitterPublisher {
         return formatter.format(now.getTime());
     }
 
-    private String filterPositionDate() {
+    private LocalDate filterPositionDate() {
+        /*
         SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
         Calendar date = Calendar.getInstance(TimeZone.getTimeZone(TIME_ZONE));
         date.add(Calendar.DAY_OF_YEAR, FILTER_OLDER_THEN_DAYS);
 
         return formatter.format(date.getTime());
+        */
+        LocalDate date = LocalDate.now(ZoneId.of(TIME_ZONE));
+        return date.minusDays(FILTER_OLDER_THEN_DAYS);
     }
 
-    private Date toDate(String date) throws ParseException {
-        return new SimpleDateFormat(DATE_FORMAT).parse(date);
+    private LocalDate toDate(String date) throws ParseException {
+        return LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
     }
 
     private Set<String> diffStreams(Stream<NetShortPosition> s1, Stream<NetShortPosition> s2) {

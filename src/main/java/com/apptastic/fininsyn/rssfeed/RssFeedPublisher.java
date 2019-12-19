@@ -87,7 +87,7 @@ public class RssFeedPublisher {
                     .filter(i -> filterPubDate(formatter, i.getPubDate().orElse(""), lastPublished.getRiksbankenPubDate()))
                     .filter(RssFeedFilter::filterContentRiksbanken)
                     .sorted(this::sortByPublicationDate)
-                    .map(i -> { next.setRiksbankenPubDate(i.getPubDate().orElse("")); return i; })
+                    .peek(i -> next.setRiksbankenPubDate(i.getPubDate().orElse("")))
                     .map(RssFeedTweet::createRiskbankenTweet)
                     .forEach(twitter::publishTweet);
         }
@@ -103,12 +103,12 @@ public class RssFeedPublisher {
 
         try {
             rssReader.read(RSS_FEED_FINANSPOLITISKARADET)
-                    .filter(i -> filterPubDate(formatter, i.getPubDate().orElse(""), lastPublished.getFinanspolitiskaradetPubDate()))
-                    .filter(RssFeedFilter::filterContentFinanspolitiskaRadet)
-                    .sorted(this::sortByPublicationDate)
-                    .map(i -> { next.setFinanspolitiskaradetPubDate(i.getPubDate().orElse("")); return i; })
-                    .map(RssFeedTweet::createFinanspolitiskaradetTweet)
-                    .forEach(twitter::publishTweet);
+                     .filter(i -> filterPubDate(formatter, i.getPubDate().orElse(""), lastPublished.getFinanspolitiskaradetPubDate()))
+                     .filter(RssFeedFilter::filterContentFinanspolitiskaRadet)
+                     .sorted(this::sortByPublicationDate)
+                     .peek(i -> next.setFinanspolitiskaradetPubDate(i.getPubDate().orElse("")))
+                     .map(RssFeedTweet::createFinanspolitiskaradetTweet)
+                     .forEach(twitter::publishTweet);
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -125,7 +125,7 @@ public class RssFeedPublisher {
                     .filter(i -> filterPubDate(formatter, i.getPubDate().orElse(""), lastPublished.getKonjunkturinstitutetPubDate()))
                     .filter(RssFeedFilter::filterContentKonjunkturinstitutet)
                     .sorted(this::sortByPublicationDate)
-                    .map(i -> { next.setKonjunkturinstitutetPubDate(i.getPubDate().orElse("")); return i; })
+                    .peek(i -> next.setKonjunkturinstitutetPubDate(i.getPubDate().orElse("")))
                     .map(RssFeedTweet::createKonjunkturinstitutetTweet)
                     .forEach(twitter::publishTweet);
         }
@@ -144,7 +144,7 @@ public class RssFeedPublisher {
                     .filter(i -> filterPubDate(formatter, i.getPubDate().orElse(""), lastPublished.getScbPubDate()))
                     .filter(RssFeedFilter::filterContentScb)
                     .sorted(this::sortByPublicationDateISO)
-                    .map(i -> { next.setScbPubDate(i.getPubDate().orElse("")); return i; })
+                    .peek(i -> next.setScbPubDate(i.getPubDate().orElse("")))
                     .map(RssFeedTweet::createScbTweet)
                     .forEach(twitter::publishTweet);
         }
@@ -163,7 +163,7 @@ public class RssFeedPublisher {
                     .filter(i -> filterPubDate(formatter, i.getPubDate().orElse(""), lastPublished.getEkobrottsmyndighetenPubDate()))
                     .filter(RssFeedFilter::filterContentEkobrottsmyndigheten)
                     .sorted(this::sortByPublicationDateGMT)
-                    .map(i -> { next.setEkobrottsmyndighetenPubDate(i.getPubDate().orElse("")); return i; })
+                    .peek(i -> next.setEkobrottsmyndighetenPubDate(i.getPubDate().orElse("")))
                     .map(RssFeedTweet::createEkobrottsmyndighetenTweet)
                     .forEach(twitter::publishTweet);
         }
@@ -182,7 +182,7 @@ public class RssFeedPublisher {
                     .filter(i -> filterPubDate(formatter, i.getPubDate().orElse(""), lastPublished.getVeckansAffarerPubDate()))
                     .filter(RssFeedFilter::filterContentVeckansAffarer)
                     .sorted(this::sortByPublicationDateGMT)
-                    .map(i -> { next.setVeckansAffarerPubDate(i.getPubDate().orElse("")); return i; })
+                    .peek(i -> next.setVeckansAffarerPubDate(i.getPubDate().orElse("")))
                     .map(RssFeedTweet::createVeckansAffarerTweet)
                     .forEach(twitter::publishTweet);
         }
@@ -201,7 +201,7 @@ public class RssFeedPublisher {
                     .filter(i -> filterPubDate(formatter, i.getPubDate().orElse(""), lastPublished.getRealtidPubDate()))
                     .filter(RssFeedFilter::filterContentRealtid)
                     .sorted(this::sortByPublicationDateGMT)
-                    .map(i -> { next.setRealtidPubDate(i.getPubDate().orElse("")); return i; })
+                    .peek(i -> next.setRealtidPubDate(i.getPubDate().orElse("")))
                     .map(RssFeedTweet::createRealtidTweet)
                     .forEach(twitter::publishTweet);
         }
@@ -220,7 +220,7 @@ public class RssFeedPublisher {
                     .filter(i -> filterPubDate(formatter, i.getPubDate().orElse(""), lastPublished.getPlaceraPubDate()))
                     .filter(RssFeedFilter::filterContentPlacera)
                     .sorted(this::sortByPublicationDate)
-                    .map(i -> { next.setPlaceraPubDate(i.getPubDate().orElse("")); return i; })
+                    .peek(i -> next.setPlaceraPubDate(i.getPubDate().orElse("")))
                     .map(RssFeedTweet::createPlaceraTweet)
                     .forEach(twitter::publishTweet);
         }
@@ -239,7 +239,7 @@ public class RssFeedPublisher {
                     .filter(i -> filterPubDate(formatter, i.getPubDate().orElse(""), lastPublished.getBreakitPubDate()))
                     .filter(RssFeedFilter::filterContentBreakit)
                     .sorted(this::sortByPublicationDate)
-                    .map(i -> { next.setBreakitPubDate(i.getPubDate().orElse("")); return i; })
+                    .peek(i -> next.setBreakitPubDate(i.getPubDate().orElse("")))
                     .map(RssFeedTweet::createBreakitTweet)
                     .forEach(twitter::publishTweet);
         }
@@ -258,7 +258,7 @@ public class RssFeedPublisher {
                     .filter(i -> filterPubDate(formatter, i.getPubDate().orElse(""), lastPublished.getAffarsvarldenPubDate()))
                     .filter(RssFeedFilter::filterContentAffarsvarlden)
                     .sorted(this::sortByPublicationDate)
-                    .map(i -> { next.setAffarsvarldenPubDate(i.getPubDate().orElse("")); return i; })
+                    .peek(i -> next.setAffarsvarldenPubDate(i.getPubDate().orElse("")))
                     .map(RssFeedTweet::createAffarsvarldenTweet)
                     .forEach(twitter::publishTweet);
         }
@@ -276,7 +276,7 @@ public class RssFeedPublisher {
                     .filter(i -> filterPubDate(formatter, i.getPubDate().orElse(""), lastPublished.getInvestingComPubDate()))
                     .filter(RssFeedFilter::filterContentInvestingCom)
                     .sorted(this::sortByPublicationDateNormal)
-                    .map(i -> { next.setInvestingComPubDate(i.getPubDate().orElse("")); return i; })
+                    .peek(i -> next.setInvestingComPubDate(i.getPubDate().orElse("")))
                     .map(RssFeedTweet::createInvestingComTweet)
                     .forEach(twitter::publishTweet);
         }
@@ -295,7 +295,7 @@ public class RssFeedPublisher {
                     .filter(i -> filterPubDate(formatter, i.getPubDate().orElse(""), lastPublished.getDiDigitalPubDate()))
                     .filter(RssFeedFilter::filterContentDiDigital)
                     .sorted(this::sortByPublicationDateGMT)
-                    .map(i -> { next.setDiDigitalPubDate(i.getPubDate().orElse("")); return i; })
+                    .peek(i -> next.setDiDigitalPubDate(i.getPubDate().orElse("")))
                     .map(RssFeedTweet::createDiDigitalTweet)
                     .forEach(twitter::publishTweet);
         }

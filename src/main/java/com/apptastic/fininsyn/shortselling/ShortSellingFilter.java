@@ -2,21 +2,21 @@ package com.apptastic.fininsyn.shortselling;
 
 import com.apptastic.blankningsregistret.NetShortPosition;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.time.LocalDate;
+import java.time.ZoneId;
+
+import static com.apptastic.fininsyn.shortselling.ShortSellingTwitterPublisher.TIME_ZONE;
 
 public class ShortSellingFilter {
 
-    public static boolean positionDateFilter(String notOlderThenDate, String publicationDate) {
+    public static boolean positionDateFilter(LocalDate notOlderThenDate, LocalDate publicationDate) {
         return notOlderThenDate.compareTo(publicationDate) < 0;
     }
 
     public static boolean historyLimitFilter(NetShortPosition position) {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar date = Calendar.getInstance();
-        date.add(Calendar.YEAR, -1);
+        LocalDate date = LocalDate.now(ZoneId.of(TIME_ZONE));
+        date = date.minusYears(1);
 
-        String newerThenDate = formatter.format(date.getTime());
-        return position.getPositionDate().compareTo(newerThenDate) > 0;
+        return position.getPositionDate().compareTo(date) > 0;
     }
 }

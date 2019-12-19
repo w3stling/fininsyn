@@ -12,12 +12,12 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,6 +29,7 @@ import static java.util.stream.Collectors.toList;
 public class PdmrTransactionTwitterPublisher {
     private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
     private static final String TIME_ZONE = "Europe/Stockholm";
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
     @Autowired
     Insynsregistret insynsregistret;
     @Autowired
@@ -46,18 +47,18 @@ public class PdmrTransactionTwitterPublisher {
 
         PdmrTransaction last = getLastPublishedPdmrTransaction();
         final PdmrTransaction next = new PdmrTransaction(last);
-        Date fromDate = getFromDate(last);
-        Date toDate = new Date();
+        LocalDate fromDate = getFromDate(last);
+        LocalDate toDate = LocalDate.now(ZoneId.of(TIME_ZONE));
 
         try {
             TransactionQuery query = TransactionQueryBuilder.publications(fromDate, toDate).build();
             insynsregistret.search(query)
-                .filter(t -> PdmrTransactionFilter.transactionFilter(last.getPublicationDate(), t.getPublicationDate()))
+                .filter(t -> PdmrTransactionFilter.transactionFilter(last.getPublicationDate(), t.getPublicationDate().format(DateTimeFormatter.ISO_LOCAL_DATE)))
                 .filter(PdmrTransactionFilter::transactionFilter)
                 .collect(Collectors.groupingBy(this::groupTransactionBy, TreeMap::new, toList()))
                 .values().stream()
                 .filter(PdmrTransactionFilter::transactionAmountFilter)
-                .map(t -> { next.setPublicationDate(t.get(0).getPublicationDate()); return t; })
+                .peek(t -> next.setPublicationDate(t.get(0).getPublicationDate().format(DateTimeFormatter.ISO_LOCAL_DATE)))
                 .map(PdmrTransactionTweet::create)
                 .filter(TwitterPublisher::filterTweetLength)
                 .forEach(twitter::publishTweet);
@@ -89,15 +90,13 @@ public class PdmrTransactionTwitterPublisher {
         catch (Exception e) { }
 
         if (lastPublished == null) {
-            Calendar today = Calendar.getInstance(TimeZone.getTimeZone(TIME_ZONE));
-            //today.add(Calendar.DAY_OF_YEAR, -1);
-            //today.set(Calendar.HOUR, 0);
-            //today.set(Calendar.MINUTE, 0);
-            //today.set(Calendar.SECOND, 0);
+            LocalDateTime today = LocalDateTime.now(ZoneId.of(TIME_ZONE));
+            //today = today.minusDays(1);
+            //today = today.withHour(0);
+            //today = today.withMinute(0);
+            //today = today.withSecond(0);
 
-            SimpleDateFormat formatter = new SimpleDateFormat(DATE_TIME_FORMAT);
-            String date = formatter.format(today.getTime());
-
+            String date = today.format(DATE_TIME_FORMATTER);
             lastPublished = new PdmrTransaction("1", "1", date, "");
         }
 
@@ -105,16 +104,14 @@ public class PdmrTransactionTwitterPublisher {
     }
 
 
-    private Date getFromDate(PdmrTransaction transaction) {
-        Date fromDate;
-        SimpleDateFormat formatter = new SimpleDateFormat(DATE_TIME_FORMAT);
+    private LocalDate getFromDate(PdmrTransaction transaction) {
+        LocalDate fromDate;
 
         try {
-            fromDate = formatter.parse(transaction.getPublicationDate());
+            fromDate = LocalDate.parse(transaction.getPublicationDate(), DateTimeFormatter.ISO_LOCAL_DATE);
         }
-        catch (ParseException e) {
-            Calendar now = Calendar.getInstance(TimeZone.getTimeZone(TIME_ZONE));
-            fromDate = now.getTime();
+        catch (DateTimeParseException e) {
+            fromDate = LocalDate.now(ZoneId.of(TIME_ZONE));
         }
 
         return fromDate;
@@ -122,9 +119,7 @@ public class PdmrTransactionTwitterPublisher {
 
 
     private String now() {
-        SimpleDateFormat formatter = new SimpleDateFormat(DATE_TIME_FORMAT);
-        Calendar now = Calendar.getInstance(TimeZone.getTimeZone(TIME_ZONE));
-
-        return formatter.format(now.getTime());
+        LocalDateTime today = LocalDateTime.now(ZoneId.of(TIME_ZONE));
+        return today.format(DATE_TIME_FORMATTER);
     }
 }

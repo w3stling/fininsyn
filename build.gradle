@@ -27,7 +27,7 @@ import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
 import com.bmuschko.gradle.docker.tasks.image.DockerPushImage
 
 group = 'com.apptastic'
-version = '0.0.5-SNAPSHOT'
+version = '0.0.6-SNAPSHOT'
 sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
 
@@ -44,10 +44,10 @@ repositories {
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-mongodb-reactive')
 	compile('org.twitter4j:twitter4j-core:4.0.7')
-    compile('com.apptastic:insynsregistret:2.1.2')
-	compile('com.apptastic:blankningsregistret:2.0.2')
-    compile('com.apptastic:rssreader:2.0.1')
-    compile('com.apptastic:tickersymbol:2.0.3')
+    compile('com.apptastic:insynsregistret:3.0.1')
+	compile('com.apptastic:blankningsregistret:3.0.0')
+    compile('com.apptastic:rssreader:2.2.0')
+    compile('com.apptastic:tickersymbol:2.0.7')
     compile('org.apache.commons:commons-lang3:3.8.1')
     compile('net.swisstech:bitly-api-client:0.8.0')
     testCompile('com.aries:docker-java-shaded:3.0.14')

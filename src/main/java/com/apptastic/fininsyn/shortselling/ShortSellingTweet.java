@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -50,9 +51,10 @@ public class ShortSellingTweet {
         builder.append(PROCENT_FORMATTER.format(currentPosition.getPositionInPercent()))
                 .append("% i ")
                 .append(formatIssuer(currentPosition.getIssuer()))
-                .append(" " + getEmoji(increased, currentPosition.getPositionInPercent()))
+                .append(" ")
+                .append(getEmoji(increased, currentPosition.getPositionInPercent()))
                 .append("\n")
-                .append(currentPosition.getPositionDate().trim())
+                .append(currentPosition.getPositionDate().format(DateTimeFormatter.ISO_LOCAL_DATE))
                 .append("\n");
 
         String symbolName = null;
@@ -66,9 +68,12 @@ public class ShortSellingTweet {
             builder.append("#blankning ");
 
         if (symbolName != null)
-            builder.append(TwitterUtil.toCashTag(symbolName) + " #" + isin);
+            builder.append(TwitterUtil.toCashTag(symbolName))
+                   .append(" #")
+                   .append(isin);
         else
-            builder.append("#" + isin);
+            builder.append("#")
+                   .append(isin);
 
         return builder.toString();
     }
