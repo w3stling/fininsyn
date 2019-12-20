@@ -28,6 +28,10 @@ public class PdmrTransactionTweet {
 
 
     public static String create(List<Transaction> transactions) {
+        if (transactions.isEmpty()) {
+            return "";
+        }
+
         Transaction transaction = transactions.get(0);
 
         double quantity = transactions.stream()

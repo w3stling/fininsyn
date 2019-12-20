@@ -23,6 +23,10 @@ public class ShortSellingTweet {
     private static final Pattern TRIM = Pattern.compile("(^\\h*)|(\\h*$)");
 
     public static String create(List<NetShortPosition> positionHistoryPerHolder) {
+        if (positionHistoryPerHolder.isEmpty()) {
+            return "";
+        }
+
         NetShortPosition currentPosition = positionHistoryPerHolder.get(0);
 
         boolean increased = increasePosition(positionHistoryPerHolder);

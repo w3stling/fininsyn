@@ -71,8 +71,8 @@ public class ShortSellingTwitterPublisher {
                         .filter(p -> diff.contains(p.getPositionHolder() + p.getIsin()))
                         .collect(Collectors.groupingBy(this::groupShortSellingBy, TreeMap::new, toList()))
                         .values().stream()
-                        .sorted(this::sortByPositionDate)
                         .filter(Predicate.not(List::isEmpty))
+                        .sorted(this::sortByPositionDate)
                         .filter(t -> ShortSellingFilter.positionDateFilter(filterPositionDate(), t.get(0).getPositionDate()))
                         .peek(t -> {
                             next.setPublicationDate(newPublicationDate);

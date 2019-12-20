@@ -26,6 +26,10 @@ public class PdmrTransactionFilter {
     }
 
     public static boolean transactionAmountFilter(List<Transaction> transactions) {
+        if (transactions.isEmpty()) {
+            return false;
+        }
+
         double currencyConvertedAmount = 0.0;
         double totalAmount = transactions.stream()
                 .mapToDouble(PdmrTransactionFilter::toAmount)

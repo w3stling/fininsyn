@@ -29,17 +29,20 @@ public class TwitterPublisher {
     }
 
     public static boolean filterTweetLength(String tweet) {
-        boolean ok = true;
+        if (tweet == null || tweet.length() <= 2) {
+            return false;
+        }
 
         if (tweet.length() > TwitterUtil.TWEET_MAX_LENGTH) {
-            ok = false;
             java.util.logging.Logger logger = Logger.getLogger("com.apptastic.fininsyn");
 
             if (logger.isLoggable(Level.WARNING))
                 logger.log(Level.WARNING, "Tweet to long. Maximum tweet length is 280 this tweet is " + tweet.length());
+
+            return false;
         }
 
-        return ok;
+        return true;
     }
 
     public void publishTweet(String tweet) {
