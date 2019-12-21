@@ -27,7 +27,7 @@ import static java.util.stream.Collectors.toList;
 
 @Component
 public class ShortSellingTwitterPublisher {
-    private static final int FILTER_OLDER_THEN_DAYS = -10;
+    private static final int FILTER_OLDER_THEN_DAYS = 10;
     private static final String DATE_FORMAT = "yyyy-MM-dd";
     private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
     static final String TIME_ZONE = "Europe/Stockholm";
@@ -63,7 +63,7 @@ public class ShortSellingTwitterPublisher {
 
                 Set<String> diff = diffStreams(newSearch.stream(), lastSearch);
 
-                if (diff.size() > 40)
+                if (diff.size() > 50)
                     return;
 
                 newSearch.stream()
@@ -149,6 +149,9 @@ public class ShortSellingTwitterPublisher {
     }
 
     private LocalDate toDate(String date) throws ParseException {
+        if (date.length() > 10) {
+            date = date.substring(0, 10);
+        }
         return LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
     }
 
