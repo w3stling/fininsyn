@@ -99,7 +99,8 @@ public class RssFeedTweet {
                     titleLowerCase.contains("över nollan") || titleLowerCase.contains("tjuraktig") || titleLowerCase.contains("blått") ||
                     titleLowerCase.contains("högre") || titleLowerCase.contains("blå") || titleLowerCase.contains("grön") ||
                     titleLowerCase.contains("uppgång") || titleLowerCase.contains("dur") || titleLowerCase.contains("stigande") ||
-                    titleLowerCase.contains("tjurstart") || titleLowerCase.contains("norrut") || titleLowerCase.contains("modest upp")) {
+                    titleLowerCase.contains("tjurstart") || titleLowerCase.contains("norrut") || titleLowerCase.contains("modest upp") ||
+                    titleLowerCase.contains("plusöppning")) {
 
                 emoji = EMOJI_CHART_INCREASING;
             }
