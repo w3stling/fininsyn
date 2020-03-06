@@ -100,7 +100,7 @@ public class RssFeedTweet {
                     titleLowerCase.contains("högre") || titleLowerCase.contains("blå") || titleLowerCase.contains("grön") ||
                     titleLowerCase.contains("uppgång") || titleLowerCase.contains("dur") || titleLowerCase.contains("stigande") ||
                     titleLowerCase.contains("tjurstart") || titleLowerCase.contains("norrut") || titleLowerCase.contains("modest upp") ||
-                    titleLowerCase.contains("plusöppning")) {
+                    titleLowerCase.contains("plusöppning") || titleLowerCase.contains("svagt upp")) {
 
                 emoji = EMOJI_CHART_INCREASING;
             }
