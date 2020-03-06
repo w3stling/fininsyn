@@ -133,9 +133,9 @@ public class PdmrTransactionTweet {
             return false;
         }
         text = text.toLowerCase();
-        return TextUtil.endsWith(text, "ab", "plc", "ltd", "inc", "as", "ag") ||
+        return TextUtil.endsWith(text, "ab", "plc", "ltd", "inc", "as", "ag", "nv") ||
                TextUtil.containsAny(text, "holding", "capital", "invest", "management", "aktiebolag", "finance",
-                       "partner", "trust", "publ", "plc", "stiftelse");
+                       "partner", "trust", "publ", "plc", "inc", "stiftelse");
     }
 
     private static String formatIssuer(String issuer) {
