@@ -26,6 +26,7 @@ public class RssFeedTweet {
     private static final String EMOJI_LOUDSPEAKER = "\uD83D\uDCE2";
     private static final String EMOJI_THUMBS_UP = "\uD83D\uDC4D";
     private static final String EMOJI_THUMBS_DOWN = "\uD83D\uDC4E";
+    private static final String EMOJI_POLICE_CAR_LIGHT = "\uF09F\u9AA8";
 
     public static String createRiskbankenTweet(Item item) {
         String title = item.getTitle().orElse("").trim();
@@ -185,6 +186,39 @@ public class RssFeedTweet {
         String title = item.getTitle().orElse("").trim();
         String url = toShortUrl(item.getLink().orElse(""));
         return "DI Digital " + EMOJI_NEWSPAPER + " " + title + "\n" + url;
+    }
+
+
+    public static String createFiSanktionerTweet(Item item) {
+        String title = item.getTitle().orElse("").trim();
+        String description = item.getDescription().orElse("").trim();
+        String hashTags = toFiSanktionerHashTags(title, description);
+        String url = toShortUrl(item.getLink().orElse(""));
+
+        String tweet = "FI " + EMOJI_POLICE_OFFICER + " " + title + "\n" + description;
+        tweet = TwitterUtil.trim(tweet, hashTags.length() + url.length() + 3);
+        return tweet + "\n" + url + "\n\n" + hashTags;
+    }
+
+    private static String toFiSanktionerHashTags(String title, String description) {
+        String hashTags = "";
+        description = description.toLowerCase();
+        title = title.toLowerCase();
+
+        if (description.contains("penningtvätt")) {
+            hashTags += "#penningtvätt ";
+        }
+        if (description.contains("sanktionsavgift")) {
+            hashTags += "#sanktionsavgift ";
+        }
+        if (description.contains("straffavgift")) {
+            hashTags += "#straffavgift ";
+        }
+        if (title.contains("tillstånd återkallas") || description.contains("återkallar tillståndet")) {
+            hashTags += "#tillståndåterkallas ";
+        }
+
+        return hashTags.trim();
     }
 
 

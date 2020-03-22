@@ -96,6 +96,10 @@ public class RssFeedFilter {
         return containsAny(content, COMMON_KEYWORDS) && !containsAny(content, COMMON_IGNORE_KEYWORDS);
     }
 
+    public static boolean filterContentFiSanktioner(Item item) {
+        return true;
+    }
+
     private static String getContent(Item item) {
         if (item == null)
             return "";

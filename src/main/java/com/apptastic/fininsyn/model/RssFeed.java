@@ -21,6 +21,7 @@ public class RssFeed {
     public String affarsvarldenPubDate;
     public String investingComPubDate;
     public String diDigitalPubDate;
+    public String fiSanktionerPubDate;
     public String lastAttempt;
 
 
@@ -31,7 +32,8 @@ public class RssFeed {
     public RssFeed(String id, String rssFeedId, String riksbankenPubDate, String finanspolitiskaradetPubDate,
                    String konjunkturinstitutetPubDate, String scbPubDate, String ekobrottsmyndighetenPubDate,
                    String veckansAffarerPubDate, String realtidPubDate, String placeraPubDate, String breakitPubDate,
-                   String affarsvarldenPubDate, String investingComPubDate, String diDigitalPubDate, String lastAttempt) {
+                   String affarsvarldenPubDate, String investingComPubDate, String diDigitalPubDate,
+                   String fiSanktionerPubDate, String lastAttempt) {
 
         this.id = id;
         this.rssFeedId = rssFeedId;
@@ -47,6 +49,7 @@ public class RssFeed {
         this.affarsvarldenPubDate = affarsvarldenPubDate;
         this.investingComPubDate = investingComPubDate;
         this.diDigitalPubDate = diDigitalPubDate;
+        this.fiSanktionerPubDate = fiSanktionerPubDate;
         this.lastAttempt = lastAttempt;
     }
 
@@ -66,6 +69,7 @@ public class RssFeed {
         affarsvarldenPubDate = o.affarsvarldenPubDate;
         investingComPubDate = o.investingComPubDate;
         diDigitalPubDate = o.diDigitalPubDate;
+        fiSanktionerPubDate = o.fiSanktionerPubDate;
         lastAttempt = o.lastAttempt;
     }
 
@@ -179,6 +183,14 @@ public class RssFeed {
 
     public void setDiDigitalPubDate(String diDigitalPubDate) {
         this.diDigitalPubDate = diDigitalPubDate;
+    }
+
+    public String getFiSanktionerPubDate() {
+        return fiSanktionerPubDate;
+    }
+
+    public void setFiSanktionerPubDate(String fiSanktionerPubDate) {
+        this.fiSanktionerPubDate = fiSanktionerPubDate;
     }
 
     public String getLastAttempt() {
