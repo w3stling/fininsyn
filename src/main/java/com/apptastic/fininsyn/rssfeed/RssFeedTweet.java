@@ -1,17 +1,17 @@
 package com.apptastic.fininsyn.rssfeed;
 
+import com.apptastic.fininsyn.bitly.BitlyClient;
 import com.apptastic.fininsyn.utils.TextUtil;
 import com.apptastic.fininsyn.utils.TwitterUtil;
 import com.apptastic.rssreader.Item;
-import net.swisstech.bitly.BitlyClient;
-import net.swisstech.bitly.model.Response;
-import net.swisstech.bitly.model.v3.ShortenResponse;
 
 import java.util.*;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 
 public class RssFeedTweet {
+    private static final String BITLY_ACCESSTOKEN = "707fb3170e622ee0c650c02fe09151cc2e012515";
     private static final String EMOJI_BANK = "\uD83C\uDFE6";
     private static final String EMOJI_BAR_CHART = "\uD83D\uDCCA";
     private static final String EMOJI_CHART_INCREASING = "\uD83D\uDCC8";
@@ -192,13 +192,14 @@ public class RssFeedTweet {
         if (url == null || url.isEmpty())
             return "";
 
-        BitlyClient client = new BitlyClient("707fb3170e622ee0c650c02fe09151cc2e012515");
-        Response<ShortenResponse> respShort = client.shorten()
-                .setLongUrl(url)
-                .call();
-
-        if (respShort.status_code == 200)
-            url = respShort.data.url;
+        try {
+            BitlyClient theURLService = new BitlyClient(url, BITLY_ACCESSTOKEN);
+            theURLService.shortenLink();
+            url = theURLService.finalUrl;
+        } catch (Exception e) {
+            Logger logger = Logger.getLogger("com.apptastic.fininsyn");
+            logger.warning("Failed to get short url. " + e.getMessage());
+        }
 
         return url;
     }
