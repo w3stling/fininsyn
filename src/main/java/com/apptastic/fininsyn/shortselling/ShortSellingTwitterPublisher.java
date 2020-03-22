@@ -39,7 +39,8 @@ public class ShortSellingTwitterPublisher {
     TwitterPublisher twitter;
 
 
-    @Scheduled(initialDelay = 20000, fixedRate = 900000)
+    //@Scheduled(initialDelay = 10000, fixedRate = 900000)
+    @Scheduled(cron = "0 40 15 * * ?", zone = "Europe/Stockholm")
     public void checkShortSellingPositions() {
         Logger logger = Logger.getLogger("com.apptastic.fininsyn");
 
@@ -54,17 +55,14 @@ public class ShortSellingTwitterPublisher {
 
         if (!newPublicationDate.equals(last.getPublicationDate())) {
             try {
-                Stream<NetShortPosition> lastSearch = register.search(toDate(last.getPublicationDate()), 6)
+                Stream<NetShortPosition> lastSearch = register.search(toDate(last.getPublicationDate()), 4)
                         .filter(ShortSellingFilter::historyLimitFilter);
 
-                List<NetShortPosition> newSearch = register.search(toDate(now), 6)
+                List<NetShortPosition> newSearch = register.search(toDate(now), 4)
                         .filter(ShortSellingFilter::historyLimitFilter)
                         .collect(Collectors.toList());
 
                 Set<String> diff = diffStreams(newSearch.stream(), lastSearch);
-
-                if (diff.size() > 50)
-                    return;
 
                 newSearch.stream()
                         .filter(ShortSellingFilter::historyLimitFilter)
@@ -77,6 +75,7 @@ public class ShortSellingTwitterPublisher {
                         .peek(t -> {
                             next.setPublicationDate(newPublicationDate);
                         })
+                        .limit(19)
                         .map(ShortSellingTweet::create)
                         .filter(TwitterPublisher::filterTweetLength)
                         .forEach(twitter::publishTweet);
