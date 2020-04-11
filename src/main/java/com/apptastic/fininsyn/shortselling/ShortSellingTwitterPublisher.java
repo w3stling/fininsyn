@@ -40,7 +40,7 @@ public class ShortSellingTwitterPublisher {
 
 
     //@Scheduled(initialDelay = 10000, fixedRate = 900000)
-    @Scheduled(cron = "0 40 15 * * ?", zone = "Europe/Stockholm")
+    @Scheduled(cron = "0 40 15 * * ?", zone = TIME_ZONE)
     public void checkShortSellingPositions() {
         Logger logger = Logger.getLogger("com.apptastic.fininsyn");
 
