@@ -52,17 +52,17 @@ public class InstrumentLookup {
             if (name.endsWith(".") && name.length() > 1)
                 name = name.substring(0, name.length() - 1);
 
-            instrument = longNameCache.get(name);
+            instrument = longNameCache.get(name.toUpperCase());
 
             if (instrument == null) {
                 TickerSymbol tickerSymbol = symbolSearch.searchByName(name)
-                        .findFirst()
-                        .orElse(null);
+                                                        .findFirst()
+                                                        .orElse(null);
 
                 if (tickerSymbol != null) {
                     String symbol = cleanSymbolName(tickerSymbol.getSymbol());
                     instrument = new Instrument(symbol, tickerSymbol.getName());
-                    longNameCache.put(name, instrument);
+                    longNameCache.put(name.toUpperCase(), instrument);
                 }
             }
         }
@@ -99,10 +99,11 @@ public class InstrumentLookup {
         issuer = issuer.trim();
         List<String> isinList = getIsinByIssuer(issuer, currency);
 
-        instrument = isinList.stream().map(i -> fetchAndCacheInstrument(i, currency))
-                .filter(Objects::nonNull)
-                .findFirst()
-                .orElse(null);
+        instrument = isinList.stream()
+                             .map(i -> fetchAndCacheInstrument(i, currency))
+                             .filter(Objects::nonNull)
+                             .findFirst()
+                             .orElse(null);
 
         if (instrument != null) {
             String key = getKey(isin, currency);
@@ -113,7 +114,7 @@ public class InstrumentLookup {
     }
 
     private String getKey(String isin, String currency) {
-        return isin + currency;
+        return isin.toUpperCase() + currency.toUpperCase();
     }
 
     private Instrument fetchAndCacheInstrument(String isin, String currency) {
@@ -135,9 +136,9 @@ public class InstrumentLookup {
         Instrument instrument = null;
 
         TickerSymbol tickerSymbol = symbolSearch.searchByIsin(isin)
-                .filter(t -> filterCurrency(t, currency))
-                .findFirst()
-                .orElse(null);
+                                                .filter(t -> filterCurrency(t, currency))
+                                                .findFirst()
+                                                .orElse(null);
 
         if (tickerSymbol != null) {
             String symbol = cleanSymbolName(tickerSymbol.getSymbol());
@@ -175,10 +176,10 @@ public class InstrumentLookup {
 
             TransactionQuery transactionQuery = TransactionQueryBuilder.publicationsLastDays(3 * 365).issuer(issuerName).build();
             return insynsregistret.search(transactionQuery)
-                    .filter(t -> currency.equals(t.getCurrency()) && !t.getIsin().isEmpty())
-                    .map(Transaction::getIsin)
-                    .distinct()
-                    .collect(Collectors.toList());
+                                  .filter(t -> currency.equals(t.getCurrency()) && !t.getIsin().isEmpty())
+                                  .map(Transaction::getIsin)
+                                  .distinct()
+                                  .collect(Collectors.toList());
         }
         catch (IOException e) {
             return Collections.emptyList();
