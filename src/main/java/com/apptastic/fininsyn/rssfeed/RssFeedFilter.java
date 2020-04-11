@@ -30,7 +30,7 @@ public class RssFeedFilter {
             "rally", "biometri", "marknadsmanipulation", "kursmanipulation", "marknadsmissbruk", "inside",
             "finansinspektionen", "finansmyndighet", "rekonstruktion", "ägardata", "backar", "satsning", "satsar",
             "fusion", "läkemedel", "inflation", "deflation", "recession", "högkonjunktur", "lågkonjunktur",
-            "personalneddrag", "cannabis", "tvångsinlös", "licens", "växtbaser" };
+            "personalneddrag", "cannabis", "tvångsinlös", "licens", "växtbaser", "straffavgift", "sanktionsavgift" };
 
     public static final String[] COMMON_IGNORE_KEYWORDS = { "politiker", "partiet", "väljarbarometer", "deklaration", "eu-val" };
 
@@ -42,22 +42,25 @@ public class RssFeedFilter {
 
     public static boolean filterContentEkobrottsmyndigheten(Item item) {
         String content = getContent(item);
-        return !containsAny(content, "vi söker", "söker", "tjänsten", "högskol", "trafikskol", "välfärd", "friskol", "namnstatistik", "tilltalsnamn", "miljöräkenskaper");
+        return !containsAny(content, "vi söker", "söker", "tjänsten", "högskol", "trafikskol", "välfärd",
+                "friskol", "namnstatistik", "tilltalsnamn", "miljöräkenskaper");
     }
 
     public static boolean filterContentRiksbanken(Item item) {
         String content = getContent(item);
-        return !containsAny(content, "vi söker", "söker", "tjänsten");
+        return !containsAny(content, "vi söker", "söker", "tjänsten", "konferens", "seminarium", "webbinarium",
+                "protokoll");
     }
 
     public static boolean filterContentFinanspolitiskaRadet(Item item) {
         String content = getContent(item);
-        return !containsAny(content, "vi söker", "söker", "tjänsten", "konferens", "seminarium");
+        return !containsAny(content, "vi söker", "söker", "tjänsten", "konferens", "seminarium", "webbinarium",
+                "pressträff", "inbjudan");
     }
 
     public static boolean filterContentKonjunkturinstitutet(Item item) {
         String content = getContent(item);
-        return !containsAny(content, "vi söker", "söker", "tjänsten");
+        return !containsAny(content, "vi söker", "söker", "tjänsten", "konferens", "seminarium", "webbinarium");
     }
 
     public static boolean filterContentVeckansAffarer(Item item) {

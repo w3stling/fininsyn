@@ -315,12 +315,12 @@ public class RssFeedPublisher {
         }
         try {
             rssReader.read(RSS_FEED_FI_SANKTIONER)
-                    .filter(i -> filterPubDate(formatter, i.getPubDate().orElse(""), lastPublished.getFiSanktionerPubDate()))
-                    .filter(RssFeedFilter::filterContentFiSanktioner)
-                    .sorted(this::sortByPublicationDate)
-                    .peek(i -> next.setFiSanktionerPubDate(i.getPubDate().orElse("")))
-                    .map(RssFeedTweet::createFiSanktionerTweet)
-                    .forEach(twitter::publishTweet);
+                     .filter(i -> filterPubDate(formatter, i.getPubDate().orElse(""), lastPublished.getFiSanktionerPubDate()))
+                     .filter(RssFeedFilter::filterContentFiSanktioner)
+                     .sorted(this::sortByPublicationDate)
+                     .peek(i -> next.setFiSanktionerPubDate(i.getPubDate().orElse("")))
+                     .map(RssFeedTweet::createFiSanktionerTweet)
+                     .forEach(twitter::publishTweet);
         }
         catch (IOException e) {
             e.printStackTrace();
