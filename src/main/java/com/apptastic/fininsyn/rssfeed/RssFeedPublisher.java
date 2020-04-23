@@ -66,7 +66,7 @@ public class RssFeedPublisher {
             checkVeckansAffarerRssFeed(lastPublished, next);
             checkRealtidRssFeed(lastPublished, next);
             checkBreakitRssFeed(lastPublished, next);
-            checkAffarsvarldenRssFeed(lastPublished, next);
+            //checkAffarsvarldenRssFeed(lastPublished, next);
             checkPlaceraRssFeed(lastPublished, next);
             checkInvestingComRssFeed(lastPublished, next);
             checkDiDigitalRssFeed(lastPublished, next);
