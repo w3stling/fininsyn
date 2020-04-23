@@ -281,7 +281,7 @@ public class RssFeedTweet {
         return TextUtil.containsAny(description,"redovisar ett resultat", "redovisade ett result",
                 "redovisar ett rörelseresultat", "redovisade ett rörelseresultat",
                 "redovisar ett ebitda-resultat", "redovisade ett ebitda-resultat") ||
-                (TextUtil.containsAny(description, "redovisar", "redovisade") && TextUtil.containsAtLeast(description, 3, "nettoomsättning", "rörelseresultat", "kassaflöde",
+                (TextUtil.containsAny(description, "redovisar", "redovisade") && TextUtil.containsAtLeast(description, 2, "nettoomsättning", "rörelseresultat", "kassaflöde",
                         "bruttomarginal", "nettoresultat", "kvartal",
                         "resultatet per aktie", "resultat per aktie",
                         "resultatet före skatt", "resultat före skatt",
