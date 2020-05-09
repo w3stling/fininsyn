@@ -32,15 +32,27 @@ public class PdmrTransactionTweet {
             return "";
         }
 
+        String fromDate = transactions.stream()
+                                      .min(Transaction::compareTo)
+                                      .map(Transaction::getTransactionDate)
+                                      .map(t -> t.format(DateTimeFormatter.ISO_LOCAL_DATE))
+                                      .orElse("");
+
+        String toDate = transactions.stream()
+                                    .max(Transaction::compareTo)
+                                    .map(Transaction::getTransactionDate)
+                                    .map(t -> t.format(DateTimeFormatter.ISO_LOCAL_DATE))
+                                    .orElse("");
+
         Transaction transaction = transactions.get(0);
 
         double quantity = transactions.stream()
-                .mapToDouble(PdmrTransactionFilter::toQuantity)
-                .sum();
+                                      .mapToDouble(PdmrTransactionFilter::toQuantity)
+                                      .sum();
 
         double amount = transactions.stream()
-                .mapToDouble(PdmrTransactionFilter::toAmount)
-                .sum();
+                                    .mapToDouble(PdmrTransactionFilter::toAmount)
+                                    .sum();
 
         InstrumentLookup.Instrument instrument = InstrumentLookup.getInstance().getInstrument(transaction.getIssuer(), transaction.getIsin(), transaction.getCurrency());
 
@@ -98,10 +110,15 @@ public class PdmrTransactionTweet {
                     .append("\n");
         }
 
+        String dateText = fromDate;
+        if (!fromDate.equals(toDate)) {
+            dateText += " - " + toDate;
+        }
+
         builder.append(QUANTITY_FORMATTER.format((long)quantity) + " @ " + PRICE_FORMATTER.format(amount/quantity) + " " + transaction.getCurrency())
-                .append("\n")
-                .append(transaction.getTransactionDate().format(DateTimeFormatter.ISO_LOCAL_DATE))
-                .append("\n");
+               .append("\n")
+               .append(dateText)
+               .append("\n");
 
         if (amount >= 85_000_000)
             builder.append("#insynshandel ");
