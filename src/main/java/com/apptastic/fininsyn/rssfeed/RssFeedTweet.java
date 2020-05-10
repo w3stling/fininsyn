@@ -55,7 +55,7 @@ public class RssFeedTweet {
     public static String createEkobrottsmyndighetenTweet(Item item) {
         String title = item.getTitle().orElse("").trim();
         String url = toShortUrl(item.getLink().orElse(""));
-        return "Ekobrottsmyndigheten " + EMOJI_POLICE_OFFICER + " " + title + "\n" + url + "\n\n" + "#ekobrottsmyndigheten";
+        return "Ekobrottsmyndigheten " + EMOJI_POLICE_OFFICER + " " + title + "\n" + url + "\n\n" + "#EBM";
     }
 
     public static String createVeckansAffarerTweet(Item item) {
