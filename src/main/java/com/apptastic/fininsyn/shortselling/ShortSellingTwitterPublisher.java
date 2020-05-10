@@ -35,7 +35,7 @@ public class ShortSellingTwitterPublisher {
 
 
     //@Scheduled(initialDelay = 0, fixedRate = 900000)
-    @Scheduled(cron = "0 40 15 * * ?", zone = TIME_ZONE)
+    @Scheduled(cron = "0 36 15 * * ?", zone = TIME_ZONE)
     public void checkShortSellingPositions() {
         Logger logger = Logger.getLogger("com.apptastic.fininsyn");
 
@@ -99,7 +99,7 @@ public class ShortSellingTwitterPublisher {
     }
 
     private static String toKey(NetShortPosition position) {
-        return position.getIsin() + position.getPositionHolder();
+        return position.getIssuer() + position.getPositionHolder();
     }
 
     private ShortSelling getLastShortSelling() {
