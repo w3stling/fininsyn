@@ -5,6 +5,7 @@ import com.apptastic.blankningsregistret.NetShortPosition;
 import com.apptastic.fininsyn.TwitterPublisher;
 import com.apptastic.fininsyn.model.ShortSelling;
 import com.apptastic.fininsyn.repo.ShortSellingRepository;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -16,14 +17,8 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.toList;
-
 
 @Component
 public class ShortSellingTwitterPublisher {
@@ -39,7 +34,7 @@ public class ShortSellingTwitterPublisher {
     TwitterPublisher twitter;
 
 
-    //@Scheduled(initialDelay = 10000, fixedRate = 900000)
+    //@Scheduled(initialDelay = 0, fixedRate = 900000)
     @Scheduled(cron = "0 40 15 * * ?", zone = TIME_ZONE)
     public void checkShortSellingPositions() {
         Logger logger = Logger.getLogger("com.apptastic.fininsyn");
@@ -51,31 +46,43 @@ public class ShortSellingTwitterPublisher {
         ShortSelling next = new ShortSelling(last);
 
         String now = nowDateTime();
-        String newPublicationDate = now.substring(0, 10);
+        final String newPublicationDate = now.substring(0, 10);
 
         if (!newPublicationDate.equals(last.getPublicationDate())) {
             try {
-                Stream<NetShortPosition> lastSearch = register.search(toDate(last.getPublicationDate()), 4)
-                        .filter(ShortSellingFilter::historyLimitFilter);
+                final Map<String, Pair<NetShortPosition, NetShortPosition>> positionsMap = new HashMap<>();
 
-                List<NetShortPosition> newSearch = register.search(toDate(now), 4)
+                register.search(toDate(now), 5)
+                        .filter(ShortSellingFilter::badPositions)
                         .filter(ShortSellingFilter::historyLimitFilter)
-                        .collect(Collectors.toList());
+                        .forEach(p -> {
+                            String key = toKey(p);
+                            Pair<NetShortPosition, NetShortPosition> position = positionsMap.get(key);
+                            if (position == null) {
+                                positionsMap.put(key, Pair.of(p, null));
+                            } else if (position.getRight() == null) {
+                                positionsMap.put(key, Pair.of(position.getLeft(), p));
+                            }
+                        });
 
-                Set<String> diff = diffStreams(newSearch.stream(), lastSearch);
+                List<Pair<NetShortPosition, NetShortPosition>> positions = new LinkedList<>(positionsMap.values());
+                positions.sort((a, b) -> {
+                    int value = b.getLeft().compareTo(a.getLeft());
+                    if (value == 0) {
+                        value = a.getLeft().getIssuer().compareTo(b.getLeft().getIssuer());
+                    }
+                    if (value == 0) {
+                        value = a.getLeft().getPositionHolder().compareTo(b.getLeft().getPositionHolder());
+                    }
+                    return value;
+                });
 
-                newSearch.stream()
-                        .filter(ShortSellingFilter::historyLimitFilter)
-                        .filter(p -> diff.contains(p.getPositionHolder() + p.getIsin()))
-                        .collect(Collectors.groupingBy(this::groupShortSellingBy, TreeMap::new, toList()))
-                        .values().stream()
-                        .filter(Predicate.not(List::isEmpty))
-                        .sorted(this::sortByPositionDate)
-                        .filter(t -> ShortSellingFilter.positionDateFilter(filterPositionDate(), t.get(0).getPositionDate()))
-                        .peek(t -> {
-                            next.setPublicationDate(newPublicationDate);
-                        })
-                        .limit(19)
+                positions.stream()
+                        .filter(t -> ShortSellingFilter.positionDateFilter(filterPositionDate(), t.getLeft().getPositionDate()))
+                        .filter(ShortSellingFilter::positionChange)
+                        .limit(25)
+                        .peek(t -> next.setPublicationDate(newPublicationDate))
+                        .sorted(Comparator.comparing(Pair::getLeft))
                         .map(ShortSellingTweet::create)
                         .filter(TwitterPublisher::filterTweetLength)
                         .forEach(twitter::publishTweet);
@@ -91,20 +98,9 @@ public class ShortSellingTwitterPublisher {
         repository.save(next).subscribe();
     }
 
-
-    private String groupShortSellingBy(NetShortPosition position) {
+    private static String toKey(NetShortPosition position) {
         return position.getIsin() + position.getPositionHolder();
     }
-
-
-    private int sortByPositionDate(List<NetShortPosition> o1, List<NetShortPosition> o2) {
-        Comparator<NetShortPosition> comparator = Comparator.comparing(NetShortPosition::getPositionDate)
-            .thenComparing(NetShortPosition::getIssuer)
-            .thenComparing(NetShortPosition::getPositionHolder);
-
-        return comparator.compare(o1.get(0), o2.get(0));
-    }
-
 
     private ShortSelling getLastShortSelling() {
         ShortSelling shortSelling = null;
@@ -152,13 +148,5 @@ public class ShortSellingTwitterPublisher {
             date = date.substring(0, 10);
         }
         return LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
-    }
-
-    private Set<String> diffStreams(Stream<NetShortPosition> s1, Stream<NetShortPosition> s2) {
-        Set<NetShortPosition> b2 = s2.collect(Collectors.toSet());
-
-        return s1.filter(p -> !b2.contains(p))
-                 .map(p -> p.getPositionHolder() + p.getIsin())
-                 .collect(Collectors.toSet());
     }
 }

@@ -4,12 +4,12 @@ import com.apptastic.blankningsregistret.NetShortPosition;
 import com.apptastic.fininsyn.InstrumentLookup;
 import com.apptastic.fininsyn.utils.TwitterUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -22,14 +22,15 @@ public class ShortSellingTweet {
     private static final DecimalFormat PROCENT_FORMATTER = new DecimalFormat("#,##0.00", new DecimalFormatSymbols(Locale.FRANCE));
     private static final Pattern TRIM = Pattern.compile("(^\\h*)|(\\h*$)");
 
-    public static String create(List<NetShortPosition> positionHistoryPerHolder) {
-        if (positionHistoryPerHolder.isEmpty()) {
+    public static String create(Pair<NetShortPosition, NetShortPosition> positionPair) {
+        if (positionPair == null || positionPair.getLeft() == null) {
             return "";
         }
 
-        NetShortPosition currentPosition = positionHistoryPerHolder.get(0);
+        NetShortPosition currentPosition = positionPair.getLeft();
+        NetShortPosition previousPosition = positionPair.getRight();
 
-        boolean increased = increasePosition(positionHistoryPerHolder);
+        boolean increased = increasePosition(positionPair);
         String directionText = increased ? "ökar" : "minskar";
 
         StringBuilder builder = new StringBuilder();
@@ -38,15 +39,18 @@ public class ShortSellingTweet {
                 .append(directionText)
                 .append(" sin korta nettoposition");
 
-        if (positionHistoryPerHolder.size() >= 2 &&
-                currentPosition.getPositionInPercent() != positionHistoryPerHolder.get(1).getPositionInPercent() &&
-                positionHistoryPerHolder.get(1).getPositionInPercent() > 0.5) {
+        if (previousPosition != null &&
+            currentPosition.getPositionInPercent() != previousPosition.getPositionInPercent() &&
+            previousPosition.getPositionInPercent() > 0.5) {
 
-            NetShortPosition previousPosition = positionHistoryPerHolder.get(1);
+            String change = PROCENT_FORMATTER.format(currentPosition.getPositionInPercent() - previousPosition.getPositionInPercent());
 
-            builder.append(" från ")
-                    .append(PROCENT_FORMATTER.format(previousPosition.getPositionInPercent()))
-                    .append("% till ");
+            builder.append(" med ")
+                    .append(change)
+                    .append(" procentenheter till ");
+            if (!increased && currentPosition.getPositionInPercent() <= 0.5) {
+                builder.append("under ");
+            }
         }
         else {
             builder.append(" till ");
@@ -82,18 +86,12 @@ public class ShortSellingTweet {
         return builder.toString();
     }
 
-    private static boolean increasePosition(List<NetShortPosition> positionHistory) {
-        if (positionHistory.isEmpty()) {
-            return false;
-        }
-        else if (positionHistory.size() == 1) {
-            return positionHistory.get(0).getPositionInPercent() >= 0.5;
+    private static boolean increasePosition(Pair<NetShortPosition, NetShortPosition> positionPair) {
+        if (positionPair.getRight() == null) {
+            return positionPair.getLeft().getPositionInPercent() >= 0.5;
         }
         else {
-            if (positionHistory.get(1).getPositionInPercent() < 0.5)
-                return positionHistory.get(0).getPositionInPercent() >= 0.5;
-            else
-                return positionHistory.get(0).getPositionInPercent() > positionHistory.get(1).getPositionInPercent();
+            return positionPair.getLeft().getPositionInPercent() > positionPair.getRight().getPositionInPercent();
         }
     }
 
@@ -107,10 +105,21 @@ public class ShortSellingTweet {
     }
 
     private static String formatIssuer(String issuer) {
-        if (issuer.equals("AB SKF"))
-            issuer = "SKF";
-        else if (issuer.equals("BillerudKorsnas publ AB"))
-            issuer = "BillerudKorsnas";
+        if (issuer.length() > 0 && issuer.endsWith(".")) {
+            issuer = issuer.substring(0, issuer.length()-1).trim();
+        }
+
+        if ("SSAB AB".equals(issuer))
+            return "SSAB";
+        else if ("SAAB AKTIEBOLAG".equals(issuer))
+            return "SAAB";
+        else if ("AB SKF".equals(issuer))
+            return "SKF";
+        else if ("BillerudKorsnas publ AB".equals(issuer))
+            return "BillerudKorsnas";
+        else if ("H & M HENNES & MAURITZ AB".equals(issuer)) {
+            return "Hennes & Mauritz";
+        }
 
         issuer = issuer.replaceFirst("TELE2", "Tele2");
         issuer = issuer.replaceFirst("\\(PUBL\\)", "");
