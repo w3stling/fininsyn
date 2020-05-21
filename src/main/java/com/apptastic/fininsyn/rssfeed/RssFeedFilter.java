@@ -27,12 +27,14 @@ public class RssFeedFilter {
             "konkurren", "elpris", "köper", "avyttra", "artificiell", "konkurrent", "marknadsled", "import", "export",
             "sysselsättning", "stämning", "stämmer", "stäms", "pressmeddelande", "jobbsiffror", "konkurs", "noter",
             "uppstickare", "köprek", "säljrek", "köpråd", "säljråd", "neutralt råd", "finansering", "handelsstopp",
-            "rally", "biometri", "marknadsmanipulation", "kursmanipulation", "marknadsmissbruk", "inside",
+            "rally", "biometri", "marknadsmanipulation", "kursmanipulation", "marknadsmissbruk", "inside", "förvärv",
             "finansinspektionen", "finansmyndighet", "rekonstruktion", "ägardata", "backar", "satsning", "satsar",
-            "fusion", "läkemedel", "inflation", "deflation", "recession", "högkonjunktur", "lågkonjunktur",
-            "personalneddrag", "cannabis", "tvångsinlös", "licens", "växtbaser", "straffavgift", "sanktionsavgift" };
+            "fusion", "läkemedel", "inflation", "deflation", "recession", "rekordlåg", "permitter", "rekommendation",
+            "personalneddrag", "cannabis", "tvångsinlös", "licens", "växtbaser", "straffavgift", "sanktionsavgift",
+            "stödpaket", "stödåtgärder"};
 
-    public static final String[] COMMON_IGNORE_KEYWORDS = { "politiker", "partiet", "väljarbarometer", "deklaration", "eu-val" };
+    public static final String[] COMMON_IGNORE_KEYWORDS = { "politiker", "partiet", "väljarbarometer", "deklaration",
+            "eu-val", "jämställdhet" };
 
     public static boolean filterContentScb(Item item) {
         String content = getContent(item);
