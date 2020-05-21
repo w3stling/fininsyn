@@ -10,11 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.logging.Level;
@@ -22,9 +19,8 @@ import java.util.logging.Logger;
 
 @Component
 public class ShortSellingTwitterPublisher {
-    private static final int FILTER_OLDER_THEN_DAYS = 10;
     private static final String DATE_FORMAT = "yyyy-MM-dd";
-    private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    private static final DateTimeFormatter DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     static final String TIME_ZONE = "Europe/Stockholm";
     @Autowired
     Blankningsregistret register;
@@ -35,7 +31,7 @@ public class ShortSellingTwitterPublisher {
 
 
     //@Scheduled(initialDelay = 0, fixedRate = 900000)
-    @Scheduled(cron = "0 36 15 * * ?", zone = TIME_ZONE)
+    @Scheduled(cron = "0 45 15 * * ?", zone = TIME_ZONE)
     public void checkShortSellingPositions() {
         Logger logger = Logger.getLogger("com.apptastic.fininsyn");
 
@@ -45,14 +41,14 @@ public class ShortSellingTwitterPublisher {
         ShortSelling last = getLastShortSelling();
         ShortSelling next = new ShortSelling(last);
 
-        String now = nowDateTime();
-        final String newPublicationDate = now.substring(0, 10);
+        final LocalDate today = nowDate();
+        final LocalDate lastPublicationDate = LocalDate.parse(last.getPublicationDate());
 
-        if (!newPublicationDate.equals(last.getPublicationDate())) {
+        if (today.isAfter(lastPublicationDate)) {
             try {
                 final Map<String, Pair<NetShortPosition, NetShortPosition>> positionsMap = new HashMap<>();
 
-                register.search(toDate(now), 5)
+                register.search(today, 5)
                         .filter(ShortSellingFilter::badPositions)
                         .filter(ShortSellingFilter::historyLimitFilter)
                         .forEach(p -> {
@@ -78,14 +74,19 @@ public class ShortSellingTwitterPublisher {
                 });
 
                 positions.stream()
-                        .filter(t -> ShortSellingFilter.positionDateFilter(filterPositionDate(), t.getLeft().getPositionDate()))
-                        .filter(ShortSellingFilter::positionChange)
-                        .limit(25)
-                        .peek(t -> next.setPublicationDate(newPublicationDate))
-                        .sorted(Comparator.comparing(Pair::getLeft))
-                        .map(ShortSellingTweet::create)
-                        .filter(TwitterPublisher::filterTweetLength)
-                        .forEach(twitter::publishTweet);
+                         .filter(t -> ShortSellingFilter.positionDateFilter(lastPublicationDate, t.getLeft().getPositionDate()))
+                         .filter(ShortSellingFilter::positionChange)
+                         .limit(25)
+                         .peek(t -> {
+                            LocalDate lastPublication = LocalDate.parse(next.getPublicationDate());
+                            if (t.getLeft().getPositionDate().isAfter(lastPublication)) {
+                                next.setPublicationDate(t.getLeft().getPositionDate().format(DateTimeFormatter.ISO_DATE));
+                            }
+                         })
+                         .sorted(Comparator.comparing(Pair::getLeft))
+                         .map(ShortSellingTweet::create)
+                         .filter(TwitterPublisher::filterTweetLength)
+                         .forEach(twitter::publishTweet);
             } catch (Exception e) {
                 Logger warningLogger = Logger.getLogger("com.apptastic.fininsyn");
 
@@ -94,6 +95,7 @@ public class ShortSellingTwitterPublisher {
             }
         }
 
+        String now = nowDateTime().format(DATE_TIME_FORMAT);
         next.setLastAttempt(now);
         repository.save(next).subscribe();
     }
@@ -123,30 +125,12 @@ public class ShortSellingTwitterPublisher {
         return shortSelling;
     }
 
-
-    private String nowDateTime() {
-        SimpleDateFormat formatter = new SimpleDateFormat(DATE_TIME_FORMAT);
-        Calendar now = Calendar.getInstance(TimeZone.getTimeZone(TIME_ZONE));
-
-        return formatter.format(now.getTime());
+    private LocalDate nowDate() {
+        return ZonedDateTime.now(ZoneId.of(TIME_ZONE)).toLocalDate();
     }
 
-    private LocalDate filterPositionDate() {
-        /*
-        SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
-        Calendar date = Calendar.getInstance(TimeZone.getTimeZone(TIME_ZONE));
-        date.add(Calendar.DAY_OF_YEAR, FILTER_OLDER_THEN_DAYS);
-
-        return formatter.format(date.getTime());
-        */
-        LocalDate date = LocalDate.now(ZoneId.of(TIME_ZONE));
-        return date.minusDays(FILTER_OLDER_THEN_DAYS);
+    private LocalDateTime nowDateTime() {
+        return ZonedDateTime.now(ZoneId.of(TIME_ZONE)).toLocalDateTime();
     }
 
-    private LocalDate toDate(String date) throws ParseException {
-        if (date.length() > 10) {
-            date = date.substring(0, 10);
-        }
-        return LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
-    }
 }

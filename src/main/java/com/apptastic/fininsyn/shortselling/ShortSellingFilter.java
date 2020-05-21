@@ -10,8 +10,8 @@ import static com.apptastic.fininsyn.shortselling.ShortSellingTwitterPublisher.T
 
 public class ShortSellingFilter {
 
-    public static boolean positionDateFilter(LocalDate notOlderThenDate, LocalDate publicationDate) {
-        return notOlderThenDate.compareTo(publicationDate) < 0;
+    public static boolean positionDateFilter(LocalDate lastPublicationDate, LocalDate publicationDate) {
+        return publicationDate.isAfter(lastPublicationDate);
     }
 
     public static boolean historyLimitFilter(NetShortPosition position) {
