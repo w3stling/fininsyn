@@ -41,7 +41,7 @@ public class RepurchaseTwitterPublisher {
                 transactions.stream()
                             .filter(RepurchaseFilter::quantity)
                             .filter(RepurchaseFilter::type)
-                            .filter(t -> !lastPublished.getTransactions().contains(toKey(t)))
+                            .filter(t -> isNewTransaction(lastPublished, t))
                             .map(RepurchaseTweet::create)
                             .filter(TwitterPublisher::filterTweetLength)
                             .forEach(twitter::publishTweet);
@@ -60,6 +60,10 @@ public class RepurchaseTwitterPublisher {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private boolean isNewTransaction(RepurchaseTransaction lastPublished, Transaction transaction) {
+        return !lastPublished.getTransactions().contains(toKey(transaction));
     }
 
     private String toKey(Transaction transaction) {

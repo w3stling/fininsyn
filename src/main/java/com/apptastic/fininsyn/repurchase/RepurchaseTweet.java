@@ -27,7 +27,9 @@ public class RepurchaseTweet {
                    .append("\n\n")
                    .append(toStock(transaction.getCompany()))
                    .append("\n")
-                   .append(QUANTITY_FORMATTER.format(Math.abs(transaction.getQuantity())) + " @ " + PRICE_FORMATTER.format(Math.abs(transaction.getPrice().get())) + " SEK");
+                   .append(QUANTITY_FORMATTER.format(Math.abs(transaction.getQuantity())) + " @ " + PRICE_FORMATTER.format(Math.abs(transaction.getPrice().get())) + " SEK")
+                   .append("\n")
+                   .append(transaction.getDate());
         } else {
             return "";
         }
