@@ -34,7 +34,7 @@ public class RssFeedFilter {
             "stödpaket", "stödåtgärder"};
 
     public static final String[] COMMON_IGNORE_KEYWORDS = { "politiker", "partiet", "väljarbarometer", "deklaration",
-            "eu-val", "jämställdhet" };
+            "eu-val", "jämställdhet", "jag" };
 
     public static boolean filterContentScb(Item item) {
         String content = getContent(item);
