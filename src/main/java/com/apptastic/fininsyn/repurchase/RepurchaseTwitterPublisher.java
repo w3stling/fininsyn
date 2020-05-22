@@ -49,6 +49,7 @@ public class RepurchaseTwitterPublisher {
 
             Set<String> keys = transactions.stream()
                                            .filter(RepurchaseFilter::quantity)
+                                           .filter(RepurchaseFilter::type)
                                            .map(this::toKey)
                                            .collect(Collectors.toSet());
 
