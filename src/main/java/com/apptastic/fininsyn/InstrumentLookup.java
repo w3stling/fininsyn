@@ -61,7 +61,7 @@ public class InstrumentLookup {
 
                 if (tickerSymbol != null) {
                     String symbol = cleanSymbolName(tickerSymbol.getSymbol());
-                    instrument = new Instrument(symbol, tickerSymbol.getName());
+                    instrument = new Instrument(symbol, tickerSymbol.getName(), tickerSymbol.getIsin());
                     longNameCache.put(name.toUpperCase(), instrument);
                 }
             }
@@ -142,7 +142,8 @@ public class InstrumentLookup {
 
         if (tickerSymbol != null) {
             String symbol = cleanSymbolName(tickerSymbol.getSymbol());
-            instrument = new Instrument(symbol.trim(), tickerSymbol.getName().trim());
+            String isinCode = (tickerSymbol.getIsin() != null) ? tickerSymbol.getIsin() : isin;
+            instrument = new Instrument(symbol.trim(), tickerSymbol.getName().trim(), isinCode.trim());
         }
 
         return instrument;
@@ -208,10 +209,12 @@ public class InstrumentLookup {
     public static class Instrument {
         private String symbol;
         private String name;
+        private String isin;
 
-        public Instrument(String symbol, String name) {
+        public Instrument(String symbol, String name, String isin) {
             this.symbol = symbol;
             this.name = name;
+            this.isin = isin;
         }
 
         public String getSymbol() {
@@ -220,6 +223,10 @@ public class InstrumentLookup {
 
         public String getName() {
             return name;
+        }
+
+        public String getIsin() {
+            return isin;
         }
     }
 

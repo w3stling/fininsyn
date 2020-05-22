@@ -3,6 +3,7 @@ package com.apptastic.fininsyn.config;
 import com.apptastic.blankningsregistret.Blankningsregistret;
 import com.apptastic.fininsyn.model.PdmrTransaction;
 import com.apptastic.insynsregistret.Insynsregistret;
+import com.apptastic.repurchase.Repurchase;
 import com.apptastic.rssreader.RssReader;
 import com.mongodb.reactivestreams.client.MongoClient;
 import com.mongodb.reactivestreams.client.MongoClients;
@@ -38,6 +39,11 @@ public class ApplicationConfiguration extends AbstractReactiveMongoConfiguration
     @Bean
     public Blankningsregistret blankningsregistret() {
         return new Blankningsregistret();
+    }
+
+    @Bean
+    public Repurchase repurchase() {
+        return new Repurchase();
     }
 
     @Bean
