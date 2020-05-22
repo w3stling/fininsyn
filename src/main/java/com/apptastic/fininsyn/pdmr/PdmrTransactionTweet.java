@@ -110,9 +110,9 @@ public class PdmrTransactionTweet {
                     .append("\n");
         }
 
-        String dateText = fromDate;
+        String dateText = toDate;
         if (!fromDate.equals(toDate)) {
-            dateText += " - " + toDate;
+            dateText += " - " + fromDate;
         }
 
         builder.append(QUANTITY_FORMATTER.format((long)quantity) + " @ " + PRICE_FORMATTER.format(amount/quantity) + " " + transaction.getCurrency())
