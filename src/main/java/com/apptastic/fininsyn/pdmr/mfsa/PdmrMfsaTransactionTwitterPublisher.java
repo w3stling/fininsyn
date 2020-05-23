@@ -33,7 +33,7 @@ public class PdmrMfsaTransactionTwitterPublisher {
     TwitterPublisher twitter;
 
 
-    @Scheduled(initialDelay = 500, fixedRate = 120000)
+    @Scheduled(initialDelay = 5000, fixedRate = 300000)
     public void checkPdmrMfsaTransactions() {
         try {
             PdmrMfsaTransaction lastPublished = getLastPublishedTransactions();
