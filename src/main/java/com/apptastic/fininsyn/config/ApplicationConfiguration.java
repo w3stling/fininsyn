@@ -3,6 +3,7 @@ package com.apptastic.fininsyn.config;
 import com.apptastic.blankningsregistret.Blankningsregistret;
 import com.apptastic.fininsyn.model.PdmrTransaction;
 import com.apptastic.insynsregistret.Insynsregistret;
+import com.apptastic.mfsapdmr.PdmrRegistry;
 import com.apptastic.repurchase.Repurchase;
 import com.apptastic.rssreader.RssReader;
 import com.mongodb.reactivestreams.client.MongoClient;
@@ -34,6 +35,11 @@ public class ApplicationConfiguration extends AbstractReactiveMongoConfiguration
     @Bean
     public Insynsregistret insynsregistret() {
         return new Insynsregistret();
+    }
+
+    @Bean
+    public PdmrRegistry pdmrMfsa() {
+        return new PdmrRegistry();
     }
 
     @Bean

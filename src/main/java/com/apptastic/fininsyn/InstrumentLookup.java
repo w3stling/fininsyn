@@ -160,6 +160,7 @@ public class InstrumentLookup {
         symbol = trimBeforeText(symbol," PREF");
         symbol = trimBeforeText(symbol, "001");
         symbol = trimBeforeText(symbol, "1V");
+        symbol = trimBeforeText(symbol, "SDB");
 
         symbol = symbol.replaceFirst("(.+) \\d\\d+", "$1");
         symbol = symbol.replace(" ", "");
