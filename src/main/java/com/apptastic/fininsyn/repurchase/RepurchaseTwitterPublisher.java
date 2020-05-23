@@ -35,12 +35,13 @@ public class RepurchaseTwitterPublisher {
     public void checkRepurchaseTransactions() {
         try {
             RepurchaseTransaction lastPublished = getLastPublishedRepurchaseTransactions();
-            Set<Transaction> transactions = repurchase.getTransactions(10).collect(Collectors.toSet());
+            Set<Transaction> transactions = repurchase.getTransactions(10)
+                                                      .filter(RepurchaseFilter::quantity)
+                                                      .filter(RepurchaseFilter::type)
+                                                      .collect(Collectors.toSet());
 
             if (!lastPublished.getTransactions().isEmpty()) {
                 transactions.stream()
-                            .filter(RepurchaseFilter::quantity)
-                            .filter(RepurchaseFilter::type)
                             .filter(t -> isNewTransaction(lastPublished, t))
                             .map(RepurchaseTweet::create)
                             .filter(TwitterPublisher::filterTweetLength)
@@ -48,8 +49,6 @@ public class RepurchaseTwitterPublisher {
             }
 
             Set<String> keys = transactions.stream()
-                                           .filter(RepurchaseFilter::quantity)
-                                           .filter(RepurchaseFilter::type)
                                            .map(this::toKey)
                                            .collect(Collectors.toSet());
 
