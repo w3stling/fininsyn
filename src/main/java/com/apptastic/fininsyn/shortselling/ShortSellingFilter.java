@@ -30,7 +30,7 @@ public class ShortSellingFilter {
 
     public static boolean positionChange(Pair<NetShortPosition, NetShortPosition> positionPair) {
         return positionPair != null &&
-               (positionPair.getRight() == null ||
-                positionPair.getLeft().getPositionInPercent() != positionPair.getRight().getPositionInPercent());
+               ((positionPair.getRight() == null || positionPair.getLeft().getPositionInPercent() != positionPair.getRight().getPositionInPercent()) ||
+                (positionPair.getRight() != null && positionPair.getLeft().getPositionInPercent() == 0.50 && positionPair.getRight().getPositionInPercent() == 0.50 &&  positionPair.getLeft().isSignificantPosition() != positionPair.getRight().isSignificantPosition()));
     }
 }
