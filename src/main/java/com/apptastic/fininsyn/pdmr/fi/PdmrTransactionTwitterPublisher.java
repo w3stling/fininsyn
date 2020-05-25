@@ -1,4 +1,4 @@
-package com.apptastic.fininsyn.pdmr;
+package com.apptastic.fininsyn.pdmr.fi;
 
 import com.apptastic.fininsyn.TwitterPublisher;
 import com.apptastic.fininsyn.model.PdmrTransaction;

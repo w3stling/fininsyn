@@ -1,7 +1,7 @@
 package com.apptastic.fininsyn.pdmr.mfsa;
 
 import com.apptastic.fininsyn.InstrumentLookup;
-import com.apptastic.fininsyn.pdmr.PdmrTransactionFilter;
+import com.apptastic.fininsyn.pdmr.fi.PdmrTransactionFilter;
 import com.apptastic.fininsyn.utils.TwitterUtil;
 import com.apptastic.mfsapdmr.Transaction;
 
@@ -23,12 +23,12 @@ public class PdmrMfsaTransactionTweet {
         if (transaction.isCloselyAssociated()) {
             builder.append("Närstående till ");
         }
-        // TODO: lägg till info om närstående
+
         builder.append(toCompany(transaction))
                .append(" ")
                .append(toRole(transaction))
                .append(transaction.getPdmr())
-               .append(" har ")
+               .append(" ")
                .append(toNatureOfTransaction(transaction))
                .append(" aktier för ")
                .append(formatAmount(transaction.getPrice() * transaction.getVolume(), toCurrency(transaction)))
@@ -88,15 +88,15 @@ public class PdmrMfsaTransactionTweet {
             transaction.getNatureOfTransaction().equalsIgnoreCase("Purchase") ||
             transaction.getNatureOfTransaction().equalsIgnoreCase("Bought")) {
 
-            typeOfTransaction = "köpt";
+            typeOfTransaction = "köper";
         }
         else if (transaction.getNatureOfTransaction().equalsIgnoreCase("Sell") ||
                 transaction.getNatureOfTransaction().equalsIgnoreCase("Sold")) {
 
-            typeOfTransaction = "sålt";
+            typeOfTransaction = "säljer";
         }
         else {
-            typeOfTransaction = "";
+            typeOfTransaction = "?";
         }
 
         return typeOfTransaction;
@@ -105,9 +105,9 @@ public class PdmrMfsaTransactionTweet {
     private static String formatAmount(double amount, String currency) {
         String amountString;
 
-        if (Math.abs(amount) >= 100000.0)
+        if (Math.abs(amount) >= 1000000.0)
             amountString = AMOUNT_FORMATTER.format(Math.abs(amount) / 1000000.0) + " M" + currency;
-        else if (Math.abs(amount) >= 1000.0)
+        else if (Math.abs(amount) >= 10000.0)
             amountString = AMOUNT_FORMATTER.format(Math.abs(amount) / 1000.0) + " k" + currency;
         else
             amountString = AMOUNT_FORMATTER.format(Math.abs(amount)) + ' ' + currency;

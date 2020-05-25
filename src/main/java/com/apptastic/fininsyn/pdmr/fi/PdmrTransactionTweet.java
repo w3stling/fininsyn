@@ -1,4 +1,4 @@
-package com.apptastic.fininsyn.pdmr;
+package com.apptastic.fininsyn.pdmr.fi;
 
 import com.apptastic.fininsyn.InstrumentLookup;
 import com.apptastic.fininsyn.utils.TextUtil;
@@ -86,7 +86,7 @@ public class PdmrTransactionTweet {
                     .append(formatPdmr(transaction.getPdmr().trim()));
         }
 
-        builder.append(" har ")
+        builder.append(" ")
                 .append(formatNatureOfTransaction(transaction.getNatureOfTransaction()))
                 .append(" ")
                 .append(formatInstrumentType(transaction.getInstrumentTypeDescription()))
@@ -215,9 +215,9 @@ public class PdmrTransactionTweet {
         natureOfTransaction = natureOfTransaction.trim();
 
         if ("Förvärv".equals(natureOfTransaction))
-            natureOfTransaction = "köpt";
+            natureOfTransaction = "köper";
         else if ("Avyttring".equals(natureOfTransaction))
-            natureOfTransaction = "sålt";
+            natureOfTransaction = "säljer";
         else
             natureOfTransaction = "???";
 
@@ -316,9 +316,9 @@ public class PdmrTransactionTweet {
     private static String formatAmount(double amount, String currency) {
         String amountString;
 
-        if (amount >= 100000.0)
+        if (amount >= 1000000.0)
             amountString = AMOUNT_FORMATTER.format(amount / 1000000.0) + " M" + currency;
-        else if (amount >= 1000.0)
+        else if (amount >= 10000.0)
             amountString = AMOUNT_FORMATTER.format(amount / 1000.0) + " k" + currency;
         else
             amountString = AMOUNT_FORMATTER.format(amount) + ' ' + currency;
