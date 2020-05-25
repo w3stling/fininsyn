@@ -35,22 +35,22 @@ public class ShortSellingTweet {
 
         StringBuilder builder = new StringBuilder();
         builder.append(formatPositionHolder(currentPosition.getPositionHolder()))
-                .append(" ")
-                .append(directionText)
-                .append(" sin korta nettoposition");
+               .append(" ")
+               .append(directionText)
+               .append(" sin korta nettoposition");
 
         if (previousPosition != null &&
             currentPosition.getPositionInPercent() != previousPosition.getPositionInPercent() &&
-            previousPosition.getPositionInPercent() > 0.5) {
+            currentPosition.isSignificantPosition()) {
 
             String change = PROCENT_FORMATTER.format(currentPosition.getPositionInPercent() - previousPosition.getPositionInPercent());
 
             builder.append(" med ")
                     .append(change)
                     .append(" procentenheter till ");
-            if (!increased && currentPosition.getPositionInPercent() <= 0.5) {
-                builder.append("under ");
-            }
+        }
+        else if (!currentPosition.isSignificantPosition()) {
+            builder.append(" till under ");
         }
         else {
             builder.append(" till ");
