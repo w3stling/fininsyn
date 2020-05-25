@@ -39,7 +39,7 @@ public class RssFeedFilter {
     public static boolean filterContentScb(Item item) {
         String content = getContent(item);
         return !containsAny(content, "politik", "parti", "barn", "föräld", "skola", "vi söker", "allmänna val",
-                "folkvald", "kommunfullmäktig", "folkmängd", "fritidshus");
+                "folkvald", "kommunfullmäktig", "folkmängd", "fritidshus", "kultur", "konst");
     }
 
     public static boolean filterContentEkobrottsmyndigheten(Item item) {
