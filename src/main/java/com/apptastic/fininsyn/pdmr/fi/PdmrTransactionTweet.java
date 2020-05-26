@@ -163,6 +163,7 @@ public class PdmrTransactionTweet {
 
         issuer = issuer.replaceFirst("\\(publ\\)", "");
         issuer = issuer.replaceFirst("\\(PUBL\\)", "");
+        issuer = issuer.replaceFirst("P\\.L\\.C", "");
 
 
         int index = indexesOf(issuer," ab", " a/s", " ltd", " bta", ",", ".");

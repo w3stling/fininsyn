@@ -135,7 +135,7 @@ public class PdmrMfsaTransactionTweet {
         StringBuilder emojiBuilder = new StringBuilder();
         String natureOfTransaction = toNatureOfTransaction(transaction);
 
-        if ("köpt".equals(natureOfTransaction)) {
+        if ("köper".equals(natureOfTransaction)) {
             if (amountInSek < 5_000_000.0)
                 emojiBuilder.append(EMOJI_MONEY_DOLLAR);
             else if (amountInSek < 20_000_000.0)
@@ -147,7 +147,7 @@ public class PdmrMfsaTransactionTweet {
             else
                 emojiBuilder.append(EMOJI_MONEY_BAG + EMOJI_MONEY_BAG + EMOJI_MONEY_BAG);
         }
-        else if ("sålt".equals(natureOfTransaction)) {
+        else if ("säljer".equals(natureOfTransaction)) {
             if (amountInSek < 50_000_000)
                 emojiBuilder.append(EMOJI_BEAR);
             else if (amountInSek < 1_000_000_000.0)
