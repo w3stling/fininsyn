@@ -31,7 +31,7 @@ public class RssFeedFilter {
             "finansinspektionen", "finansmyndighet", "rekonstruktion", "ägardata", "backar", "satsning", "satsar",
             "fusion", "läkemedel", "inflation", "deflation", "recession", "rekordlåg", "permitter", "rekommendation",
             "personalneddrag", "cannabis", "tvångsinlös", "licens", "växtbaser", "straffavgift", "sanktionsavgift",
-            "stödpaket", "stödåtgärder"};
+            "stödpaket", "stödåtgärder", "wall street", "nyse", "omx" };
 
     public static final String[] COMMON_IGNORE_KEYWORDS = { "politiker", "partiet", "väljarbarometer", "deklaration",
             "eu-val", "jämställdhet", "jag" };
