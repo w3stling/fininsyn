@@ -31,7 +31,7 @@ public class RssFeedFilter {
             "finansinspektionen", "finansmyndighet", "rekonstruktion", "ägardata", "backar", "satsning", "satsar",
             "fusion", "läkemedel", "inflation", "deflation", "recession", "rekordlåg", "permitter", "rekommendation",
             "personalneddrag", "cannabis", "tvångsinlös", "licens", "växtbaser", "straffavgift", "sanktionsavgift",
-            "stödpaket", "stödåtgärder", "wall street", "nyse", "omx" };
+            "stödpaket", "stödåtgärder", "wall street", "nasdaq", "nyse", "omx", "värdering"};
 
     public static final String[] COMMON_IGNORE_KEYWORDS = { "politiker", "partiet", "väljarbarometer", "deklaration",
             "eu-val", "jämställdhet", "jag" };
@@ -39,7 +39,7 @@ public class RssFeedFilter {
     public static boolean filterContentScb(Item item) {
         String content = getContent(item);
         return !containsAny(content, "politik", "parti", "barn", "föräld", "skola", "vi söker", "allmänna val",
-                "folkvald", "kommunfullmäktig", "folkmängd", "fritidshus", "kultur", "konst");
+                "folkvald", "kommunfullmäktig", "folkmängd", "fritidshus", "kultur", "konst", "natur", "barn");
     }
 
     public static boolean filterContentEkobrottsmyndigheten(Item item) {
