@@ -13,10 +13,6 @@ public class NumberUtil {
         return QUANTITY_FORMATTER.format((long)quantity);
     }
 
-    public static String formatPrice(double amount, double quantity) {
-        return PRICE_FORMATTER.format(amount/quantity);
-    }
-
     public static String formatPrice(double price) {
         return PRICE_FORMATTER.format(price);
     }
