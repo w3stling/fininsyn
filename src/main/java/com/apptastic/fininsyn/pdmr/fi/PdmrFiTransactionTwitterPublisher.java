@@ -28,7 +28,7 @@ import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toList;
 
 @Component
-public class PdmrTransactionTwitterPublisher {
+public class PdmrFiTransactionTwitterPublisher {
     private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
     private static final String TIME_ZONE = "Europe/Stockholm";
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
@@ -55,14 +55,14 @@ public class PdmrTransactionTwitterPublisher {
         try {
             TransactionQuery query = TransactionQueryBuilder.publications(fromDate, toDate).build();
             insynsregistret.search(query)
-                .filter(t -> PdmrTransactionFilter.transactionFilter(last.getPublicationDate(), t.getPublicationDate().format(DATE_TIME_FORMATTER)))
-                .filter(PdmrTransactionFilter::transactionFilter)
+                .filter(t -> PdmrFiTransactionFilter.transactionFilter(last.getPublicationDate(), t.getPublicationDate().format(DATE_TIME_FORMATTER)))
+                .filter(PdmrFiTransactionFilter::transactionFilter)
                 .collect(Collectors.groupingBy(this::groupTransactionBy, TreeMap::new, toList()))
                 .values().stream()
-                .filter(PdmrTransactionFilter::transactionAmountFilter)
+                .filter(PdmrFiTransactionFilter::transactionAmountFilter)
                 .filter(not(List::isEmpty))
                 .peek(t -> next.setPublicationDate(t.get(0).getPublicationDate().format(DATE_TIME_FORMATTER)))
-                .map(PdmrTransactionTweet::create)
+                .map(PdmrFiTransactionTweet::create)
                 .filter(TwitterPublisher::filterTweetLength)
                 .forEach(twitter::publishTweet);
         }

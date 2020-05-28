@@ -4,7 +4,7 @@ import com.apptastic.insynsregistret.Transaction;
 
 import java.util.List;
 
-public class PdmrTransactionFilter {
+public class PdmrFiTransactionFilter {
     private static final double EXCHANGE_RATE_EUR_SEK = 10.28;
     private static final double EXCHANGE_RATE_USD_SEK = 8.60;
     private static final double EXCHANGE_RATE_CAD_SEK = 6.70;
@@ -32,7 +32,7 @@ public class PdmrTransactionFilter {
 
         double currencyConvertedAmount = 0.0;
         double totalAmount = transactions.stream()
-                .mapToDouble(PdmrTransactionFilter::toAmount)
+                .mapToDouble(PdmrFiTransactionFilter::toAmount)
                 .sum();
 
         String currency = transactions.get(0).getCurrency();

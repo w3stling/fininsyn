@@ -14,7 +14,7 @@ import static com.apptastic.fininsyn.utils.NumberUtil.formatAmount;
 import static com.apptastic.fininsyn.utils.NumberUtil.formatQuantityAtPrice;
 
 
-public class PdmrTransactionTweet {
+public class PdmrFiTransactionTweet {
     private static final String EMOJI_BULL = "\uD83D\uDC02";
     private static final String EMOJI_BEAR = "\uD83D\uDC3B";
     private static final String EMOJI_WEARY_FACE = "\uD83D\uDE29";
@@ -45,11 +45,11 @@ public class PdmrTransactionTweet {
         Transaction transaction = transactions.get(0);
 
         double quantity = transactions.stream()
-                                      .mapToDouble(PdmrTransactionFilter::toQuantity)
+                                      .mapToDouble(PdmrFiTransactionFilter::toQuantity)
                                       .sum();
 
         double amount = transactions.stream()
-                                    .mapToDouble(PdmrTransactionFilter::toAmount)
+                                    .mapToDouble(PdmrFiTransactionFilter::toAmount)
                                     .sum();
 
         InstrumentLookup.Instrument instrument = InstrumentLookup.getInstance().getInstrument(transaction.getIssuer(), transaction.getIsin(), transaction.getCurrency());
@@ -174,7 +174,7 @@ public class PdmrTransactionTweet {
             issuer = issuer.substring(0, issuer.length()-2);
 
         Optional<String> formattedIssuer = Arrays.stream(StringUtils.split(issuer, ' '))
-                .map(PdmrTransactionTweet::formatWordToCapitalize)
+                .map(PdmrFiTransactionTweet::formatWordToCapitalize)
                 .reduce((a, b) -> a + " " + b );
 
         issuer = formattedIssuer.orElse(issuer);
@@ -285,7 +285,7 @@ public class PdmrTransactionTweet {
             position = position.substring(0, index);
 
         Optional<String> formattedPosition = Arrays.stream(StringUtils.split(position, ' '))
-                .map(PdmrTransactionTweet::formatWordToLowerCase)
+                .map(PdmrFiTransactionTweet::formatWordToLowerCase)
                 .reduce((a, b) -> a + ' ' + b );
 
         position = formattedPosition.orElse(position);
@@ -313,7 +313,7 @@ public class PdmrTransactionTweet {
     }
 
     private static String formatEmoji(Transaction transaction, double amount) {
-        double amountInSek = PdmrTransactionFilter.amountInSek(amount, transaction.getCurrency());
+        double amountInSek = PdmrFiTransactionFilter.amountInSek(amount, transaction.getCurrency());
 
         StringBuilder emojiBuilder = new StringBuilder();
 

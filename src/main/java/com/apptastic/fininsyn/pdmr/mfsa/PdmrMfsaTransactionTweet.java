@@ -1,7 +1,7 @@
 package com.apptastic.fininsyn.pdmr.mfsa;
 
 import com.apptastic.fininsyn.InstrumentLookup;
-import com.apptastic.fininsyn.pdmr.fi.PdmrTransactionFilter;
+import com.apptastic.fininsyn.pdmr.fi.PdmrFiTransactionFilter;
 import com.apptastic.fininsyn.utils.TwitterUtil;
 import com.apptastic.mfsapdmr.Transaction;
 
@@ -114,7 +114,7 @@ public class PdmrMfsaTransactionTweet {
 
     private static String formatEmoji(Transaction transaction) {
         double amount = transaction.getVolume() * transaction.getPrice();
-        double amountInSek = PdmrTransactionFilter.amountInSek(amount, toCurrency(transaction));
+        double amountInSek = PdmrFiTransactionFilter.amountInSek(amount, toCurrency(transaction));
 
         StringBuilder emojiBuilder = new StringBuilder();
         String natureOfTransaction = toNatureOfTransaction(transaction);
