@@ -5,17 +5,14 @@ import com.apptastic.fininsyn.pdmr.fi.PdmrTransactionFilter;
 import com.apptastic.fininsyn.utils.TwitterUtil;
 import com.apptastic.mfsapdmr.Transaction;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.Locale;
+import static com.apptastic.fininsyn.utils.NumberUtil.formatAmount;
+import static com.apptastic.fininsyn.utils.NumberUtil.formatQuantityAtPrice;
+
 
 public class PdmrMfsaTransactionTweet {
     private static final String EMOJI_BEAR = "\uD83D\uDC3B";
     private static final String EMOJI_MONEY_BAG = "\uD83D\uDCB0";
     private static final String EMOJI_MONEY_DOLLAR = "\uD83D\uDCB5";
-    private static final DecimalFormat QUANTITY_FORMATTER = new DecimalFormat("#,###", new DecimalFormatSymbols(Locale.FRANCE));
-    private static final DecimalFormat PRICE_FORMATTER = new DecimalFormat("#,##0.00", new DecimalFormatSymbols(Locale.FRANCE));
-    private static final DecimalFormat AMOUNT_FORMATTER = new DecimalFormat("#,##0.00",  new DecimalFormatSymbols(Locale.FRANCE));
 
     public static String create(Transaction transaction) {
         StringBuilder builder = new StringBuilder();
@@ -37,7 +34,7 @@ public class PdmrMfsaTransactionTweet {
                .append("\n\n")
                .append(toStock(transaction))
                .append("\n")
-               .append(QUANTITY_FORMATTER.format(Math.abs(transaction.getVolume())) + " @ " + PRICE_FORMATTER.format(Math.abs(transaction.getPrice())) + " " + toCurrency(transaction))
+               .append(formatQuantityAtPrice(transaction.getVolume(), transaction.getPrice(), transaction.getCurrency()))
                .append("\n")
                .append(transaction.getDate());
 
@@ -100,19 +97,6 @@ public class PdmrMfsaTransactionTweet {
         }
 
         return typeOfTransaction;
-    }
-
-    private static String formatAmount(double amount, String currency) {
-        String amountString;
-
-        if (Math.abs(amount) >= 1000000.0)
-            amountString = AMOUNT_FORMATTER.format(Math.abs(amount) / 1000000.0) + " M" + currency;
-        else if (Math.abs(amount) >= 10000.0)
-            amountString = AMOUNT_FORMATTER.format(Math.abs(amount) / 1000.0) + " k" + currency;
-        else
-            amountString = AMOUNT_FORMATTER.format(Math.abs(amount)) + ' ' + currency;
-
-        return amountString;
     }
 
     private static String toCurrency(Transaction transaction) {

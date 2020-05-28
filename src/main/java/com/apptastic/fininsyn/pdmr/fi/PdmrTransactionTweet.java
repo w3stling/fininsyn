@@ -6,11 +6,12 @@ import com.apptastic.fininsyn.utils.TwitterUtil;
 import com.apptastic.insynsregistret.Transaction;
 import org.apache.commons.lang3.StringUtils;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Stream;
+
+import static com.apptastic.fininsyn.utils.NumberUtil.formatAmount;
+import static com.apptastic.fininsyn.utils.NumberUtil.formatQuantityAtPrice;
 
 
 public class PdmrTransactionTweet {
@@ -21,9 +22,6 @@ public class PdmrTransactionTweet {
     private static final String EMOJI_STRONG = "\uD83D\uDCAA";
     private static final String EMOJI_MONEY_BAG = "\uD83D\uDCB0";
     private static final String EMOJI_MONEY_DOLLAR = "\uD83D\uDCB5";
-    private static final DecimalFormat QUANTITY_FORMATTER = new DecimalFormat("#,###", new DecimalFormatSymbols(Locale.FRANCE));
-    private static final DecimalFormat PRICE_FORMATTER = new DecimalFormat("#,##0.00", new DecimalFormatSymbols(Locale.FRANCE));
-    private static final DecimalFormat AMOUNT_FORMATTER = new DecimalFormat("#,##0.00",  new DecimalFormatSymbols(Locale.FRANCE));
     private static final int TWITTER_MAX_LENGTH = 280;
 
 
@@ -115,7 +113,7 @@ public class PdmrTransactionTweet {
             dateText += " - " + fromDate;
         }
 
-        builder.append(QUANTITY_FORMATTER.format((long)quantity) + " @ " + PRICE_FORMATTER.format(amount/quantity) + " " + transaction.getCurrency())
+        builder.append(formatQuantityAtPrice(quantity, amount/quantity, transaction.getCurrency()))
                .append("\n")
                .append(dateText)
                .append("\n");
@@ -312,19 +310,6 @@ public class PdmrTransactionTweet {
                 .reduce((a, b) -> a + ' ' + b);
 
         return formattedPdmr.orElse(pdmr);
-    }
-
-    private static String formatAmount(double amount, String currency) {
-        String amountString;
-
-        if (amount >= 1000000.0)
-            amountString = AMOUNT_FORMATTER.format(amount / 1000000.0) + " M" + currency;
-        else if (amount >= 10000.0)
-            amountString = AMOUNT_FORMATTER.format(amount / 1000.0) + " k" + currency;
-        else
-            amountString = AMOUNT_FORMATTER.format(amount) + ' ' + currency;
-
-        return amountString;
     }
 
     private static String formatEmoji(Transaction transaction, double amount) {

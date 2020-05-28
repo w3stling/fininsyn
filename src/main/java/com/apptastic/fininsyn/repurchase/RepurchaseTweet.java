@@ -4,14 +4,11 @@ import com.apptastic.fininsyn.InstrumentLookup;
 import com.apptastic.fininsyn.utils.TwitterUtil;
 import com.apptastic.repurchase.Transaction;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.Locale;
+import static com.apptastic.fininsyn.utils.NumberUtil.formatAmount;
+import static com.apptastic.fininsyn.utils.NumberUtil.formatQuantityAtPrice;
+
 
 public class RepurchaseTweet {
-    private static final DecimalFormat QUANTITY_FORMATTER = new DecimalFormat("#,###", new DecimalFormatSymbols(Locale.FRANCE));
-    private static final DecimalFormat PRICE_FORMATTER = new DecimalFormat("#,##0.00", new DecimalFormatSymbols(Locale.FRANCE));
-    private static final DecimalFormat AMOUNT_FORMATTER = new DecimalFormat("#,##0.00",  new DecimalFormatSymbols(Locale.FRANCE));
 
     public static String create(Transaction transaction) {
         StringBuilder builder = new StringBuilder();
@@ -27,7 +24,7 @@ public class RepurchaseTweet {
                    .append("\n\n")
                    .append(toStock(transaction.getCompany()))
                    .append("\n")
-                   .append(QUANTITY_FORMATTER.format(Math.abs(transaction.getQuantity())) + " @ " + PRICE_FORMATTER.format(Math.abs(transaction.getPrice().get())) + " SEK")
+                   .append(formatQuantityAtPrice(Math.abs(transaction.getQuantity()), Math.abs(transaction.getPrice().get()), "SEK"))
                    .append("\n")
                    .append(transaction.getDate());
         } else {
@@ -85,18 +82,5 @@ public class RepurchaseTweet {
         }
 
         return text.trim();
-    }
-
-    private static String formatAmount(double amount, String currency) {
-        String amountString;
-
-        if (Math.abs(amount) >= 100000.0)
-            amountString = AMOUNT_FORMATTER.format(Math.abs(amount) / 1000000.0) + " M" + currency;
-        else if (Math.abs(amount) >= 1000.0)
-            amountString = AMOUNT_FORMATTER.format(Math.abs(amount) / 1000.0) + " k" + currency;
-        else
-            amountString = AMOUNT_FORMATTER.format(Math.abs(amount)) + ' ' + currency;
-
-        return amountString;
     }
 }
