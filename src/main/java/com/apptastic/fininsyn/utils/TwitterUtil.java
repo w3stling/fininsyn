@@ -1,6 +1,10 @@
 package com.apptastic.fininsyn.utils;
 
 public class TwitterUtil {
+    private static final String EMOJI_BEAR = "\uD83D\uDC3B";
+    private static final String EMOJI_MONEY_BAG = "\uD83D\uDCB0";
+    private static final String EMOJI_MONEY_DOLLAR = "\uD83D\uDCB5";
+
     public static final int TWEET_MAX_LENGTH = 280;
 
     public static String toCashTag(String text) {
@@ -14,6 +18,35 @@ public class TwitterUtil {
             cashTag = "$" + text;
 
         return cashTag;
+    }
+
+    public static String formatEmoji(double amount, String currency, boolean isBuy, boolean isSell) {
+        double amountInSek = CurrencyConverter.amountInSek(amount, currency);
+
+        StringBuilder emojiBuilder = new StringBuilder();
+
+        if (isBuy) {
+            if (amountInSek < 5_000_000.0)
+                emojiBuilder.append(EMOJI_MONEY_DOLLAR);
+            else if (amountInSek < 20_000_000.0)
+                emojiBuilder.append(EMOJI_MONEY_DOLLAR + EMOJI_MONEY_DOLLAR);
+            else if (amountInSek < 50_000_000.0)
+                emojiBuilder.append(EMOJI_MONEY_BAG);
+            else if (amountInSek < 1_000_000_000.0)
+                emojiBuilder.append(EMOJI_MONEY_BAG + EMOJI_MONEY_BAG);
+            else
+                emojiBuilder.append(EMOJI_MONEY_BAG + EMOJI_MONEY_BAG + EMOJI_MONEY_BAG);
+        }
+        else if (isSell) {
+            if (amountInSek < 50_000_000)
+                emojiBuilder.append(EMOJI_BEAR);
+            else if (amountInSek < 1_000_000_000.0)
+                emojiBuilder.append(EMOJI_BEAR + EMOJI_BEAR);
+            else
+                emojiBuilder.append(EMOJI_BEAR + EMOJI_BEAR + EMOJI_BEAR);
+        }
+
+        return emojiBuilder.toString();
     }
 
 

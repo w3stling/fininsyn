@@ -26,8 +26,6 @@ public class NumberUtil {
 
         if (amount >= 1000000.0)
             amountString = AMOUNT_FORMATTER.format(amount / 1000000.0) + " M" + currency;
-        else if (amount >= 10000.0)
-            amountString = AMOUNT_FORMATTER.format(amount / 1000.0) + " k" + currency;
         else
             amountString = AMOUNT_FORMATTER.format(amount) + ' ' + currency;
 

@@ -1,7 +1,6 @@
 package com.apptastic.fininsyn.pdmr.mfsa;
 
 import com.apptastic.fininsyn.InstrumentLookup;
-import com.apptastic.fininsyn.pdmr.fi.PdmrFiTransactionFilter;
 import com.apptastic.fininsyn.utils.TwitterUtil;
 import com.apptastic.mfsapdmr.Transaction;
 
@@ -10,9 +9,6 @@ import static com.apptastic.fininsyn.utils.NumberUtil.formatQuantityAtPrice;
 
 
 public class PdmrMfsaTransactionTweet {
-    private static final String EMOJI_BEAR = "\uD83D\uDC3B";
-    private static final String EMOJI_MONEY_BAG = "\uD83D\uDCB0";
-    private static final String EMOJI_MONEY_DOLLAR = "\uD83D\uDCB5";
 
     public static String create(Transaction transaction) {
         StringBuilder builder = new StringBuilder();
@@ -21,6 +17,8 @@ public class PdmrMfsaTransactionTweet {
             builder.append("Närstående till ");
         }
 
+        String currency = toCurrency(transaction);
+
         builder.append(toCompany(transaction))
                .append(" ")
                .append(toRole(transaction))
@@ -28,13 +26,13 @@ public class PdmrMfsaTransactionTweet {
                .append(" ")
                .append(toNatureOfTransaction(transaction))
                .append(" aktier för ")
-               .append(formatAmount(transaction.getPrice() * transaction.getVolume(), toCurrency(transaction)))
+               .append(formatAmount(transaction.getPrice() * transaction.getVolume(), currency))
                .append(" ")
                .append(formatEmoji(transaction))
                .append("\n\n")
                .append(toStock(transaction))
                .append("\n")
-               .append(formatQuantityAtPrice(transaction.getVolume(), transaction.getPrice(), transaction.getCurrency()))
+               .append(formatQuantityAtPrice(transaction.getVolume(), transaction.getPrice(), currency))
                .append("\n")
                .append(transaction.getDate());
 
@@ -114,32 +112,10 @@ public class PdmrMfsaTransactionTweet {
 
     private static String formatEmoji(Transaction transaction) {
         double amount = transaction.getVolume() * transaction.getPrice();
-        double amountInSek = PdmrFiTransactionFilter.amountInSek(amount, toCurrency(transaction));
-
-        StringBuilder emojiBuilder = new StringBuilder();
+        String currency = toCurrency(transaction);
         String natureOfTransaction = toNatureOfTransaction(transaction);
-
-        if ("köper".equals(natureOfTransaction)) {
-            if (amountInSek < 5_000_000.0)
-                emojiBuilder.append(EMOJI_MONEY_DOLLAR);
-            else if (amountInSek < 20_000_000.0)
-                emojiBuilder.append(EMOJI_MONEY_DOLLAR + EMOJI_MONEY_DOLLAR);
-            else if (amountInSek < 50_000_000.0)
-                emojiBuilder.append(EMOJI_MONEY_BAG);
-            else if (amountInSek < 1_000_000_000.0)
-                emojiBuilder.append(EMOJI_MONEY_BAG + EMOJI_MONEY_BAG);
-            else
-                emojiBuilder.append(EMOJI_MONEY_BAG + EMOJI_MONEY_BAG + EMOJI_MONEY_BAG);
-        }
-        else if ("säljer".equals(natureOfTransaction)) {
-            if (amountInSek < 50_000_000)
-                emojiBuilder.append(EMOJI_BEAR);
-            else if (amountInSek < 1_000_000_000.0)
-                emojiBuilder.append(EMOJI_BEAR + EMOJI_BEAR);
-            else
-                emojiBuilder.append(EMOJI_BEAR + EMOJI_BEAR + EMOJI_BEAR);
-        }
-
-        return emojiBuilder.toString();
+        boolean isBuy = "köper".equals(natureOfTransaction);
+        boolean isSell = "säljer".equals(natureOfTransaction);
+        return TwitterUtil.formatEmoji(amount, currency, isBuy, isSell);
     }
 }

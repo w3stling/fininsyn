@@ -15,16 +15,6 @@ import static com.apptastic.fininsyn.utils.NumberUtil.formatQuantityAtPrice;
 
 
 public class PdmrFiTransactionTweet {
-    private static final String EMOJI_BULL = "\uD83D\uDC02";
-    private static final String EMOJI_BEAR = "\uD83D\uDC3B";
-    private static final String EMOJI_WEARY_FACE = "\uD83D\uDE29";
-    private static final String EMOJI_FACE_SCREAMING_IN_FEAR = "\uD83D\uDE31";
-    private static final String EMOJI_STRONG = "\uD83D\uDCAA";
-    private static final String EMOJI_MONEY_BAG = "\uD83D\uDCB0";
-    private static final String EMOJI_MONEY_DOLLAR = "\uD83D\uDCB5";
-    private static final int TWITTER_MAX_LENGTH = 280;
-
-
     public static String create(List<Transaction> transactions) {
         if (transactions.isEmpty()) {
             return "";
@@ -134,7 +124,7 @@ public class PdmrFiTransactionTweet {
         if (transaction.isAmendment()) {
             String update = "Rättelse: " + transaction.getDetailsOfAmendment() + "\n\n";
 
-            if (tweet.length() + update.length() > TWITTER_MAX_LENGTH)
+            if (tweet.length() + update.length() > TwitterUtil.TWEET_MAX_LENGTH)
                 update = "Uppdatering\n\n";
 
             tweet = update + tweet;
@@ -313,32 +303,8 @@ public class PdmrFiTransactionTweet {
     }
 
     private static String formatEmoji(Transaction transaction, double amount) {
-        double amountInSek = PdmrFiTransactionFilter.amountInSek(amount, transaction.getCurrency());
-
-        StringBuilder emojiBuilder = new StringBuilder();
-
-        if ("Förvärv".equals(transaction.getNatureOfTransaction())) {
-
-            if (amountInSek < 5_000_000.0)
-                emojiBuilder.append(EMOJI_MONEY_DOLLAR);
-            else if (amountInSek < 20_000_000.0)
-                emojiBuilder.append(EMOJI_MONEY_DOLLAR + EMOJI_MONEY_DOLLAR);
-            else if (amountInSek < 50_000_000.0)
-                emojiBuilder.append(EMOJI_MONEY_BAG);
-            else if (amountInSek < 1_000_000_000.0)
-                emojiBuilder.append(EMOJI_MONEY_BAG + EMOJI_MONEY_BAG);
-            else
-                emojiBuilder.append(EMOJI_MONEY_BAG + EMOJI_MONEY_BAG + EMOJI_MONEY_BAG);
-        }
-        else if ("Avyttring".equals(transaction.getNatureOfTransaction())) {
-            if (amountInSek < 50_000_000)
-                emojiBuilder.append(EMOJI_BEAR);
-            else if (amountInSek < 1_000_000_000.0)
-                emojiBuilder.append(EMOJI_BEAR + EMOJI_BEAR);
-            else
-                emojiBuilder.append(EMOJI_BEAR + EMOJI_BEAR + EMOJI_BEAR);
-        }
-
-        return emojiBuilder.toString();
+        boolean isBuy = "Förvärv".equals(transaction.getNatureOfTransaction());
+        boolean isSell = "Avyttring".equals(transaction.getNatureOfTransaction());
+        return TwitterUtil.formatEmoji(amount, transaction.getCurrency(), isBuy, isSell);
     }
 }

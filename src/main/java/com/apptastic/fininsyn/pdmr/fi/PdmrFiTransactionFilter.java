@@ -4,6 +4,8 @@ import com.apptastic.insynsregistret.Transaction;
 
 import java.util.List;
 
+import static com.apptastic.fininsyn.utils.CurrencyConverter.amountInSek;
+
 public class PdmrFiTransactionFilter {
     private static final double EXCHANGE_RATE_EUR_SEK = 10.28;
     private static final double EXCHANGE_RATE_USD_SEK = 8.60;
@@ -30,25 +32,12 @@ public class PdmrFiTransactionFilter {
             return false;
         }
 
-        double currencyConvertedAmount = 0.0;
         double totalAmount = transactions.stream()
                 .mapToDouble(PdmrFiTransactionFilter::toAmount)
                 .sum();
 
         String currency = transactions.get(0).getCurrency();
-
-        if ("SEK".equals(currency))
-            currencyConvertedAmount = totalAmount;
-        else if ("EUR".equals(currency))
-            currencyConvertedAmount = totalAmount * EXCHANGE_RATE_EUR_SEK;
-        else if ("USD".equals(currency))
-            currencyConvertedAmount = totalAmount * EXCHANGE_RATE_USD_SEK;
-        else if ("CAD".equals(currency))
-            currencyConvertedAmount = totalAmount * EXCHANGE_RATE_CAD_SEK;
-        else if ("DKK".equals(currency))
-            currencyConvertedAmount = totalAmount * EXCHANGE_RATE_DKK_SEK;
-        else if ("NOK".equals(currency))
-            currencyConvertedAmount = totalAmount * EXCHANGE_RATE_NOK_SEK;
+        double currencyConvertedAmount = amountInSek(totalAmount, currency);
 
         return currencyConvertedAmount >= 5000.0;
     }
@@ -73,23 +62,6 @@ public class PdmrFiTransactionFilter {
             quantity = transaction.getQuantity() / transaction.getPrice();
 
         return quantity;
-    }
-
-    public static double amountInSek(double amount, String currency) {
-        if ("SEK".equals(currency))
-            return amount;
-        else if ("EUR".equals(currency))
-            return amount * EXCHANGE_RATE_EUR_SEK;
-        else if ("USD".equals(currency))
-            return amount * EXCHANGE_RATE_USD_SEK;
-        else if ("CAD".equals(currency))
-            return amount * EXCHANGE_RATE_CAD_SEK;
-        else if ("DKK".equals(currency))
-            return amount * EXCHANGE_RATE_DKK_SEK;
-        else if ("NOK".equals(currency))
-            return amount * EXCHANGE_RATE_NOK_SEK;
-        else
-            return amount;
     }
 
 }
