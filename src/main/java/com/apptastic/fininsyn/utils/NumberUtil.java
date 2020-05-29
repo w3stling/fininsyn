@@ -24,7 +24,7 @@ public class NumberUtil {
     public static String formatAmount(double amount, String currency) {
         String amountString;
 
-        if (amount >= 1000000.0)
+        if (Math.abs(amount) >= 1000000.0)
             amountString = AMOUNT_FORMATTER.format(amount / 1000000.0) + " M" + currency;
         else
             amountString = AMOUNT_FORMATTER.format(amount) + ' ' + currency;
