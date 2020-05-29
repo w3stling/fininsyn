@@ -20,7 +20,7 @@ public class RepurchaseTweet {
                    .append(toType(transaction.getType()))
                    .append(" ")
                    .append("egna aktier för ")
-                   .append(formatAmount(transaction.getValue(), "SEK"))
+                   .append(formatAmount(Math.abs(transaction.getValue()), "SEK"))
                    .append("\n\n")
                    .append(toStock(transaction.getCompany()))
                    .append("\n")
