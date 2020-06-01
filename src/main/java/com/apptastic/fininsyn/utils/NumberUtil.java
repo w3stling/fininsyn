@@ -7,7 +7,8 @@ import java.util.Locale;
 public class NumberUtil {
     private static final DecimalFormat QUANTITY_FORMATTER = new DecimalFormat("#,###", new DecimalFormatSymbols(Locale.FRANCE));
     private static final DecimalFormat PRICE_FORMATTER = new DecimalFormat("#,##0.00", new DecimalFormatSymbols(Locale.FRANCE));
-    private static final DecimalFormat AMOUNT_FORMATTER = new DecimalFormat("#,##0.00",  new DecimalFormatSymbols(Locale.FRANCE));
+    private static final DecimalFormat AMOUNT_FORMATTER_NO_DECIMAL = new DecimalFormat("#,##0",  new DecimalFormatSymbols(Locale.FRANCE));
+    private static final DecimalFormat AMOUNT_FORMATTER_WITH_DECIMAL = new DecimalFormat("#,##0.00",  new DecimalFormatSymbols(Locale.FRANCE));
 
     public static String formatQuantity(double quantity) {
         return QUANTITY_FORMATTER.format((long)quantity);
@@ -25,9 +26,9 @@ public class NumberUtil {
         String amountString;
 
         if (Math.abs(amount) >= 1000000.0)
-            amountString = AMOUNT_FORMATTER.format(amount / 1000000.0) + " M" + currency;
+            amountString = AMOUNT_FORMATTER_WITH_DECIMAL.format(amount / 1000000.0) + " M" + currency;
         else
-            amountString = AMOUNT_FORMATTER.format(amount) + ' ' + currency;
+            amountString = AMOUNT_FORMATTER_NO_DECIMAL.format(amount) + ' ' + currency;
 
         return amountString;
     }
