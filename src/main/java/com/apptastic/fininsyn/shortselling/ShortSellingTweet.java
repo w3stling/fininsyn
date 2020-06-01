@@ -4,7 +4,7 @@ import com.apptastic.blankningsregistret.NetShortPosition;
 import com.apptastic.fininsyn.InstrumentLookup;
 import com.apptastic.fininsyn.utils.TwitterUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -16,51 +16,63 @@ import java.util.regex.Pattern;
 
 
 public class ShortSellingTweet {
+    private static final String EMOJI_NEW = "\uD83C\uDD95";
+    private static final String EMOJI_WHITE_FLAG = "\uD83C\uDFF3️";
     private static final String EMOJI_SMILING = "\uD83D\uDE07";
     private static final String EMOJI_GHOST = "\uD83D\uDC7B";
-    private static final String EMOJI_THUMBS_UP = "\uD83D\uDC4D";
     private static final DecimalFormat PROCENT_FORMATTER = new DecimalFormat("#,##0.00", new DecimalFormatSymbols(Locale.FRANCE));
     private static final Pattern TRIM = Pattern.compile("(^\\h*)|(\\h*$)");
 
-    public static String create(Pair<NetShortPosition, NetShortPosition> positionPair) {
+    public static String create(Triple<NetShortPosition, NetShortPosition, Integer> positionPair) {
         if (positionPair == null || positionPair.getLeft() == null) {
             return "";
         }
 
         NetShortPosition currentPosition = positionPair.getLeft();
-        NetShortPosition previousPosition = positionPair.getRight();
-
+        NetShortPosition previousPosition = positionPair.getMiddle();
+        boolean newPositionHolder = Optional.ofNullable(positionPair.getRight()).orElse(-1).longValue() == 1;
         boolean increased = increasePosition(positionPair);
-        String directionText = increased ? "ökar" : "minskar";
+        boolean isNewPosition = newPosition(positionPair);
 
         StringBuilder builder = new StringBuilder();
-        builder.append(formatPositionHolder(currentPosition.getPositionHolder()))
-               .append(" ")
-               .append(directionText)
-               .append(" sin korta nettoposition");
 
-        if (previousPosition != null &&
-            currentPosition.getPositionInPercent() != previousPosition.getPositionInPercent() &&
-            currentPosition.isSignificantPosition()) {
-
-            String change = PROCENT_FORMATTER.format(currentPosition.getPositionInPercent() - previousPosition.getPositionInPercent());
-
-            builder.append(" med ")
-                    .append(change)
-                    .append(" procentenheter till ");
+        if (newPositionHolder) {
+            builder.append("Ny blankare ");
         }
-        else if (!currentPosition.isSignificantPosition()) {
-            builder.append(" till under ");
+
+        if (isNewPosition) {
+            builder.append(formatPositionHolder(currentPosition.getPositionHolder()))
+                   .append(" tar en ny kort nettoposition på ");
         }
         else {
-            builder.append(" till ");
+            String directionText = increased ? "ökar" : "minskar";
+
+            builder.append(formatPositionHolder(currentPosition.getPositionHolder()))
+                    .append(" ")
+                    .append(directionText)
+                    .append(" sin korta nettoposition");
+
+            if (previousPosition != null &&
+                    currentPosition.getPositionInPercent() != previousPosition.getPositionInPercent() &&
+                    currentPosition.isSignificantPosition()) {
+
+                String change = PROCENT_FORMATTER.format(currentPosition.getPositionInPercent() - previousPosition.getPositionInPercent());
+
+                builder.append(" med ")
+                        .append(change)
+                        .append(" procentenheter till ");
+            } else if (!currentPosition.isSignificantPosition()) {
+                builder.append(" till under ");
+            } else {
+                builder.append(" till ");
+            }
         }
 
         builder.append(PROCENT_FORMATTER.format(currentPosition.getPositionInPercent()))
                 .append("% i ")
                 .append(formatIssuer(currentPosition.getIssuer()))
                 .append(" ")
-                .append(getEmoji(increased, currentPosition.getPositionInPercent()))
+                .append(getEmoji(isNewPosition, currentPosition.isSignificantPosition(), increased))
                 .append("\n")
                 .append(currentPosition.getPositionDate().format(DateTimeFormatter.ISO_LOCAL_DATE))
                 .append("\n");
@@ -86,20 +98,28 @@ public class ShortSellingTweet {
         return builder.toString();
     }
 
-    private static boolean increasePosition(Pair<NetShortPosition, NetShortPosition> positionPair) {
-        if (positionPair.getRight() == null) {
+    private static boolean increasePosition(Triple<NetShortPosition, NetShortPosition, Integer> positionPair) {
+        if (positionPair.getMiddle() == null) {
             return positionPair.getLeft().getPositionInPercent() >= 0.5;
         }
         else {
-            return positionPair.getLeft().getPositionInPercent() > positionPair.getRight().getPositionInPercent();
+            return positionPair.getLeft().getPositionInPercent() > positionPair.getMiddle().getPositionInPercent();
         }
     }
 
-    private static String getEmoji(boolean increasePosition, double currentPosition) {
-        String emoji = (increasePosition) ? EMOJI_GHOST : EMOJI_SMILING;
+    private static boolean newPosition(Triple<NetShortPosition, NetShortPosition, Integer> positionPair) {
+        return positionPair.getLeft() != null && positionPair.getMiddle() == null;
+    }
 
-        if (currentPosition < 0.5)
-            emoji += EMOJI_THUMBS_UP;
+    private static String getEmoji(boolean newPosition, boolean significantPosition, boolean increasePosition) {
+        String emoji = increasePosition ? EMOJI_GHOST : EMOJI_SMILING;
+
+        if (newPosition) {
+            emoji += EMOJI_NEW;
+        }
+        else if (!significantPosition && !increasePosition) {
+            emoji += EMOJI_WHITE_FLAG;
+        }
 
         return emoji;
     }

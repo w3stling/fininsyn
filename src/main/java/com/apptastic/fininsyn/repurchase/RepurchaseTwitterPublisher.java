@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -31,7 +30,7 @@ public class RepurchaseTwitterPublisher {
     @Autowired
     TwitterPublisher twitter;
 
-    @Scheduled(initialDelay = 2000, fixedRate = 900000)
+    @Scheduled(initialDelay = 2000, fixedRate = 360000)
     public void checkRepurchaseTransactions() {
         try {
             RepurchaseTransaction lastPublished = getLastPublishedRepurchaseTransactions();
@@ -56,7 +55,7 @@ public class RepurchaseTwitterPublisher {
             String now = nowDateTime().format(DATE_TIME_FORMATTER);
             lastPublished.setLastAttempt(now);
             repository.save(lastPublished).subscribe();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

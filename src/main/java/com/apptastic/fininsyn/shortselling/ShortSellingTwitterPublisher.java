@@ -5,7 +5,7 @@ import com.apptastic.blankningsregistret.NetShortPosition;
 import com.apptastic.fininsyn.TwitterPublisher;
 import com.apptastic.fininsyn.model.ShortSelling;
 import com.apptastic.fininsyn.repo.ShortSellingRepository;
-import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -14,8 +14,10 @@ import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @Component
 public class ShortSellingTwitterPublisher {
@@ -48,22 +50,32 @@ public class ShortSellingTwitterPublisher {
 
         if (today.isAfter(lastPublicationDate)) {
             try {
-                final Map<String, Pair<NetShortPosition, NetShortPosition>> positionsMap = new HashMap<>();
+                final Map<String, Triple<NetShortPosition, NetShortPosition, Integer>> positionsMap = new HashMap<>();
+                final HashMap<String, AtomicInteger> positionsPerPositionsHolders = new HashMap<>();
 
                 register.search(today, 5)
                         .filter(ShortSellingFilter::badPositions)
                         .filter(ShortSellingFilter::historyLimitFilter)
                         .forEach(p -> {
                             String key = toKey(p);
-                            Pair<NetShortPosition, NetShortPosition> position = positionsMap.get(key);
+                            Triple<NetShortPosition, NetShortPosition, Integer> position = positionsMap.get(key);
                             if (position == null) {
-                                positionsMap.put(key, Pair.of(p, null));
+                                positionsMap.put(key, Triple.of(p, null, null));
                             } else if (position.getRight() == null) {
-                                positionsMap.put(key, Pair.of(position.getLeft(), p));
+                                positionsMap.put(key, Triple.of(position.getLeft(), p, null));
                             }
+                            positionsPerPositionsHolders.computeIfAbsent(p.getPositionHolder(), a -> new AtomicInteger(0))
+                                                        .incrementAndGet();
                         });
 
-                List<Pair<NetShortPosition, NetShortPosition>> positions = new LinkedList<>(positionsMap.values());
+                List<Triple<NetShortPosition, NetShortPosition, Integer>> positions = positionsMap.values().stream()
+                    .map(t -> {
+                            Integer numberOfTransaction = positionsPerPositionsHolders.getOrDefault(t.getLeft().getPositionHolder(), new AtomicInteger(0)).intValue();
+                            return Triple.of(t.getLeft(), t.getMiddle(), numberOfTransaction);
+                        })
+                    .collect(Collectors.toList());
+
+
                 positions.sort((a, b) -> {
                     int value = b.getLeft().compareTo(a.getLeft());
                     if (value == 0) {
@@ -85,7 +97,7 @@ public class ShortSellingTwitterPublisher {
                                 next.setPublicationDate(t.getLeft().getPositionDate().format(DateTimeFormatter.ISO_DATE));
                             }
                          })
-                         .sorted(Comparator.comparing(Pair::getLeft))
+                         .sorted(Comparator.comparing(Triple::getLeft))
                          .map(ShortSellingTweet::create)
                          .filter(TwitterPublisher::filterTweetLength)
                          .forEach(twitter::publishTweet);

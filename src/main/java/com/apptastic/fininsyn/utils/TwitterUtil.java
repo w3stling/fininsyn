@@ -26,9 +26,9 @@ public class TwitterUtil {
         StringBuilder emojiBuilder = new StringBuilder();
 
         if (isBuy) {
-            if (amountInSek < 5_000_000.0)
+            if (amountInSek < 1_000_000.0)
                 emojiBuilder.append(EMOJI_MONEY_DOLLAR);
-            else if (amountInSek < 20_000_000.0)
+            else if (amountInSek < 10_000_000.0)
                 emojiBuilder.append(EMOJI_MONEY_DOLLAR + EMOJI_MONEY_DOLLAR);
             else if (amountInSek < 50_000_000.0)
                 emojiBuilder.append(EMOJI_MONEY_BAG);
@@ -38,9 +38,9 @@ public class TwitterUtil {
                 emojiBuilder.append(EMOJI_MONEY_BAG + EMOJI_MONEY_BAG + EMOJI_MONEY_BAG);
         }
         else if (isSell) {
-            if (amountInSek < 50_000_000)
+            if (amountInSek < 1_000_000.0)
                 emojiBuilder.append(EMOJI_BEAR);
-            else if (amountInSek < 1_000_000_000.0)
+            else if (amountInSek < 50_000_000.0)
                 emojiBuilder.append(EMOJI_BEAR + EMOJI_BEAR);
             else
                 emojiBuilder.append(EMOJI_BEAR + EMOJI_BEAR + EMOJI_BEAR);
