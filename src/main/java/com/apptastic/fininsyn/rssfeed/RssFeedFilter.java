@@ -31,10 +31,10 @@ public class RssFeedFilter {
             "finansinspektionen", "finansmyndighet", "rekonstruktion", "ägardata", "backar", "satsning", "satsar",
             "fusion", "läkemedel", "inflation", "deflation", "recession", "rekordlåg", "permitter", "rekommendation",
             "personalneddrag", "cannabis", "tvångsinlös", "licens", "växtbaser", "straffavgift", "sanktionsavgift",
-            "stödpaket", "stödåtgärder", "wall street", "nasdaq", "nyse", "omx", "värdering"};
+            "stödpaket", "stödåtgärder", "wall street", "nasdaq", "nyse", "omx", "värdering", "utdelning"};
 
     public static final String[] COMMON_IGNORE_KEYWORDS = { "politiker", "partiet", "väljarbarometer", "deklaration",
-            "eu-val", "jämställdhet", "jag" };
+            "eu-val", "jämställdhet", "jag", "läsarna" };
 
     public static boolean filterContentScb(Item item) {
         String content = getContent(item);
