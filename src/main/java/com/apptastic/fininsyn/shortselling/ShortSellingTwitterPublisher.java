@@ -61,7 +61,7 @@ public class ShortSellingTwitterPublisher {
                             Triple<NetShortPosition, NetShortPosition, Integer> position = positionsMap.get(key);
                             if (position == null) {
                                 positionsMap.put(key, Triple.of(p, null, null));
-                            } else if (position.getRight() == null) {
+                            } else if (position.getMiddle() == null) {
                                 positionsMap.put(key, Triple.of(position.getLeft(), p, null));
                             }
                             positionsPerPositionsHolders.computeIfAbsent(p.getPositionHolder(), a -> new AtomicInteger(0))

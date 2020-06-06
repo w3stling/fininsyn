@@ -30,7 +30,7 @@ public class ShortSellingTweet {
 
         NetShortPosition currentPosition = positionPair.getLeft();
         NetShortPosition previousPosition = positionPair.getMiddle();
-        boolean newPositionHolder = Optional.ofNullable(positionPair.getRight()).orElse(-1).longValue() == 1;
+        boolean newPositionHolder = newPositionHolder(positionPair);
         boolean increased = increasePosition(positionPair);
         boolean isNewPosition = newPosition(positionPair);
 
@@ -42,7 +42,7 @@ public class ShortSellingTweet {
 
         if (isNewPosition) {
             builder.append(formatPositionHolder(currentPosition.getPositionHolder()))
-                   .append(" tar en ny kort nettoposition på ");
+                   .append(" tar en signifikant kort nettoposition på ");
         }
         else {
             String directionText = increased ? "ökar" : "minskar";
@@ -98,12 +98,33 @@ public class ShortSellingTweet {
         return builder.toString();
     }
 
+
+    private static boolean newPositionHolder(Triple<NetShortPosition, NetShortPosition, Integer> positionPair) {
+        return Optional.ofNullable(positionPair.getRight()).orElse(-1).longValue() == 1;
+    }
+
     private static boolean increasePosition(Triple<NetShortPosition, NetShortPosition, Integer> positionPair) {
-        if (positionPair.getMiddle() == null) {
-            return positionPair.getLeft().getPositionInPercent() >= 0.5;
+        NetShortPosition currentPosition = positionPair.getLeft();
+        NetShortPosition previousPosition = positionPair.getMiddle();
+
+        if (previousPosition == null) {
+            return currentPosition.getPositionInPercent() >= 0.5;
+        }
+        else if (currentPosition.getPositionInPercent() == previousPosition.getPositionInPercent()) {
+            double currentPositionInPercent = currentPosition.getPositionInPercent();
+            if (!currentPosition.isSignificantPosition()) {
+                currentPositionInPercent -= 0.01;
+            }
+
+            double previousPositionInPercent = previousPosition.getPositionInPercent();
+            if (!previousPosition.isSignificantPosition()) {
+                previousPositionInPercent -= 0.01;
+            }
+
+            return currentPositionInPercent >= previousPositionInPercent;
         }
         else {
-            return positionPair.getLeft().getPositionInPercent() > positionPair.getMiddle().getPositionInPercent();
+            return currentPosition.getPositionInPercent() >= previousPosition.getPositionInPercent();
         }
     }
 
