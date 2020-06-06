@@ -202,6 +202,8 @@ public class RssFeedTweet {
 
     private static String toFiSanktionerHashTags(String title, String description) {
         String hashTags = "";
+
+        /*
         description = description.toLowerCase();
         title = title.toLowerCase();
 
@@ -217,6 +219,7 @@ public class RssFeedTweet {
         if (title.contains("tillstånd återkallas") || description.contains("återkallar tillståndet")) {
             hashTags += "#tillståndåterkallas ";
         }
+        */
 
         return hashTags.trim();
     }
