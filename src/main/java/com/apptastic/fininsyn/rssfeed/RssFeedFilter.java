@@ -34,13 +34,14 @@ public class RssFeedFilter {
             "stödpaket", "stödåtgärder", "wall street", "nasdaq", "nyse", "omx", "värdering", "utdelning"};
 
     public static final String[] COMMON_IGNORE_KEYWORDS = { "politiker", "partiet", "väljarbarometer", "deklaration",
-            "eu-val", "jämställdhet", "jag", "läsarna", "berättar", "samhäll"};
+            "eu-val", "jämställdhet", "jag", "läsarna", "berättar", "samhäll", "influencer"};
 
     public static boolean filterContentScb(Item item) {
         String content = getContent(item);
         return !containsAny(content, "politik", "parti", "barn", "föräld", "skola", "vi söker", "allmänna val",
                 "folkvald", "kommunfullmäktig", "folkmängd", "fritidshus", "kultur", "konst", "natur", "barn",
-                "medellivslängd", "utbildningsnivå", "miljöräkenskap");
+                "medellivslängd", "utbildningsnivå", "miljöräkenskap", "miljö", "skörd", "ekologisk", "odling",
+                "spannmål", "skog");
     }
 
     public static boolean filterContentEkobrottsmyndigheten(Item item) {
