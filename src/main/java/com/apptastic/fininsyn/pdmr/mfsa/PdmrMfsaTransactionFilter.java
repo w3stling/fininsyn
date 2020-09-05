@@ -6,6 +6,12 @@ import java.time.LocalDate;
 
 public class PdmrMfsaTransactionFilter {
 
+    public static boolean transactionFilter(Transaction transaction) {
+        return  transaction != null &&
+                transaction.getPrice() != 0.0 &&
+                transaction.getVolume() != 0.0;
+    }
+
     public static boolean sweden(Transaction transaction) {
         return "SEK".equalsIgnoreCase(transaction.getCurrency()) ||
                transaction.getCurrency().toLowerCase().contains("swedish") ||

@@ -39,6 +39,7 @@ public class PdmrMfsaTransactionTwitterPublisher {
             PdmrMfsaTransaction lastPublished = getLastPublishedTransactions();
 
             List<Transaction> transactions = pdmrRegistry.getTransactions()
+                                                         .filter(PdmrMfsaTransactionFilter::transactionFilter)
                                                          .filter(PdmrMfsaTransactionFilter::sweden)
                                                          .filter(PdmrMfsaTransactionFilter::natureOfTransaction)
                                                          .filter(PdmrMfsaTransactionFilter::dateTime)

@@ -25,7 +25,9 @@ public class PdmrMfsaTransactionTweet {
                .append(transaction.getPdmr())
                .append(" ")
                .append(toNatureOfTransaction(transaction))
-               .append(" aktier för ")
+               .append(" ")
+               .append(formatInstrumentType(transaction))
+               .append(" för ")
                .append(formatAmount(transaction.getPrice() * transaction.getVolume(), currency))
                .append(" ")
                .append(formatEmoji(transaction))
@@ -49,6 +51,33 @@ public class PdmrMfsaTransactionTweet {
         }
 
         return builder.toString();
+    }
+
+    private static String formatInstrumentType(Transaction transaction) {
+        String instrumentType = transaction.getInstrumentType();
+        if (instrumentType == null) {
+            return "aktier";
+        }
+
+        instrumentType = instrumentType.toLowerCase();
+
+        if ("equity".equals(instrumentType) || "units".equals(instrumentType) || "unit subscription rights".equals(instrumentType)) {
+            instrumentType = "aktier";
+        }
+        else if ("options".equals(instrumentType)) {
+            instrumentType = "optioner";
+        }
+        else if ("bonds".equals(instrumentType)) {
+            instrumentType = "obligationer";
+        }
+        else if ("warrants".equals(instrumentType)) {
+            instrumentType = "warranter";
+        }
+        else {
+            instrumentType = "aktier";
+        }
+
+        return instrumentType;
     }
 
     private static String toCompany(Transaction transaction) {

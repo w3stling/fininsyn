@@ -108,7 +108,7 @@ public class PdmrFiTransactionTweet {
                .append(dateText)
                .append("\n");
 
-        if (amount >= 85_000_000)
+        if (amount >= 100_000_000)
             builder.append("#insynshandel ");
 
         if (symbolName != null)

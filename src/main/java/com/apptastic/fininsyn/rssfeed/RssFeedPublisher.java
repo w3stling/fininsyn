@@ -21,17 +21,17 @@ import java.util.logging.Logger;
 @Component
 public class RssFeedPublisher {
     private static final String RSS_FEED_RISKBANKEN = "https://www.riksbank.se/sv/rss/pressmeddelanden";
-    private static final String RSS_FEED_FINANSPOLITISKARADET = "http://www.finanspolitiskaradet.se/2.5dd459a31158f2d75c380003166/12.778e24d112a169fd1c1800036576.portlet?state=rss&sv.contenttype=text/xml;charset=UTF-8";
+    //private static final String RSS_FEED_FINANSPOLITISKARADET = "http://www.finanspolitiskaradet.se/2.5dd459a31158f2d75c380003166/12.778e24d112a169fd1c1800036576.portlet?state=rss&sv.contenttype=text/xml;charset=UTF-8";
     private static final String RSS_FEED_KONJUNKTURINSTITUTET = "https://www.konj.se/4.2de5c57614f808a95afcc13f/12.2de5c57614f808a95afcc354.portlet?state=rss&sv.contenttype=text/xml;charset=UTF-8";
     private static final String RSS_FEED_SCB = "https://www.scb.se/Feed/statistiknyheter/";
     private static final String RSS_FEED_EKOBROTTSMYNDIGHETEN = "https://www.ekobrottsmyndigheten.se/Templates/Handlers/News/HandlerNewsRss.ashx?languageBranch=sv";
-    private static final String RSS_FEED_VECKANS_AFFARER = "https://www.va.se/rss/";
+    //private static final String RSS_FEED_VECKANS_AFFARER = "https://www.va.se/rss/";
     private static final String RSS_FEED_REALTID = "https://www.realtid.se/rss/senaste";
     private static final String RSS_FEED_PLACERA = "https://www.avanza.se/placera/forstasidan.rss.xml";
     private static final String RSS_FEED_BREAKIT = "https://www.breakit.se/feed/artiklar";
-    private static final String RSS_FEED_AFFARSVARLDEN = "https://www.affarsvarlden.se/rss.xml";
+    //private static final String RSS_FEED_AFFARSVARLDEN = "https://www.affarsvarlden.se/rss.xml";
     private static final String RSS_FEED_INVESTING_COM = "https://se.investing.com/rss/news.rss";
-    private static final String RSS_FEED_DI_DIGITAL = "https://digital.di.se/rss";
+    //private static final String RSS_FEED_DI_DIGITAL = "https://digital.di.se/rss";
     private static final String RSS_FEED_FI_SANKTIONER = "https://www.fi.se/sv/publicerat/sanktioner/finansiella-foretag/rss";
     private static final String DATE_TIME_PUBDATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss ZZZZ";
     private static final String DATE_TIME_PUBDATE_GMT_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
@@ -59,17 +59,17 @@ public class RssFeedPublisher {
             RssFeed next = new RssFeed(lastPublished);
 
             checkRiksbankenRssFeed(lastPublished, next);
-            checkFinanspolitiskaradetRssFeed(lastPublished, next);
+            //checkFinanspolitiskaradetRssFeed(lastPublished, next);
             checkKonjunkturinstitutetRssFeed(lastPublished, next);
             checkScbRssFeed(lastPublished, next);
             checkEkobrottsmyndighetenRssFeed(lastPublished, next);
-            checkVeckansAffarerRssFeed(lastPublished, next);
+            //checkVeckansAffarerRssFeed(lastPublished, next);
             checkRealtidRssFeed(lastPublished, next);
             checkBreakitRssFeed(lastPublished, next);
             //checkAffarsvarldenRssFeed(lastPublished, next);
             checkPlaceraRssFeed(lastPublished, next);
             checkInvestingComRssFeed(lastPublished, next);
-            checkDiDigitalRssFeed(lastPublished, next);
+            //checkDiDigitalRssFeed(lastPublished, next);
             checkFiSanktionerRssFeed(lastPublished, next);
 
             next.setLastAttempt(now());
@@ -99,7 +99,7 @@ public class RssFeedPublisher {
 
     }
 
-
+    /*
     private void checkFinanspolitiskaradetRssFeed(RssFeed lastPublished, RssFeed next) {
         SimpleDateFormat formatter = new SimpleDateFormat(DATE_TIME_PUBDATE_FORMAT);
 
@@ -117,7 +117,7 @@ public class RssFeedPublisher {
         }
 
     }
-
+    */
 
     private void checkKonjunkturinstitutetRssFeed(RssFeed lastPublished, RssFeed next) {
         SimpleDateFormat formatter = new SimpleDateFormat(DATE_TIME_PUBDATE_FORMAT);
@@ -175,7 +175,7 @@ public class RssFeedPublisher {
 
     }
 
-
+    /*
     private void checkVeckansAffarerRssFeed(RssFeed lastPublished, RssFeed next) {
         SimpleDateFormat formatter = new SimpleDateFormat(DATE_TIME_PUBDATE_GMT_FORMAT);
 
@@ -193,7 +193,7 @@ public class RssFeedPublisher {
         }
 
     }
-
+    */
 
     private void checkRealtidRssFeed(RssFeed lastPublished, RssFeed next) {
         SimpleDateFormat formatter = new SimpleDateFormat(DATE_TIME_PUBDATE_FORMAT);
@@ -251,7 +251,7 @@ public class RssFeedPublisher {
 
     }
 
-
+    /*
     private void checkAffarsvarldenRssFeed(RssFeed lastPublished, RssFeed next) {
         SimpleDateFormat formatter = new SimpleDateFormat(DATE_TIME_PUBDATE_FORMAT);
 
@@ -269,6 +269,7 @@ public class RssFeedPublisher {
         }
 
     }
+    */
 
     private void checkInvestingComRssFeed(RssFeed lastPublished, RssFeed next) {
         SimpleDateFormat formatter = new SimpleDateFormat(DATE_TIME_PUBDATE_NORMAL_FORMAT);
@@ -288,7 +289,7 @@ public class RssFeedPublisher {
 
     }
 
-
+    /*
     private void checkDiDigitalRssFeed(RssFeed lastPublished, RssFeed next) {
         SimpleDateFormat formatter = new SimpleDateFormat(DATE_TIME_PUBDATE_GMT_FORMAT);
 
@@ -304,8 +305,8 @@ public class RssFeedPublisher {
         catch (IOException e) {
             e.printStackTrace();
         }
-
     }
+    */
 
     private void checkFiSanktionerRssFeed(RssFeed lastPublished, RssFeed next) {
         SimpleDateFormat formatter = new SimpleDateFormat(DATE_TIME_PUBDATE_FORMAT);
