@@ -40,7 +40,7 @@ public class PdmrFiTransactionTwitterPublisher {
     TwitterPublisher twitter;
 
 
-    @Scheduled(initialDelay = 10000, fixedRate = 120000)
+    @Scheduled(initialDelay = 10000, fixedRate = 180000)
     public void checkPdmrTransactions() {
         Logger logger = Logger.getLogger("com.apptastic.fininsyn");
 

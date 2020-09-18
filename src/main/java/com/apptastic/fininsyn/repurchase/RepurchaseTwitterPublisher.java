@@ -30,7 +30,7 @@ public class RepurchaseTwitterPublisher {
     @Autowired
     TwitterPublisher twitter;
 
-    @Scheduled(initialDelay = 2000, fixedRate = 360000)
+    @Scheduled(initialDelay = 2000, fixedRate = 600000)
     public void checkRepurchaseTransactions() {
         try {
             RepurchaseTransaction lastPublished = getLastPublishedRepurchaseTransactions();
