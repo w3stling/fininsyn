@@ -74,40 +74,46 @@ public class InstrumentLookup {
     }
 
     public Instrument getInstrument(String issuer, String isin, String currency2) {
-        isin = isin.trim();
-        final String currency = currency2.trim();
+        Instrument instrument = null;
 
-        if (isin.isEmpty())
-            return null;
+        try {
+            isin = isin.trim();
+            final String currency = currency2.trim();
 
-        Instrument instrument = fetchAndCacheInstrument(isin, currency);
+            if (isin.isEmpty())
+                return null;
 
-        if (instrument != null)
-            return instrument;
+            instrument = fetchAndCacheInstrument(isin, currency);
 
-        // Try finding symbol with currency SEK if reported with wrong currency
-        if (!currency.isEmpty() && !currency.equals("SEK"))
-            instrument = fetchAndCacheInstrument(isin, "SEK");
+            if (instrument != null)
+                return instrument;
 
-        if (instrument != null) {
-            String key = getKey(isin, "SEK");
-            symbolCache.put(key, instrument);
-            return instrument;
-        }
+            // Try finding symbol with currency SEK if reported with wrong currency
+            if (!currency.isEmpty() && !currency.equals("SEK"))
+                instrument = fetchAndCacheInstrument(isin, "SEK");
 
-        // Find isin codes that have been reported for this issuer
-        issuer = issuer.trim();
-        List<String> isinList = getIsinByIssuer(issuer, currency);
+            if (instrument != null) {
+                String key = getKey(isin, "SEK");
+                symbolCache.put(key, instrument);
+                return instrument;
+            }
 
-        instrument = isinList.stream()
-                             .map(i -> fetchAndCacheInstrument(i, currency))
-                             .filter(Objects::nonNull)
-                             .findFirst()
-                             .orElse(null);
+            // Find isin codes that have been reported for this issuer
+            issuer = issuer.trim();
+            List<String> isinList = getIsinByIssuer(issuer, currency);
 
-        if (instrument != null) {
-            String key = getKey(isin, currency);
-            symbolCache.put(key, instrument);
+            instrument = isinList.stream()
+                    .map(i -> fetchAndCacheInstrument(i, currency))
+                    .filter(Objects::nonNull)
+                    .findFirst()
+                    .orElse(null);
+
+            if (instrument != null) {
+                String key = getKey(isin, currency);
+                symbolCache.put(key, instrument);
+            }
+        } catch (Exception e) {
+            instrument = null;
         }
 
         return instrument;

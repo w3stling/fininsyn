@@ -42,10 +42,10 @@ public class PdmrFiTransactionTweet {
                                     .mapToDouble(PdmrFiTransactionFilter::toAmount)
                                     .sum();
 
-        InstrumentLookup.Instrument instrument = InstrumentLookup.getInstance().getInstrument(transaction.getIssuer(), transaction.getIsin(), transaction.getCurrency());
-
         String symbolName = null;
         String instrumentName = null;
+
+        InstrumentLookup.Instrument instrument = InstrumentLookup.getInstance().getInstrument(transaction.getIssuer(), transaction.getIsin(), transaction.getCurrency());
 
         if (instrument != null) {
             symbolName = instrument.getSymbol();
@@ -288,7 +288,7 @@ public class PdmrFiTransactionTweet {
     }
 
     private static String formatPdmr(String pdmr) {
-        if (pdmr.length() > 50)
+        if (pdmr == null || pdmr.length() > 50)
             return "";
 
         Optional<String> formattedPdmr = Arrays.stream(StringUtils.split(pdmr, ' '))

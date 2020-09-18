@@ -16,7 +16,7 @@ public class ShortSellingFilter {
 
     public static boolean historyLimitFilter(NetShortPosition position) {
         LocalDate date = LocalDate.now(ZoneId.of(TIME_ZONE));
-        date = date.minusMonths(24);
+        date = date.minusMonths(12);
 
         return position.getPositionDate().compareTo(date) > 0;
     }
