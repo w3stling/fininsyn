@@ -105,11 +105,12 @@ public class RssFeedTweet {
 
                 emoji = EMOJI_CHART_INCREASING;
             }
-            else if (titleLowerCase.contains("röd") || titleLowerCase.contains("rött") || titleLowerCase.contains("björn") ||
-                    titleLowerCase.contains("nedåt") || titleLowerCase.contains("nedgång") || titleLowerCase.contains("svag")||
-                    titleLowerCase.contains("negativ") || titleLowerCase.contains("moll") || titleLowerCase.contains("utför") ||
-                    titleLowerCase.contains("fallande") || titleLowerCase.contains("sur") || titleLowerCase.contains("motvind") ||
-                    titleLowerCase.contains("under nollan") || titleLowerCase.contains("ned")) {
+            else if (titleLowerCase.contains("röd") || titleLowerCase.contains("rött") || titleLowerCase.contains("minusöppning") ||
+                    titleLowerCase.contains("björn") || titleLowerCase.contains("nedåt") || titleLowerCase.contains("nedgång") ||
+                    titleLowerCase.contains("svag") || titleLowerCase.contains("negativ") || titleLowerCase.contains("moll") ||
+                    titleLowerCase.contains("utför") || titleLowerCase.contains("fallande") || titleLowerCase.contains("sur") ||
+                    titleLowerCase.contains("motvind") || titleLowerCase.contains("under nollan") || titleLowerCase.contains("ned") ||
+                    titleLowerCase.contains("tapp")) {
 
                 emoji = EMOJI_CHART_DECREASING;
             }

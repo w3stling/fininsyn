@@ -41,7 +41,7 @@ public class RssFeedFilter {
         return !containsAny(content, "politik", "parti", "barn", "föräld", "skola", "vi söker", "allmänna val",
                 "folkvald", "kommunfullmäktig", "folkmängd", "fritidshus", "kultur", "konst", "natur", "barn",
                 "medellivslängd", "utbildningsnivå", "miljöräkenskap", "miljö", "skörd", "ekologisk", "odling",
-                "spannmål", "skog");
+                "spannmål", "skog", "nyanlända", "flyktingar", "levnadsförhållande");
     }
 
     public static boolean filterContentEkobrottsmyndigheten(Item item) {
@@ -53,7 +53,7 @@ public class RssFeedFilter {
     public static boolean filterContentRiksbanken(Item item) {
         String content = getContent(item);
         return !containsAny(content, "vi söker", "söker", "tjänsten", "konferens", "seminarium", "webbinarium",
-                "protokoll");
+                "protokoll", "mandat förlängt");
     }
 
     public static boolean filterContentFinanspolitiskaRadet(Item item) {
